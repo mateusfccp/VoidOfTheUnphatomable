@@ -1,0 +1,269 @@
+#+TITLE: Entrega 1
+#+AUTHOR: Mateus Felipe Cordeiro Caetano Pinto, Mathias Raúl Schneider Sicalo
+#+EMAIL: mateus.cordeiro@uap.edu.ar, mathias.schneider@uap.edu.ar
+#+LANGUAGE: es
+#+STARTUP: latexpreview
+#+LATEX_HEADER: \usepackage{parskip}
+#+LATEX_HEADER: \usepackage[spanish]{babel}
+#+LATEX_HEADER: \usepackage[inkscapelatex=false]{svg}
+
+* Integrantes del Equipo
+
+- Mateus Felipe Cordeiro Caetano Pinto
+- Mathias Raúl Schneider Sicalo
+
+* Especificaciones del juego
+
+** Nombre
+
+Void of the Unfathomable
+
+** Descripción general
+
+/Void of the Unfathomable/ es un juego RPG basado en terminal (consola), donde
+el protagonista, llamado /El Peregrino/, tiene que adentrar el /Vacío/,
+encontrar el /Núcleo Resonante/ y volver al mundo normal, para destruir la
+/Estaticidad/ y restaurar el mundo.
+
+** Lore
+
+*** Trasfondo: El Mundo Silencioso
+
+Nuestro mundo, otrora vibrante y lleno de color, sufre de una plaga insidiosa
+conocida como "La Estaticidad". No es una enfermedad que mate el cuerpo, sino la
+realidad misma. Los colores se apagan, los sonidos se vuelven sordos y
+monótonos, las emociones se aplanan y, lentamente, todo empieza a perder su
+significado y su esencia. Los sabios creen que la realidad está "olvidando" cómo
+ser, desvaneciéndose en una monotonía gris y sin propósito.
+
+*** El Vacío: La Cicatriz del Conocimiento
+
+En el centro del continente, donde antes se erguía la gran biblioteca de los
+Ancestros, ahora yace el Vacío. No es un agujero en la tierra, sino una herida
+en el tejido del universo. Se dice que los Ancestros, en su arrogancia,
+intentaron mirar más allá de la existencia y vislumbraron la nada absoluta que
+la precedió. Ese acto de soberbia desgarró la realidad, y el Vacío es la
+cicatriz que quedó.
+
+El Vacío es un no-lugar de geometría imposible y leyes físicas rotas. Es un
+entorno activamente hostil a la lógica y la vida. Entrar en él es arriesgarse no
+solo a la muerte física, sino a la aniquilación conceptual: ser borrado de la
+existencia como si nunca hubieras sido. Las criaturas que lo habitan no son de
+este mundo; son ecos de pensamientos rotos, paradojas con forma física y el
+hambre puro de la nada.
+
+*** El Núcleo Resonante
+
+Una antigua leyenda, encontrada en los fragmentos de los textos de los
+Ancestros, ofrece una única esperanza. Cuentan que cuando desgarraron la
+realidad, un fragmento del "Primer Sonido" —la vibración inicial que dio forma
+al universo— cayó en las profundidades de la herida. Este artefacto, conocido
+como el Núcleo Resonante, es lo único que aún recuerda la verdadera esencia de
+la existencia.
+
+La teoría es simple y desesperada: si alguien pudiera adentrarse en el Vacío,
+sobrevivir a su locura, encontrar el Núcleo y traerlo de vuelta al mundo, su
+resonancia podría "recordarle" a la realidad lo que ha olvidado, revirtiendo La
+Estaticidad y devolviendo el color, el sonido y el significado al mundo.
+
+*** El Peregrino del Vacío
+
+Tú no eres un héroe ni un elegido. Eres un Peregrino, un individuo desesperado
+que, como todos, ve su mundo desvanecerse. Ya sea por un sentido del deber, la
+búsqueda de la gloria o porque ya no te queda nada que perder, has decidido
+aceptar la misión suicida. Has sido entrenado para resistir la influencia
+antinatural del Vacío por más tiempo que otros, pero tu tiempo sigue siendo
+limitado.
+
+** Objetivo
+
+El objetivo del jugador es explorar la masmorra, encontrar un ítem específico
+(/Núcleo Resonante/) y volver a la superfície, mientras batalla con los enemigos
+y pasa por trampas.
+
+El jugador vence el juego cuando puede hacerlo sin morir.
+
+El jugador falla cuando muere intentando.
+
+** Descripción de sistemas
+
+*** Visual y perspectiva
+
+El juego se mostrará desde una perspectiva /top-down/, que mostrará el mapa de
+la masmorra, el personaje, ítems, enemigo y etc. El visual está influído por
+juegos como Rogue (1980), The Legend of Zelda: A Link To The Past y otros juegos
+similares.
+
+*** Atributos y estado del personaje
+
+El personaje posee atributos como HP (/health points/), CP (/color point/, que
+sería como un tipo de /mana/), fuerza, criatividad y defensa. También podrá
+tener estados como envenenado, encendido, dormido etc.
+
+Los atributos y estabos van a influir en como el personaje interactua con el
+medio y en las batallas.
+
+*** Sistema de batalla
+
+Cuando el personaje se encuentra con un enemigo el tiempo se cambia de
+/realtime/ para sistema de turnos, donde se puede elegir que va a hacer. Cuando
+se termina la batalla, el enemigo suelta ítems y equipamentos que mejoran los
+atributos del personaje o le dan estados.
+
+*** Sistema de /save/
+
+El jugador podrá elegir entre tres /slots/ de /save/. Al salir del juego se
+guardará el progreso en el /slot/ seleccionado. Si el jugador muere, se borra el
+/save/ y se guarda en el histórico de puntaje.
+
+#+BEGIN_SRC plantuml :file images/process_overview.svg
+@startuml
+' Diagrama de Clases para Void of the Unfathomable
+' By Gemini
+
+!theme vibrant
+
+' --- Clases Principales ---
+
+class Juego {
+  + void iniciar()
+  + void guardarPartida(slot: int)
+  + void cargarPartida(slot: int)
+  + void finalizarJuego(victoria: boolean)
+  - Peregrino peregrino
+  - Vacio vacio
+  - EstadoJuego estadoActual
+}
+
+class Vacio {
+  - Mapa[] niveles
+  + void generarNivel()
+  + Mapa getNivelActual()
+}
+
+class Mapa {
+  - Celda[][] celdas
+  - Entidad[] entidades
+  - Item[] items
+}
+
+' --- Entidades y Personajes ---
+
+abstract class Entidad {
+  # String nombre
+  # Atributos atributos
+  # Estado[] estados
+  + void atacar(objetivo: Entidad)
+  + void recibirDanio(cantidad: int)
+  + void aplicarEstado(estado: Estado)
+}
+
+class Peregrino extends Entidad {
+  - Item[] inventario
+  - Equipamento[] equipamento
+  + void mover(direccion: Direccion)
+  + void recogerItem(item: Item)
+  + void usarItem(item: Item)
+}
+
+class Enemigo extends Entidad {
+  - TipoIA inteligencia
+  + Item[] soltarRecompensa()
+}
+
+' --- Atributos y Estados ---
+
+class Atributos {
+  + int hp
+  + int cp
+  + int fuerza
+  + int creatividad
+  + int defensa
+}
+
+class Estado {
+  + String nombre
+  + int duracionTurnos
+  + void aplicarEfecto(entidad: Entidad)
+}
+
+' --- Items y Equipamento ---
+
+class Item {
+  + String nombre
+  + String descripcion
+}
+
+class Equipamento extends Item {
+  # Atributos modificadores
+}
+
+note right of Item
+  El "Núcleo Resonante"
+  es una instancia especial
+  de la clase Item.
+end note
+
+' --- Sistemas de Juego ---
+
+class SistemaBatalla {
+  - Entidad[] participantes
+  - int turnoActual
+  + void iniciarBatalla(peregrino: Peregrino, enemigos: Enemigo[])
+  + void procesarTurno()
+  + boolean verificarFinBatalla()
+}
+
+class SistemaGuardado {
+  - PartidaGuardada[] slots
+  - HistoricoPuntajes historico
+  + void guardar(juego: Juego, slot: int)
+  + Juego cargar(slot: int)
+  + void registrarPuntaje(puntaje: Puntaje)
+  + void borrarSave(slot: int)
+}
+
+class PartidaGuardada {
+  - Date fecha
+  - String datosJuegoSerializado
+}
+
+class HistoricoPuntajes {
+  - Puntaje[] puntajes
+}
+
+class Puntaje {
+  - String nombreJugador
+  - int nivelAlcanzado
+  - Date fechaMuerte
+}
+
+
+' --- Relaciones ---
+
+Juego "1" *-- "1" Peregrino : controla >
+Juego "1" *-- "1" Vacio : contiene >
+Juego "1" --> "1" SistemaGuardado : utiliza >
+Juego "1" ..> "1" SistemaBatalla : crea >
+
+Vacio "1" *-- "1..*" Mapa : se compone de >
+Mapa o-- "*" Entidad : contiene >
+Mapa o-- "*" Item : puede contener >
+
+Entidad <|-- Peregrino
+Entidad <|-- Enemigo
+Entidad "1" *-- "1" Atributos : posee >
+Entidad "1" *-- "0..*" Estado : puede tener >
+
+Peregrino "1" o-- "0..*" Item : tiene en inventario >
+Peregrino "1" o-- "0..*" Equipamento : tiene equipado >
+
+Item <|-- Equipamento
+
+SistemaBatalla -- "1..*" Entidad : gestiona >
+
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:images/process_overview.svg]]
