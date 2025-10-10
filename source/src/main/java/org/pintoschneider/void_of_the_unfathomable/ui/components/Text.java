@@ -1,7 +1,7 @@
-package org.pintoschneider.void_of_the_unphatomable.ui.components;
+package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
-import org.pintoschneider.void_of_the_unphatomable.ui.Size;
-import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.Size;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -24,79 +24,65 @@ public class Text extends Drawable {
 
     private void computeLines(String content, int maxWidth) {
         lines.clear();
-        if (content.isEmpty()) return;
+
+        if (content.isEmpty() || maxWidth <= 0) return;
 
         final StringBuilder currentWord = new StringBuilder();
-        final StringBuilder currentLineContent = new StringBuilder();
+        final StringBuilder currentLine = new StringBuilder();
         final StringCharacterIterator iterator = new StringCharacterIterator(content);
-        int currentLine = 0;
 
-        while (iterator.current() != CharacterIterator.DONE) {
+        while (true) {
             final char c = iterator.current();
 
-            if (c == ' ' || c == '\n') {
-                // We don't have any word, so we just add the space or newline
-                if (currentWord.isEmpty()) {
-                    if (c == '\n') {
-                        // Move to the next line on newline
-                        lines.add(currentLineContent.toString());
-                        currentLine++;
-                        currentLineContent.setLength(0);
-                    } else if (currentLineContent.length() + 1 <= maxWidth) {
-                        // We add the space if it fits in the current line
-                        currentLineContent.append(c);
-                    }
-                    iterator.next();
-                    continue;
-                }
-
+            if (c == ' ' || c == '\n' || c == CharacterIterator.DONE) {
                 // We reached the end of a word
-                if (currentLineContent.length() + currentWord.length() <= maxWidth) {
+                if (currentLine.length() + currentWord.length() <= maxWidth) {
                     // The word fits in the current line, so we add it
-                    currentLineContent.append(currentWord);
+                    currentLine.append(currentWord);
+                } else if (currentWord.length() > maxWidth) {
+                    // The word is too long to fit in a single line, so we use a line for the entire word and truncate it.
+                    // Maybe we could hyphenate it instead?
+                    addLine(currentLine);
+                    currentLine.append(currentWord, 0, maxWidth - 1).append('…');
 
-                    if (currentLineContent.length() + 1 <= maxWidth) {
-                        // We add the space if it fits in the current line
-                        currentLineContent.append(' ');
-                    }
-//                    } else if (c == '\n') {
-//                        // Move to the next line on newline
-//                        lines.add(currentLineContent.toString());
-//                        currentLine++;
-//                        currentLineContent.setLength(0);
-//                    }
+                    addLine(currentLine);
                 } else {
-                    // The word doesn't fit in the current line
-                    if (currentWord.length() > maxWidth) {
-                        // The word is too long to fit in a single line, so we use a line for the entire word and truncate it.
-                        // Maybe we could hyphenate it instead?
-                        lines.add(currentLineContent.toString());
-                        currentLineContent.setLength(0);
-                        currentLineContent.append(currentWord, 0, maxWidth - 1).append('…');
-                        lines.add(currentLineContent.toString());
-                        currentLineContent.setLength(0);
-                        currentLine = currentLine + 2;
-                    } else {
-                        // Move to the next line
-                        lines.add(currentLineContent.toString());
-                        currentLineContent.setLength(0);
-                        currentLine++;
-                        currentLineContent.append(currentWord);
-                    }
+                    // Move to the next line
+                    addLine(currentLine);
+                    currentLine.append(currentWord);
                 }
 
                 currentWord.setLength(0);
+
+                if (c == ' ' && currentLine.length() < maxWidth) {
+                    currentLine.append(c);
+                } else if (c == '\n') {
+                    lines.add(currentLine.toString());
+                    currentLine.setLength(0);
+                }
+                if (c == CharacterIterator.DONE) {
+                    break;
+                }
             } else {
                 // We are still in the middle of a word
                 currentWord.append(c);
+
+                if (currentLine.length() + currentWord.length() > maxWidth) {
+                    // Move current word to next line
+                    addLine(currentLine);
+                }
             }
 
             iterator.next();
         }
 
-        if (!currentLineContent.isEmpty()) {
-            assert currentLineContent.length() <= maxWidth;
-            lines.add(currentLineContent.toString());
+        lines.add(currentLine.toString());
+    }
+
+    void addLine(StringBuilder currentLine) {
+        if (!currentLine.toString().trim().isEmpty()) {
+            lines.add(currentLine.toString());
+            currentLine.setLength(0);
         }
     }
 
