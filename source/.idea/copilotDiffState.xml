@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/main/java/org/pintoschneider/void_of_the_unphatomable/ui/components/Column.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/org/pintoschneider/void_of_the_unphatomable/ui/components/Column.java" />
+              <option name="originalContent" value="package org.pintoschneider.void_of_the_unphatomable.ui.components;&#10;&#10;import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;&#10;&#10;/**&#10; * A vertical linear layout that arranges its children in a column.&#10; *&#10; * @see LinearLayout&#10; */&#10;public class Column extends LinearLayout {&#10;    /**&#10;     * Constructs a Column with the given children as Fixed or Flexible items.&#10;     *&#10;     * @param items the children as LinearLayout.Item&#10;     */&#10;    public Column(Item... items) {&#10;        super(Orientation.VERTICAL, items);&#10;    }&#10;}&#10;" />
+              <option name="updatedContent" value="package org.pintoschneider.void_of_the_unphatomable.ui.components;&#10;&#10;import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;&#10;&#10;/**&#10; * A vertical linear layout that arranges its children in a column.&#10; *&#10; * @see LinearLayout&#10; */&#10;public class Column extends LinearLayout {&#10;    /**&#10;     * Constructs a Column with the given children as Fixed or Flexible items.&#10;     *&#10;     * @param items the children as LinearLayout.Item&#10;     */&#10;    public Column(Item... items) {&#10;        super(Orientation.VERTICAL, items);&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/org/pintoschneider/void_of_the_unphatomable/ui/components/Row.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/org/pintoschneider/void_of_the_unphatomable/ui/components/Row.java" />
+              <option name="originalContent" value="package org.pintoschneider.void_of_the_unphatomable.ui.components;&#10;&#10;import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;&#10;&#10;/**&#10; * A horizontal linear layout that arranges its children in a row.&#10; *&#10; * @see LinearLayout&#10; */&#10;public class Row extends LinearLayout {&#10;    /**&#10;     * Constructs a Row with the given children as Fixed or Flexible items.&#10;     *&#10;     * @param items the children as LinearLayout.Item&#10;     */&#10;    public Row(Item... items) {&#10;        super(Orientation.HORIZONTAL, items);&#10;    }&#10;}&#10;" />
+              <option name="updatedContent" value="package org.pintoschneider.void_of_the_unphatomable.ui.components;&#10;&#10;import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;&#10;&#10;/**&#10; * A horizontal linear layout that arranges its children in a row.&#10; *&#10; * @see LinearLayout&#10; */&#10;public class Row extends LinearLayout {&#10;    /**&#10;     * Constructs a Row with the given children as Fixed or Flexible items.&#10;     *&#10;     * @param items the children as LinearLayout.Item&#10;     */&#10;    public Row(Item... items) {&#10;        super(Orientation.HORIZONTAL, items);&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

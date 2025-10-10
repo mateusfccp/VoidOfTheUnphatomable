@@ -1,5 +1,12 @@
+import org.gradle.api.tasks.bundling.Jar
+
 plugins {
-    id("java")
+    java
+    application
+}
+
+application {
+    mainClass.set("org.pintoschneider.void_of_the_unphatomable.Main")
 }
 
 group = "org.pintoschneider.void_of_the_unphatomable"
@@ -13,8 +20,21 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.jline:jline:3.30.0")
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.named<Jar>("jar") {
+    manifest {
+        attributes["Main-Class"] = "org.pintoschneider.void_of_the_unphatomable.Main"
+    }
+
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
