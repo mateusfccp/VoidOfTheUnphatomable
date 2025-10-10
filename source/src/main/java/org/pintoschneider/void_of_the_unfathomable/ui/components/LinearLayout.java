@@ -1,7 +1,7 @@
-package org.pintoschneider.void_of_the_unphatomable.ui.components;
+package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
-import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;
-import org.pintoschneider.void_of_the_unphatomable.ui.Size;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.Size;
 
 /**
  * A general-purpose layout component that arranges its children linearly,

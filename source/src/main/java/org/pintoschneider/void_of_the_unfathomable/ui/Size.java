@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unphatomable.ui;
+package org.pintoschneider.void_of_the_unfathomable.ui;
 
 /**
  * A class representing a cartesian size, with width and height.

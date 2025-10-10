@@ -1,6 +1,4 @@
-package org.pintoschneider.void_of_the_unphatomable.ui.components;
-
-import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;
+package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
 /**
  * A vertical linear layout that arranges its children in a column.

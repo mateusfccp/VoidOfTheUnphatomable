@@ -1,10 +1,10 @@
-package org.pintoschneider.void_of_the_unphatomable.ui;
+package org.pintoschneider.void_of_the_unfathomable.ui;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
 import org.jline.utils.NonBlockingReader;
-import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
 
 import java.io.IOException;
 

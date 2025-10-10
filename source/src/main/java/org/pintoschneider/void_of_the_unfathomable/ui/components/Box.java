@@ -1,16 +1,27 @@
-package org.pintoschneider.void_of_the_unphatomable.ui.components;
+package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
-import org.pintoschneider.void_of_the_unphatomable.ui.core.Drawable;
-import org.pintoschneider.void_of_the_unphatomable.ui.Size;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.Size;
 
-public final class Window extends Drawable {
+/**
+ * A bordered box that can contain a single {@link Drawable} child.
+ */
+public final class Box extends Drawable {
     private final Drawable child;
 
-    public Window() {
+    /**
+     * Constructs an empty Box with no child.
+     */
+    public Box() {
         this.child = null;
     }
 
-    public Window(Drawable child) {
+    /**
+     * Constructs a Box with the given child.
+     *
+     * @param child the child Drawable to be contained within the box
+     */
+    public Box(Drawable child) {
         this.child = child;
     }
 

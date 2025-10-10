@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unphatomable;
+package org.pintoschneider.void_of_the_unfathomable;
 
 import java.util.EnumSet;
 

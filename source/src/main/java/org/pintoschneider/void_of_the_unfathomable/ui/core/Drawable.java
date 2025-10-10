@@ -1,6 +1,6 @@
-package org.pintoschneider.void_of_the_unphatomable.ui.core;
+package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
-import org.pintoschneider.void_of_the_unphatomable.ui.Size;
+import org.pintoschneider.void_of_the_unfathomable.ui.Size;
 
 /**
  * An interface for objects that can be drawn on the screen.
