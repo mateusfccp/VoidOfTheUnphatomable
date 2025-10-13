@@ -116,25 +116,22 @@ public final class Canvas {
      * @param writer The writer to output to.
      */
     public void writeTo(PrintWriter writer) {
-        AttributedStyle currentStyle = AttributedStyle.DEFAULT;
-
         for (int y = 0; y < tiles[0].length; y++) {
             for (int x = 0; x < tiles.length; x++) {
-                final Character c = tiles[x][y];
+                final Character tile = tiles[x][y];
                 final Paint paint = paints[x][y];
+
+                final Character c = tile == null ? ' ' : tile;
 
                 if (paint != null) {
                     final AttributedStyle style = getStyle(paint);
-
-                    if (!currentStyle.equals(style)) {
-                        final AttributedStringBuilder builder = new AttributedStringBuilder();
-                        builder.style(currentStyle);
-                        writer.print(builder.toAnsi());
-                        currentStyle = style;
-                    }
+                    final AttributedStringBuilder builder = new AttributedStringBuilder();
+                    builder.style(style);
+                    builder.append(c);
+                    writer.print(builder.toAnsi());
+                } else {
+                    writer.print(c);
                 }
-
-                writer.print(c == null ? ' ' : c);
             }
         }
     }
@@ -148,16 +145,28 @@ public final class Canvas {
             style = style.boldOff();
         }
 
+        if (paint.italic) {
+            style = style.italic();
+        } else {
+            style = style.italicOff();
+        }
+
         if (paint.underline) {
             style = style.underline();
         } else {
             style = style.underlineOff();
         }
 
-        if (paint.italic) {
-            style = style.italic();
+        if (paint.strikethrough) {
+            style = style.crossedOut();
         } else {
-            style = style.italicOff();
+            style = style.crossedOutOff();
+        }
+
+        if (paint.dim) {
+            style = style.faint();
+        } else {
+            style = style.faintOff();
         }
 
         if (paint.inverted) {
@@ -170,6 +179,18 @@ public final class Canvas {
             style = style.blink();
         } else {
             style = style.blinkOff();
+        }
+
+        if (paint.foregroundColor == null) {
+            style = style.foregroundOff();
+        } else {
+            style = style.foregroundRgb(paint.foregroundColor);
+        }
+
+        if (paint.backgroundColor == null) {
+            style = style.backgroundOff();
+        } else {
+            style = style.backgroundRgb(paint.backgroundColor);
         }
 
         return style;

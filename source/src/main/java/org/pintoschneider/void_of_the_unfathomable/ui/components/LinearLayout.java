@@ -20,9 +20,9 @@ public class LinearLayout extends Drawable {
     }
 
     /**
-     * Represents a child of {@link LinearLayout}, either with a fixed size or a flexible size.
+     * Represents a child of {@link LinearLayout}, either with intrinsic size or a flexible size.
      */
-    public static sealed abstract class Item permits Fixed, Flexible {
+    public static sealed abstract class Item permits Intrinsic, Flexible {
         public final Drawable child;
 
         public Item(Drawable child) {
@@ -31,14 +31,11 @@ public class LinearLayout extends Drawable {
     }
 
     /**
-     * A fixed-size child.
+     * A child that uses its intrinsic size in the layout direction.
      */
-    public static final class Fixed extends Item {
-        private final int size;
-
-        public Fixed(Drawable child, int size) {
+    public static final class Intrinsic extends Item {
+        public Intrinsic(Drawable child) {
             super(child);
-            this.size = size;
         }
     }
 
@@ -80,24 +77,31 @@ public class LinearLayout extends Drawable {
         size = constraints.biggest();
         if (items == null || items.length == 0) return;
 
-        int totalFixed = 0;
+        int totalIntrinsic = 0;
         int totalFlex = 0;
         for (Item item : items) {
-            if (item instanceof Fixed fixed) {
-                totalFixed += fixed.size;
+            if (item instanceof Intrinsic intrinsic) {
+                intrinsic.child.layout(constraints);
+                totalIntrinsic += switch (orientation) {
+                    case HORIZONTAL -> intrinsic.child.size().width();
+                    case VERTICAL -> intrinsic.child.size().height();
+                };
             } else if (item instanceof Flexible flexible) {
                 totalFlex += flexible.flex;
             }
         }
 
         final int available = switch (orientation) {
-            case HORIZONTAL -> size.width() - totalFixed;
-            case VERTICAL -> size.height() - totalFixed;
+            case HORIZONTAL -> size.width() - totalIntrinsic;
+            case VERTICAL -> size.height() - totalIntrinsic;
         };
 
         for (Item item : items) {
             final int length = switch (item) {
-                case Fixed fixed -> fixed.size;
+                case Intrinsic intrinsic -> switch (orientation) {
+                    case HORIZONTAL -> intrinsic.child.size().width();
+                    case VERTICAL -> intrinsic.child.size().height();
+                };
                 case Flexible flexible -> available * flexible.flex / totalFlex;
             };
 
@@ -116,24 +120,32 @@ public class LinearLayout extends Drawable {
     public void draw(Canvas canvas) {
         if (items == null || items.length == 0) return;
 
-        int totalFixed = 0;
+        int totalIntrinsic = 0;
         int totalFlex = 0;
         for (Item item : items) {
             switch (item) {
-                case Fixed fixed -> totalFixed += fixed.size;
+                case Intrinsic intrinsic -> {
+                    totalIntrinsic += switch (orientation) {
+                        case HORIZONTAL -> intrinsic.child.size().width();
+                        case VERTICAL -> intrinsic.child.size().height();
+                    };
+                }
                 case Flexible flexible -> totalFlex += flexible.flex;
             }
         }
 
         final int available = switch (orientation) {
-            case HORIZONTAL -> size.width() - totalFixed;
-            case VERTICAL -> size.height() - totalFixed;
+            case HORIZONTAL -> size.width() - totalIntrinsic;
+            case VERTICAL -> size.height() - totalIntrinsic;
         };
 
         int position = 0;
         for (Item item : items) {
             final int length = switch (item) {
-                case Fixed fixed -> fixed.size;
+                case Intrinsic intrinsic -> switch (orientation) {
+                    case HORIZONTAL -> intrinsic.child.size().width();
+                    case VERTICAL -> intrinsic.child.size().height();
+                };
                 case Flexible flexible -> available * flexible.flex / totalFlex;
             };
 

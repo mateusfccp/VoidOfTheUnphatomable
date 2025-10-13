@@ -9,10 +9,20 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
      *
      * @param width  The exact width constraint.
      * @param height The exact height constraint.
-     * @return A Constraints object with tight constraints.
+     * @return A {@link Constraints} object with tight constraints.
      */
     public static Constraints tight(int width, int height) {
         return new Constraints(width, width, height, height);
+    }
+
+    /**
+     * Creates a Constraints object with loose constraints.
+     * @param width The maximum width constraint.
+     * @param height The maximum height constraint.
+     * @return A {@link Constraints} object with loose constraints.
+     */
+    public static Constraints loose(int width, int height) {
+        return new Constraints(0, width, 0, height);
     }
 
     /**

@@ -20,6 +20,18 @@ public final class Paint {
     public boolean underline = false;
 
     /**
+     * Whether the text has a strikethrough.
+     */
+    public boolean strikethrough = false;
+
+    /**
+     * Whether the text is dimmed.
+     * <p>
+     * Dimmed text appears lighter than normal text.
+     */
+    public boolean dim = false;
+
+    /**
      * Whether the text is inverted.
      * <p>
      * Inverted text swaps the foreground and background colors.
@@ -32,4 +44,18 @@ public final class Paint {
      * Blinking text alternates between visible and invisible states.
      */
     public boolean blink = false;
+
+    /**
+     * The foreground color of the text.
+     * <p>
+     * If null, the default terminal color is used.
+     */
+    public Integer foregroundColor = null;
+
+    /**
+     * The background color of the text.
+     * <p>
+     * If null, the default terminal color is used.
+     */
+    public Integer backgroundColor = null;
 }

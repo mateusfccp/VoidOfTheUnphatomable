@@ -33,7 +33,7 @@ public abstract class Drawable {
      *
      * @return The size of the drawable.
      */
-    public Size getSize() {
+    public Size size() {
         return size;
     }
 }

@@ -1,28 +1,71 @@
 package org.pintoschneider.void_of_the_unfathomable;
 
 import org.pintoschneider.void_of_the_unfathomable.ui.Engine;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.Fixed;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.Flexible;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Row;
+import org.pintoschneider.void_of_the_unfathomable.ui.components.Column;
+import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.Intrinsic;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Box;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 public class Main {
-    //    static final String lore = "Todos los ojos, desprovistos de brillo, se volvían hacia la misma cicatriz en el corazón del mundo: el Vacío. Era un no-lugar de locura geométrica, una herida supurante en el tejido del universo, nacida de la arrogancia de los Ancestros que osaron mirar a la cara a la nada. Dentro de esa pesadilla física, se decía, habían dejado caer una última lágrima de la Creación, una nota del primer sonido: el Núcleo Resonante, cuya vibración era lo único que podía recordarle al universo cómo existir.";
-    static final String lore = "a";
 
     public static void main(String[] args) {
-        final Paint paint = new Paint();
-        paint.bold = true;
+        final Paint bold = new Paint();
+        bold.bold = true;
+
+        final Paint italic = new Paint();
+        italic.italic = true;
+
+        final Paint underline = new Paint();
+        underline.underline = true;
+
+        final Paint strikethrough = new Paint();
+        strikethrough.strikethrough = true;
+
+        final Paint dim = new Paint();
+        dim.dim = true;
+
+        final Paint inverted = new Paint();
+        inverted.inverted = true;
+
+        final Paint blink = new Paint();
+        blink.blink = true;
+
+        final Paint red = new Paint();
+        red.foregroundColor = 0xFF0000;
+
+        final Paint redBackground = new Paint();
+        redBackground.backgroundColor = 0xFF0000;
 
         final Box box = new Box(
-                new Row(
-                        new Fixed(new Box(
-
-                        ), 10),
-                        new Flexible(new Box(new Text(lore, paint)), 1),
-                        new Fixed(new Box(), 10)
+                new Column(
+                        new Intrinsic(
+                                new Text("Bold", bold)
+                        ),
+                        new Intrinsic(
+                                new Text("Italic", italic)
+                        ),
+                        new Intrinsic(
+                                new Text("Underline", underline)
+                        ),
+                        new Intrinsic(
+                                new Text("Strikethrough", strikethrough)
+                        ),
+                        new Intrinsic(
+                                new Text("Dim", dim)
+                        ),
+                        new Intrinsic(
+                                new Text("Inverted", inverted)
+                        ),
+                        new Intrinsic(
+                                new Text("Blink", blink)
+                        ),
+                        new Intrinsic(
+                                new Text("Red", red)
+                        ),
+                        new Intrinsic(
+                                new Text("Red Background", redBackground)
+                        )
                 )
         );
         try (final Engine engine = new Engine(box)) {

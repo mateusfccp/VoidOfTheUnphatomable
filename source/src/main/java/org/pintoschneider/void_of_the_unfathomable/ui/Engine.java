@@ -66,7 +66,7 @@ public class Engine implements AutoCloseable {
     }
 
     private void draw() {
-        final Size drawableSize = rootDrawable.getSize();
+        final Size drawableSize = rootDrawable.size();
 
         if (drawableSize == null) {
             throw new IllegalStateException("Drawable size is null. Did you forget to call layout()?");
