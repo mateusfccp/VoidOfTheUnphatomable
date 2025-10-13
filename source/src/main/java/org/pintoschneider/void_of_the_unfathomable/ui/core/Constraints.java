@@ -16,8 +16,20 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
     }
 
     /**
+     * Creates a Constraints object with tight constraints from a Size object.
+     *
+     * @param size The exact size constraint.
+     * @return A {@link Constraints} object with tight constraints.
+     */
+    public static Constraints tight(Size size) {
+        return new Constraints(size.width(), size.width(), size.height(), size.height());
+    }
+
+
+    /**
      * Creates a Constraints object with loose constraints.
-     * @param width The maximum width constraint.
+     *
+     * @param width  The maximum width constraint.
      * @param height The maximum height constraint.
      * @return A {@link Constraints} object with loose constraints.
      */
@@ -53,6 +65,24 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
     }
 
     /**
+     * Returns a {@link Size} object representing the biggest size that satisfies the constraints.
+     *
+     * @return A {@link Size} object with the maximum width and height.
+     */
+    public Size biggest() {
+        return new Size(maxWidth, maxHeight);
+    }
+
+    /**
+     * Returns a {@link Size} object representing the smallest size that satisfies the constraints.
+     *
+     * @return A {@link Size} object with the minimum width and height.
+     */
+    public Size smallest() {
+        return new Size(minWidth, minHeight);
+    }
+
+    /**
      * Constrains the given size to fit within the constraints.
      *
      * @param size The size to be constrained.
@@ -65,11 +95,18 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
     }
 
     /**
-     * Returns a {@link Size} object representing the biggest size that satisfies the constraints.
+     * Returns new constraints that respect the given constraints while being as close as possible to the original
+     * constraints.
      *
-     * @return A {@link Size} object with the maximum width and height.
+     * @param constraints The constraints to be enforced.
+     * @return A new {@link Constraints} object that respects the given constraints.
      */
-    public Size biggest() {
-        return new Size(maxWidth, maxHeight);
+    public Constraints enforce(Constraints constraints) {
+        return new Constraints(
+                Math.clamp(minWidth, constraints.minWidth, constraints.maxWidth),
+                Math.clamp(maxWidth, constraints.minWidth, constraints.maxWidth),
+                Math.clamp(minHeight, constraints.minHeight, constraints.maxHeight),
+                Math.clamp(maxHeight, constraints.minHeight, constraints.maxHeight)
+        );
     }
 }

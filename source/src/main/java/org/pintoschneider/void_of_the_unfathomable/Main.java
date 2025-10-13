@@ -1,11 +1,15 @@
 package org.pintoschneider.void_of_the_unfathomable;
 
 import org.pintoschneider.void_of_the_unfathomable.ui.Engine;
+import org.pintoschneider.void_of_the_unfathomable.ui.components.Align;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Column;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.Intrinsic;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Border;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
+
+import java.io.IOException;
 
 public class Main {
 
@@ -66,14 +70,23 @@ public class Main {
                         new Intrinsic(
                                 new Text("Red Background", redBackground)
                         )
+                        ,
+                        new Intrinsic(
+                            new Border(
+                                    new Align(
+                                            Alignment.center,
+                                            new Text("Centered Text", red)
+                                    )
+                            )
+                        )
                 )
         );
         try (final Engine engine = new Engine(border)) {
             while (engine.isAlive()) {
                 engine.tick();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -7,14 +7,14 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 
 /**
- * A drawable component that displays text content.
+ * A component that displays text content.
  * <p>
  * The component automatically handles line wrapping based on the available width. If a word exceeds the maximum width,
  * it will be truncated and an ellipsis ("…") will be added at the end of the line.
  * <p>
  * The text is drawn using the specified {@link Paint} style.
  */
-public class Text extends Drawable {
+public class Text extends Component {
     private final String content;
     private final Paint paint;
     private final ArrayList<String> lines = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Text extends Drawable {
      * Constructs a {@link Text} component with the given content and paint style.
      *
      * @param content The text content to display.
-     * @param paint The paint style to use for rendering the text.
+     * @param paint   The paint style to use for rendering the text.
      */
     public Text(String content, Paint paint) {
         this.content = content;
@@ -44,7 +44,7 @@ public class Text extends Drawable {
     public void layout(Constraints constraints) {
         final Size maximumSize = constraints.biggest();
         computeLines(content, maximumSize.width());
-        final int width = Math.max(content.length(), maximumSize.width());
+        final int width = Math.min(content.length(), maximumSize.width());
         size = new Size(width, Math.min(lines.size(), maximumSize.height()));
     }
 

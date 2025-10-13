@@ -6,7 +6,7 @@ import org.jline.utils.InfoCmp.Capability;
 import org.jline.utils.NonBlockingReader;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
 
 import java.io.IOException;
@@ -14,11 +14,11 @@ import java.io.IOException;
 public class Engine implements AutoCloseable {
     private final Terminal terminal = TerminalBuilder.builder().build();
     private final NonBlockingReader reader = terminal.reader();
-    private final Drawable rootDrawable;
+    private final Component rootComponent;
     private Size terminalSize;
 
-    public Engine(Drawable rootDrawable) throws IOException {
-        this.rootDrawable = rootDrawable;
+    public Engine(Component rootComponent) throws IOException {
+        this.rootComponent = rootComponent;
         terminal.enterRawMode();
 
         // Register a signal handler for window resize events
@@ -60,20 +60,20 @@ public class Engine implements AutoCloseable {
     }
 
     private void layout() {
-        // Root drawable takes the entire terminal size
+        // Root component takes the entire terminal size
         final Constraints constraints = Constraints.tight(terminalSize.width(), terminalSize.height());
-        rootDrawable.layout(constraints);
+        rootComponent.layout(constraints);
     }
 
     private void draw() {
-        final Size drawableSize = rootDrawable.size();
+        final Size componentSize = rootComponent.size();
 
-        if (drawableSize == null) {
-            throw new IllegalStateException("Drawable size is null. Did you forget to call layout()?");
+        if (componentSize == null) {
+            throw new IllegalStateException("Component size is null. Did you forget to call layout()?");
         }
 
-        final Canvas rootCanvas = new Canvas(drawableSize);
-        rootDrawable.draw(rootCanvas);
+        final Canvas rootCanvas = new Canvas(componentSize, rootComponent);
+        rootComponent.draw(rootCanvas);
         rootCanvas.writeTo(terminal.writer());
     }
 

@@ -7,25 +7,32 @@ import java.io.PrintWriter;
 
 /**
  * The {@code Canvas} class represents a 2D grid of characters and optional style objects,
- * used for rendering {@link Drawable} objects in a terminal or text-based UI.
+ * used for rendering {@link Component} objects in a terminal or text-based UI.
  * <p>
  * Each cell in the canvas can hold a character and an associated style object.
- * The canvas provides methods to draw characters, draw other {@link Drawable} objects,
+ * The canvas provides methods to draw characters, draw other {@link Component} objects,
  * and merge other canvases into itself at specified offsets.
  * <p>
  * The canvas can be written to a {@link PrintWriter} for display.
  */
 public final class Canvas {
-    Character[][] tiles;
-    Paint[][] paints;
+    private final Character[][] tiles;
+    private final Paint[][] paints;
+    private final int width;
+    private final int height;
+    private final Component debugComponent;
 
     /**
      * Constructs a new {@link Canvas} with the specified width and height.
      *
-     * @param width  The width of the canvas.
-     * @param height The height of the canvas.
+     * @param width          The width of the canvas.
+     * @param height         The height of the canvas.
+     * @param debugComponent
      */
-    public Canvas(int width, int height) {
+    public Canvas(int width, int height, Component debugComponent) {
+        this.width = width;
+        this.height = height;
+        this.debugComponent = debugComponent;
         tiles = new Character[width][height];
         paints = new Paint[width][height];
     }
@@ -35,23 +42,35 @@ public final class Canvas {
      *
      * @param size The size of the canvas.
      */
-    public Canvas(Size size) {
-        this(size.width(), size.height());
+    public Canvas(Size size, Component debugComponent) {
+        this(size.width(), size.height(), debugComponent);
     }
 
     /**
-     * Draws a {@link Drawable} object onto this canvas at the specified position.
+     * Draws a {@link Component} object onto this canvas at the specified position.
      * <p>
-     * The drawable is rendered onto a temporary canvas and then merged into this canvas.
+     * The component is rendered onto a temporary canvas and then merged into this canvas.
      *
-     * @param drawable The {@link Drawable} to render.
-     * @param x        The x-coordinate to draw at.
-     * @param y        The y-coordinate to draw at.
+     * @param component The {@link Component} to render.
+     * @param x         The x-coordinate to draw at.
+     * @param y         The y-coordinate to draw at.
      */
-    public void draw(Drawable drawable, int x, int y) {
-        final Canvas canvas = forDrawable(drawable);
-        drawable.draw(canvas);
+    public void draw(Component component, int x, int y) {
+        assert component.size != null : "Component must be laid out before drawing";
+
+        final Canvas canvas = forDrawable(component);
+        component.draw(canvas);
         merge(canvas, x, y);
+    }
+
+    /**
+     * Draws a {@link Component} object onto this canvas at the specified offset.
+     *
+     * @param component The {@link Component} to render.
+     * @param offset   The {@link Offset} to draw at.
+     */
+    public void draw(Component component, Offset offset) {
+        draw(component, offset.dx(), offset.dy());
     }
 
     /**
@@ -74,6 +93,10 @@ public final class Canvas {
      * @param paint The paint style to apply, or null for no style.
      */
     public void draw(Character c, int x, int y, Paint paint) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            throw new IndexOutOfBoundsException("Coordinates out of bounds: (" + x + ", " + y + ") for canvas of size (" + width + ", " + height + ") in component " + debugComponent);
+        }
+
         tiles[x][y] = c;
         paints[x][y] = paint;
     }
@@ -88,9 +111,13 @@ public final class Canvas {
      * @param yOffset The y offset to merge at.
      */
     void merge(Canvas other, int xOffset, int yOffset) {
-        for (int x = 0; x < other.tiles.length; x++) {
-            for (int y = 0; y < other.tiles[x].length; y++) {
+        for (int x = 0; x < other.width; x++) {
+            for (int y = 0; y < other.height; y++) {
                 if (other.tiles[x][y] != null) {
+                    if (x + xOffset < 0 || x + xOffset >= width || y + yOffset < 0 || y + yOffset >= height) {
+                        continue; // Discard for now
+                    }
+
                     tiles[x + xOffset][y + yOffset] = other.tiles[x][y];
                     paints[x + xOffset][y + yOffset] = other.paints[x][y];
                 }
@@ -99,13 +126,13 @@ public final class Canvas {
     }
 
     /**
-     * Creates a new canvas sized to fit the given drawable.
+     * Creates a new canvas sized to fit the given component.
      *
-     * @param drawable The drawable to fit.
-     * @return a new canvas sized for the drawable
+     * @param component The component to fit.
+     * @return a new canvas sized for the component
      */
-    static Canvas forDrawable(Drawable drawable) {
-        return new Canvas(drawable.size.width(), drawable.size.height());
+    static Canvas forDrawable(Component component) {
+        return new Canvas(component.size.width(), component.size.height(), component);
     }
 
     /**

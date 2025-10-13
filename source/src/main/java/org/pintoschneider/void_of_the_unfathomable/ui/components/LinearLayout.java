@@ -2,7 +2,7 @@ package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
 
 /**
@@ -11,7 +11,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
  * <p>
  * Use {@link Row} or {@link Column} for convenience.
  */
-public class LinearLayout extends Drawable {
+public class LinearLayout extends Component {
     /**
      * The orientation of the layout: horizontal (row) or vertical (column).
      */
@@ -23,9 +23,9 @@ public class LinearLayout extends Drawable {
      * Represents a child of {@link LinearLayout}, either with intrinsic size or a flexible size.
      */
     public static sealed abstract class Item permits Intrinsic, Flexible {
-        public final Drawable child;
+        public final Component child;
 
-        public Item(Drawable child) {
+        public Item(Component child) {
             this.child = child;
         }
     }
@@ -34,7 +34,7 @@ public class LinearLayout extends Drawable {
      * A child that uses its intrinsic size in the layout direction.
      */
     public static final class Intrinsic extends Item {
-        public Intrinsic(Drawable child) {
+        public Intrinsic(Component child) {
             super(child);
         }
     }
@@ -45,7 +45,7 @@ public class LinearLayout extends Drawable {
     public static final class Flexible extends Item {
         private final int flex;
 
-        public Flexible(Drawable child, int flex) {
+        public Flexible(Component child, int flex) {
             super(child);
             this.flex = flex;
         }
@@ -77,42 +77,36 @@ public class LinearLayout extends Drawable {
         size = constraints.biggest();
         if (items == null || items.length == 0) return;
 
-        int totalIntrinsic = 0;
+        int availableSpace = mainAxisLength();
         int totalFlex = 0;
+
         for (Item item : items) {
-            if (item instanceof Intrinsic intrinsic) {
-                intrinsic.child.layout(constraints);
-                totalIntrinsic += switch (orientation) {
-                    case HORIZONTAL -> intrinsic.child.size().width();
-                    case VERTICAL -> intrinsic.child.size().height();
-                };
-            } else if (item instanceof Flexible flexible) {
-                totalFlex += flexible.flex;
+            switch (item) {
+                case Intrinsic intrinsic -> {
+                    final Constraints childConstraints = switch (orientation) {
+                        case HORIZONTAL -> Constraints.loose(availableSpace, crossAxisLength());
+                        case VERTICAL -> Constraints.loose(crossAxisLength(), availableSpace);
+                    };
+
+                    item.child.layout(childConstraints);
+
+                    availableSpace = availableSpace - getChildMainAxisLength(item.child);
+                }
+                case Flexible flexible -> totalFlex += flexible.flex;
             }
         }
 
-        final int available = switch (orientation) {
-            case HORIZONTAL -> size.width() - totalIntrinsic;
-            case VERTICAL -> size.height() - totalIntrinsic;
-        };
-
         for (Item item : items) {
-            final int length = switch (item) {
-                case Intrinsic intrinsic -> switch (orientation) {
-                    case HORIZONTAL -> intrinsic.child.size().width();
-                    case VERTICAL -> intrinsic.child.size().height();
+            if (item instanceof Flexible flexible) {
+                final int length = (int) ((flexible.flex / (float) totalFlex) * availableSpace);
+
+                final Constraints childConstraints = switch (orientation) {
+                    case HORIZONTAL -> Constraints.tight(length, crossAxisLength());
+                    case VERTICAL -> Constraints.tight(crossAxisLength(), length);
                 };
-                case Flexible flexible -> available * flexible.flex / totalFlex;
-            };
 
-            final Size size = switch (orientation) {
-                case HORIZONTAL -> new Size(length, this.size.height());
-                case VERTICAL -> new Size(this.size.width(), length);
-            };
-
-            final Constraints itemConstraints = Constraints.tight(size.width(), size.height());
-
-            item.child.layout(itemConstraints);
+                item.child.layout(childConstraints);
+            }
         }
     }
 
@@ -120,41 +114,40 @@ public class LinearLayout extends Drawable {
     public void draw(Canvas canvas) {
         if (items == null || items.length == 0) return;
 
-        int totalIntrinsic = 0;
-        int totalFlex = 0;
-        for (Item item : items) {
-            switch (item) {
-                case Intrinsic intrinsic -> {
-                    totalIntrinsic += switch (orientation) {
-                        case HORIZONTAL -> intrinsic.child.size().width();
-                        case VERTICAL -> intrinsic.child.size().height();
-                    };
-                }
-                case Flexible flexible -> totalFlex += flexible.flex;
-            }
-        }
-
-        final int available = switch (orientation) {
-            case HORIZONTAL -> size.width() - totalIntrinsic;
-            case VERTICAL -> size.height() - totalIntrinsic;
-        };
-
         int position = 0;
+
         for (Item item : items) {
-            final int length = switch (item) {
-                case Intrinsic intrinsic -> switch (orientation) {
-                    case HORIZONTAL -> intrinsic.child.size().width();
-                    case VERTICAL -> intrinsic.child.size().height();
-                };
-                case Flexible flexible -> available * flexible.flex / totalFlex;
-            };
-
             switch (orientation) {
-                case HORIZONTAL -> canvas.draw(item.child, position, 0);
-                case VERTICAL -> canvas.draw(item.child, 0, position);
+                case HORIZONTAL -> {
+                    canvas.draw(item.child, position, 0);
+                    position += item.child.size().width();
+                }
+                case VERTICAL -> {
+                    canvas.draw(item.child, 0, position);
+                    position += item.child.size().height();
+                }
             }
-
-            position += length;
         }
+    }
+
+    private int mainAxisLength() {
+        return switch (orientation) {
+            case HORIZONTAL -> size.width();
+            case VERTICAL -> size.height();
+        };
+    }
+
+    private int crossAxisLength() {
+        return switch (orientation) {
+            case HORIZONTAL -> size.height();
+            case VERTICAL -> size.width();
+        };
+    }
+
+    private int getChildMainAxisLength(Component component) {
+        return switch (orientation) {
+            case HORIZONTAL -> component.size().width();
+            case VERTICAL -> component.size().height();
+        };
     }
 }
