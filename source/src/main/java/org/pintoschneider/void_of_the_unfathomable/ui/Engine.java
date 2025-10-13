@@ -43,8 +43,8 @@ public class Engine implements AutoCloseable {
             if (input != NonBlockingReader.READ_EXPIRED) {
                 refresh();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -82,7 +82,7 @@ public class Engine implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         terminal.close();
     }
 }

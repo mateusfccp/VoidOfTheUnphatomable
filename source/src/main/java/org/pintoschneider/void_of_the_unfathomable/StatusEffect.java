@@ -17,5 +17,5 @@ public enum StatusEffect {
     /**
      * The entity is burning and takes fire damage over time.
      */
-    BURNING;
+    BURNING
 }
