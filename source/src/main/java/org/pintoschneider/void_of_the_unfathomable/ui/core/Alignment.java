@@ -33,47 +33,47 @@ public record Alignment(double x, double y) {
     /**
      * Alignment in the top-left corner of a rectangle.
      */
-    public static final Alignment topLeft = new Alignment(-1.0, -1.0);
+    public static final Alignment TOP_LEFT = new Alignment(-1.0, -1.0);
 
     /**
      * Alignment in the top-center of a rectangle.
      */
-    public static final Alignment topCenter = new Alignment(0.0, -1.0);
+    public static final Alignment TOP_CENTER = new Alignment(0.0, -1.0);
 
     /**
      * Alignment in the top-right corner of a rectangle.
      */
-    public static final Alignment topRight = new Alignment(1.0, -1.0);
+    public static final Alignment TOP_RIGHT = new Alignment(1.0, -1.0);
 
     /**
      * Alignment in the center-left of a rectangle.
      */
-    public static final Alignment centerLeft = new Alignment(-1.0, 0.0);
+    public static final Alignment CENTER_LEFT = new Alignment(-1.0, 0.0);
 
     /**
      * Alignment in the center of a rectangle.
      */
-    public static final Alignment center = new Alignment(0.0, 0.0);
+    public static final Alignment CENTER = new Alignment(0.0, 0.0);
 
     /**
      * Alignment in the center-right of a rectangle.
      */
-    public static final Alignment centerRight = new Alignment(1.0, 0.0);
+    public static final Alignment CENTER_RIGHT = new Alignment(1.0, 0.0);
 
     /**
      * Alignment in the bottom-left corner of a rectangle.
      */
-    public static final Alignment bottomLeft = new Alignment(-1.0, 1.0);
+    public static final Alignment BOTTOM_LEFT = new Alignment(-1.0, 1.0);
 
     /**
      * Alignment in the bottom-center of a rectangle.
      */
-    public static final Alignment bottomCenter = new Alignment(0.0, 1.0);
+    public static final Alignment BOTTOM_CENTER = new Alignment(0.0, 1.0);
 
     /**
      * Alignment in the bottom-right corner of a rectangle.
      */
-    public static final Alignment bottomRight = new Alignment(1.0, 1.0);
+    public static final Alignment BOTTOM_RIGHT = new Alignment(1.0, 1.0);
 
     /**
      * Computes the offset within a given size that corresponds to this alignment.

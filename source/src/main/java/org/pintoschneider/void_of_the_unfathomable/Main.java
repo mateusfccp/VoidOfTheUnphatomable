@@ -74,7 +74,7 @@ public class Main {
                         new Intrinsic(
                             new Border(
                                     new Align(
-                                            Alignment.center,
+                                            Alignment.CENTER,
                                             new Text("Centered Text", red)
                                     )
                             )
