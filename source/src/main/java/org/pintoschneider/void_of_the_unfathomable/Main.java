@@ -3,7 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable;
 import org.pintoschneider.void_of_the_unfathomable.ui.Engine;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Column;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.Intrinsic;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Box;
+import org.pintoschneider.void_of_the_unfathomable.ui.components.Border;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
@@ -37,7 +37,7 @@ public class Main {
         final Paint redBackground = new Paint();
         redBackground.backgroundColor = 0xFF0000;
 
-        final Box box = new Box(
+        final Border border = new Border(
                 new Column(
                         new Intrinsic(
                                 new Text("Bold", bold)
@@ -68,7 +68,7 @@ public class Main {
                         )
                 )
         );
-        try (final Engine engine = new Engine(box)) {
+        try (final Engine engine = new Engine(border)) {
             while (engine.isAlive()) {
                 engine.tick();
             }

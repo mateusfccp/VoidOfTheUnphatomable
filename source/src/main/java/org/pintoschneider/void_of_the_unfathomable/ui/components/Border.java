@@ -7,22 +7,22 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
 /**
  * A bordered box that can contain a single {@link Drawable} child.
  */
-public final class Box extends Drawable {
+public final class Border extends Drawable {
     private final Drawable child;
 
     /**
-     * Constructs an empty Box with no child.
+     * Constructs an empty {@link Border} with no child.
      */
-    public Box() {
+    public Border() {
         this.child = null;
     }
 
     /**
-     * Constructs a Box with the given child.
+     * Constructs a {@link Border} with the given child.
      *
-     * @param child the child Drawable to be contained within the box
+     * @param child the child {@link Drawable} to be contained within the box
      */
-    public Box(Drawable child) {
+    public Border(Drawable child) {
         this.child = child;
     }
 
