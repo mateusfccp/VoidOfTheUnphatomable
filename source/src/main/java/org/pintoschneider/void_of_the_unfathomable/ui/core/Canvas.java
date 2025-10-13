@@ -166,6 +166,12 @@ public final class Canvas {
             style = style.inverseOff();
         }
 
+        if (paint.blink) {
+            style = style.blink();
+        } else {
+            style = style.blinkOff();
+        }
+
         return style;
     }
 }
