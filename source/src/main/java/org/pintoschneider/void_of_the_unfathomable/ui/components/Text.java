@@ -1,25 +1,51 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
-import org.pintoschneider.void_of_the_unfathomable.ui.Size;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 
+/**
+ * A drawable component that displays text content.
+ * <p>
+ * The component automatically handles line wrapping based on the available width. If a word exceeds the maximum width,
+ * it will be truncated and an ellipsis ("…") will be added at the end of the line.
+ * <p>
+ * The text is drawn using the specified {@link Paint} style.
+ */
 public class Text extends Drawable {
     private final String content;
-    ArrayList<String> lines = new ArrayList<>();
+    private final Paint paint;
+    private final ArrayList<String> lines = new ArrayList<>();
 
+    /**
+     * Constructs a {@link Text} component with the given content.
+     *
+     * @param content The text content to display.
+     */
     public Text(String content) {
         this.content = content;
+        this.paint = new Paint();
+    }
+
+    /**
+     * Constructs a {@link Text} component with the given content and paint style.
+     *
+     * @param content The text content to display.
+     * @param paint The paint style to use for rendering the text.
+     */
+    public Text(String content, Paint paint) {
+        this.content = content;
+        this.paint = paint;
     }
 
     @Override
-    public void layout(Size maximumSize) {
-        computeLines(content, maximumSize.getWidth());
-        final int width = Math.max(content.length(), maximumSize.getWidth());
-        size = new Size(width, Math.min(lines.size(), maximumSize.getHeight()));
+    public void layout(Constraints constraints) {
+        final Size maximumSize = constraints.biggest();
+        computeLines(content, maximumSize.width());
+        final int width = Math.max(content.length(), maximumSize.width());
+        size = new Size(width, Math.min(lines.size(), maximumSize.height()));
     }
 
     private void computeLines(String content, int maxWidth) {
@@ -87,10 +113,12 @@ public class Text extends Drawable {
     }
 
     @Override
-    public Character draw(int x, int y) {
-        if (y >= lines.size()) return null;
-        final String line = lines.get(y);
-        if (x >= line.length()) return null;
-        return line.charAt(x);
+    public void draw(Canvas canvas) {
+        for (int y = 0; y < lines.size(); y++) {
+            final String line = lines.get(y);
+            for (int x = 0; x < line.length(); x++) {
+                canvas.draw(line.charAt(x), x, y, paint);
+            }
+        }
     }
 }

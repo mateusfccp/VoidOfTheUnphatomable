@@ -2,9 +2,12 @@ package org.pintoschneider.void_of_the_unfathomable.ui;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-import org.jline.utils.InfoCmp;
+import org.jline.utils.InfoCmp.Capability;
 import org.jline.utils.NonBlockingReader;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
 
 import java.io.IOException;
 
@@ -23,6 +26,8 @@ public class Engine implements AutoCloseable {
             updateTerminalSize();
             refresh();
         });
+
+        terminal.puts(Capability.cursor_invisible);
 
         updateTerminalSize();
         refresh();
@@ -44,7 +49,7 @@ public class Engine implements AutoCloseable {
     }
 
     private void clearScreen() {
-        terminal.puts(InfoCmp.Capability.clear_screen);
+        terminal.puts(Capability.clear_screen);
     }
 
     private void refresh() {
@@ -55,7 +60,9 @@ public class Engine implements AutoCloseable {
     }
 
     private void layout() {
-        rootDrawable.layout(terminalSize);
+        // Root drawable takes the entire terminal size
+        final Constraints constraints = Constraints.tight(terminalSize.width(), terminalSize.height());
+        rootDrawable.layout(constraints);
     }
 
     private void draw() {
@@ -65,27 +72,9 @@ public class Engine implements AutoCloseable {
             throw new IllegalStateException("Drawable size is null. Did you forget to call layout()?");
         }
 
-        for (int y = 0; y < drawableSize.getHeight(); y++) {
-            for (int x = 0; x < drawableSize.getWidth(); x++) {
-                final Character character = rootDrawable.draw(x, y);
-                if (character != null) {
-                    drawAt(x, y, character.toString());
-                }
-            }
-        }
-    }
-
-    private void drawAt(int x, int y, String string) {
-        final int stringEndX = x + string.length();
-        final int overflowX = Math.max(0, stringEndX - terminalSize.getWidth());
-
-        terminal.puts(InfoCmp.Capability.cursor_address, y, x);
-        if (overflowX > 0) {
-            final String trimmedString = string.substring(0, string.length() - overflowX - 1) + '…';
-            terminal.writer().print(trimmedString);
-        } else {
-            terminal.writer().print(string);
-        }
+        final Canvas rootCanvas = new Canvas(drawableSize);
+        rootDrawable.draw(rootCanvas);
+        rootCanvas.writeTo(terminal.writer());
     }
 
     private void updateTerminalSize() {

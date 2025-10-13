@@ -1,7 +1,9 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
-import org.pintoschneider.void_of_the_unfathomable.ui.Size;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
 
 /**
  * A general-purpose layout component that arranges its children linearly,
@@ -73,17 +75,10 @@ public class LinearLayout extends Drawable {
         this.items = items;
     }
 
-    /**
-     * Lays out the children within the given maximum size, dividing space
-     * according to fixed sizes and flex proportions.
-     *
-     * @param maximumSize the maximum size available for layout
-     */
     @Override
-    public void layout(Size maximumSize) {
-        size = maximumSize;
+    public void layout(Constraints constraints) {
+        size = constraints.biggest();
         if (items == null || items.length == 0) return;
-
 
         int totalFixed = 0;
         int totalFlex = 0;
@@ -96,8 +91,8 @@ public class LinearLayout extends Drawable {
         }
 
         final int available = switch (orientation) {
-            case HORIZONTAL -> size.getWidth() - totalFixed;
-            case VERTICAL -> size.getHeight() - totalFixed;
+            case HORIZONTAL -> size.width() - totalFixed;
+            case VERTICAL -> size.height() - totalFixed;
         };
 
         for (Item item : items) {
@@ -107,24 +102,19 @@ public class LinearLayout extends Drawable {
             };
 
             final Size size = switch (orientation) {
-                case HORIZONTAL -> new Size(length, this.size.getHeight());
-                case VERTICAL -> new Size(this.size.getWidth(), length);
+                case HORIZONTAL -> new Size(length, this.size.height());
+                case VERTICAL -> new Size(this.size.width(), length);
             };
 
-            item.child.layout(size);
+            final Constraints itemConstraints = Constraints.tight(size.width(), size.height());
+
+            item.child.layout(itemConstraints);
         }
     }
 
-    /**
-     * Draws the character at the given coordinates by delegating to the appropriate child.
-     *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @return the character to draw, or null if none
-     */
     @Override
-    public Character draw(int x, int y) {
-        if (items == null || items.length == 0) return null;
+    public void draw(Canvas canvas) {
+        if (items == null || items.length == 0) return;
 
         int totalFixed = 0;
         int totalFlex = 0;
@@ -136,8 +126,8 @@ public class LinearLayout extends Drawable {
         }
 
         final int available = switch (orientation) {
-            case HORIZONTAL -> size.getWidth() - totalFixed;
-            case VERTICAL -> size.getHeight() - totalFixed;
+            case HORIZONTAL -> size.width() - totalFixed;
+            case VERTICAL -> size.height() - totalFixed;
         };
 
         int position = 0;
@@ -147,20 +137,12 @@ public class LinearLayout extends Drawable {
                 case Flexible flexible -> available * flexible.flex / totalFlex;
             };
 
-            boolean inside = switch (orientation) {
-                case HORIZONTAL -> x < position + length;
-                case VERTICAL -> y < position + length;
-            };
-
-            if (inside) {
-                return switch (orientation) {
-                    case HORIZONTAL -> item.child.draw(x - position, y);
-                    case VERTICAL -> item.child.draw(x, y - position);
-                };
+            switch (orientation) {
+                case HORIZONTAL -> canvas.draw(item.child, position, 0);
+                case VERTICAL -> canvas.draw(item.child, 0, position);
             }
+
             position += length;
         }
-
-        return null;
     }
 }

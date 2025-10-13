@@ -1,7 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Drawable;
-import org.pintoschneider.void_of_the_unfathomable.ui.Size;
 
 /**
  * A bordered box that can contain a single {@link Drawable} child.
@@ -26,40 +27,34 @@ public final class Box extends Drawable {
     }
 
     @Override
-    public void layout(Size maximumSize) {
-        size = maximumSize;
+    public void layout(Constraints constraints) {
+        size = constraints.biggest();
 
         if (child != null) {
-            child.layout(new Size(size.getWidth() - 2, size.getHeight() - 2));
+            final Constraints innerConstraints = new Constraints(0, size.width() - 2, 0, size.height() - 2);
+            child.layout(innerConstraints);
         }
     }
 
     @Override
-    public Character draw(int x, int y) {
-        if (x == 0) {
-            if (y == 0) {
-                return '┌';
-            } else if (y == size.getHeight() - 1) {
-                return '└';
-            } else {
-                return '│';
-            }
-        } else if (x == size.getWidth() - 1) {
-            if (y == 0) {
-                return '┐';
-            } else if (y == size.getHeight() - 1) {
-                return '┘';
-            } else {
-                return '│';
-            }
-        } else {
-            if (y == 0 || y == size.getHeight() - 1) {
-                return '─';
-            } else if (child != null) {
-                return child.draw(x - 1, y - 1);
-            } else {
-                return null;
-            }
+    public void draw(Canvas canvas) {
+        canvas.draw('┌', 0, 0);
+        canvas.draw('┐', size.width() - 1, 0);
+        canvas.draw('└', 0, size.height() - 1);
+        canvas.draw('┘', size.width() - 1, size.height() - 1);
+
+        for (int x = 1; x < size.width() - 1; x++) {
+            canvas.draw('─', x, 0);
+            canvas.draw('─', x, size.height() - 1);
+        }
+
+        for (int y = 1; y < size.height() - 1; y++) {
+            canvas.draw('│', 0, y);
+            canvas.draw('│', size.width() - 1, y);
+        }
+
+        if (child != null) {
+            canvas.draw(child, 1, 1);
         }
     }
 }

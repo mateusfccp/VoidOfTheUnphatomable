@@ -6,17 +6,22 @@ import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.Fl
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Row;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Box;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 public class Main {
-    static final String lore = "Todos los ojos, desprovistos de brillo, se volvían hacia la misma cicatriz en el corazón del mundo: el Vacío. Era un no-lugar de locura geométrica, una herida supurante en el tejido del universo, nacida de la arrogancia de los Ancestros que osaron mirar a la cara a la nada. Dentro de esa pesadilla física, se decía, habían dejado caer una última lágrima de la Creación, una nota del primer sonido: el Núcleo Resonante, cuya vibración era lo único que podía recordarle al universo cómo existir.";
+    //    static final String lore = "Todos los ojos, desprovistos de brillo, se volvían hacia la misma cicatriz en el corazón del mundo: el Vacío. Era un no-lugar de locura geométrica, una herida supurante en el tejido del universo, nacida de la arrogancia de los Ancestros que osaron mirar a la cara a la nada. Dentro de esa pesadilla física, se decía, habían dejado caer una última lágrima de la Creación, una nota del primer sonido: el Núcleo Resonante, cuya vibración era lo único que podía recordarle al universo cómo existir.";
+    static final String lore = "a";
 
     public static void main(String[] args) {
+        final Paint paint = new Paint();
+        paint.bold = true;
+
         final Box box = new Box(
                 new Row(
                         new Fixed(new Box(
 
                         ), 10),
-                        new Flexible(new Box(new Text(lore)), 1),
+                        new Flexible(new Box(new Text(lore, paint)), 1),
                         new Fixed(new Box(), 10)
                 )
         );
