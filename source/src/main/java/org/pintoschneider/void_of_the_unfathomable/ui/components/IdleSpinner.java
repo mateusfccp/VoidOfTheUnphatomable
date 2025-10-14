@@ -16,7 +16,7 @@ public class IdleSpinner extends Component {
 
     @Override
     public void draw(Canvas canvas) {
-        final char[] frames = new char[]{'⠋', '⠙', '⠹', '⠸', '⠼', '⠤', '⠦', '⠧', '⠇', '⠏' };
+        final char[] frames = new char[]{'⠇', '⠋', '⠙', '⠸', '⠴', '⠦'};
         canvas.draw(String.valueOf(frames[frame % frames.length]).charAt(0), 0, 0);
     }
 }

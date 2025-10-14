@@ -80,6 +80,42 @@ public final class Constraints {
     }
 
     /**
+     * The minimum width constraint.
+     *
+     * @return The minimum width constraint.
+     */
+    public int minWidth() {
+        return minWidth;
+    }
+
+    /**
+     * The maximum width constraint.
+     *
+     * @return The maximum width constraint.
+     */
+    public int maxWidth() {
+        return maxWidth;
+    }
+
+    /**
+     * The minimum height constraint.
+     *
+     * @return The minimum height constraint.
+     */
+    public int minHeight() {
+        return minHeight;
+    }
+
+    /**
+     * The maximum height constraint.
+     *
+     * @return The maximum height constraint.
+     */
+    public int maxHeight() {
+        return maxHeight;
+    }
+
+    /**
      * Checks if the constraints are tight (i.e., min and max dimensions are equal).
      *
      * @return true if the constraints are tight, false otherwise.
@@ -154,8 +190,6 @@ public final class Constraints {
 
     /**
      * Returns new constraints that are enlarged by the given amounts in width and height.
-     * <p>
-     * Only the maximum constraints are enlarged.
      *
      * @param width  The amount to enlarge the height constraints.
      * @param height The amount to enlarge the width constraints.
@@ -170,20 +204,26 @@ public final class Constraints {
         );
     }
 
-    public int minWidth() {
-        return minWidth;
-    }
+    /**
+     * Returns new constraints that are deflated by the given amounts in width and height.
+     * <p>
+     * The minimum constraints will never be less than 0, and the maximum constraints will never be less than the
+     * minimum constraints.
+     *
+     * @param width  The amount to deflate the height constraints.
+     * @param height The amount to deflate the width constraints.
+     * @return A new {@link Constraints} object that is deflated by the given amounts.
+     */
+    public Constraints deflate(int width, int height) {
+        final int deflatedMinWidth = Math.max(0, minWidth - width);
+        final int deflatedMinHeight = Math.max(0, minHeight - height);
 
-    public int maxWidth() {
-        return maxWidth;
-    }
-
-    public int minHeight() {
-        return minHeight;
-    }
-
-    public int maxHeight() {
-        return maxHeight;
+        return new Constraints(
+                deflatedMinWidth,
+                Math.max(deflatedMinWidth, maxWidth - width),
+                deflatedMinHeight,
+                Math.max(deflatedMinHeight, maxHeight - width)
+        );
     }
 
     @Override
