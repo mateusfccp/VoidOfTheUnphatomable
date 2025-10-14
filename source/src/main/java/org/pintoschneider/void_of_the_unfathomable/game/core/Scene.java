@@ -14,9 +14,9 @@ public interface Scene {
      *
      * @return The root {@link Component} of the scene.
      */
-    Component build(long deltaTime);
+    Component build(Context context);
 
-    default void onKeyPress(int keyCode) {}
+    default void onKeyPress(Context context, int keyCode) {}
 
     /**
      * Disposes of any resources held by the scene.

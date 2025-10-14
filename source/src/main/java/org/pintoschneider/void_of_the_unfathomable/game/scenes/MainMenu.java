@@ -1,5 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
+import org.pintoschneider.void_of_the_unfathomable.game.core.Context;
 import org.pintoschneider.void_of_the_unfathomable.game.core.Scene;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.*;
@@ -12,7 +13,7 @@ public final class MainMenu implements Scene {
     int frame = 0;
 
     @Override
-    public Component build(long deltaTime) {
+    public Component build(Context context) {
         frame = (frame + 1) % Integer.MAX_VALUE;
 
         final Paint selectedTextPaint = new Paint();
@@ -55,7 +56,7 @@ public final class MainMenu implements Scene {
     }
 
     @Override
-    public void onKeyPress(int keyCode) {
+    public void onKeyPress(Context context, int keyCode) {
         switch (keyCode) {
             case 'w', 'W', 65 -> { // Up
                 if (selectedOption.ordinal() > 0) {
@@ -67,13 +68,35 @@ public final class MainMenu implements Scene {
                     selectedOption = MenuOption.values()[selectedOption.ordinal() + 1];
                 }
             }
-//            case 10, 13 -> { // Enter
-//                handleSelection();
-//            }
+            case 10, 13 -> { // Enter
+                handleSelection(context);
+            }
             default -> {
                 // Ignore other keys
             }
         }
+    }
+
+    private void handleSelection(Context context) {
+        switch (selectedOption) {
+            case START_GAME -> {
+                // Transition to the game scene
+            }
+            case LOAD_GAME -> {
+                // Transition to the load game scene
+            }
+            case SETTINGS -> {
+                // Transition to the settings scene
+            }
+            case EXIT -> {
+                context.sceneManager().pop();
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "MainMenu";
     }
 }
 

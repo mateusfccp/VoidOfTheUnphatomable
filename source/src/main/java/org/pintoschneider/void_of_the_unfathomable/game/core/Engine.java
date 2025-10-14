@@ -9,16 +9,17 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class Engine implements AutoCloseable {
+public class Engine implements AutoCloseable, Context {
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
     private final NonBlockingReader reader = terminal.reader();
     private final PrintWriter writer = terminal.writer();
     private Size terminalSize;
-    private final Scene scene;
+    private final SceneManager sceneManager;
     private long lastNanoTime;
+    private long deltaTime;
 
     public Engine(Scene initialScene) throws IOException {
-        this.scene = initialScene;
+        sceneManager = new SceneManager(initialScene);
         terminal.enterRawMode();
 
         // Register a signal handler for window resize events
@@ -36,17 +37,19 @@ public class Engine implements AutoCloseable {
     }
 
     public boolean isAlive() {
-        return true; // Placeholder for actual game loop condition
+        return sceneManager.hasScene();
     }
 
     public void tick() {
         try {
             final int c = reader.read();
             if (c != NonBlockingReader.READ_EXPIRED && c != NonBlockingReader.EOF) {
-                scene.onKeyPress(c);
+                sceneManager.currentScene().onKeyPress(this, c);
             }
 
             refresh();
+
+            deltaTime = System.nanoTime() - lastNanoTime;
             lastNanoTime = System.nanoTime();
         } catch (final IOException e) {
             throw new RuntimeException(e);
@@ -63,7 +66,7 @@ public class Engine implements AutoCloseable {
     }
 
     private void drawScene() {
-        final Component rootComponent = scene.build(System.nanoTime() - lastNanoTime);
+        final Component rootComponent = sceneManager.currentScene().build(this);
         rootComponent.layout(Constraints.tight(terminalSize.width(), terminalSize.height()));
 
         final Canvas rootCanvas = new Canvas(rootComponent.size(), rootComponent);
@@ -79,5 +82,15 @@ public class Engine implements AutoCloseable {
     @Override
     public void close() throws IOException {
         terminal.close();
+    }
+
+    @Override
+    public SceneManager sceneManager() {
+        return sceneManager;
+    }
+
+    @Override
+    public long deltaTime() {
+        return deltaTime;
     }
 }
