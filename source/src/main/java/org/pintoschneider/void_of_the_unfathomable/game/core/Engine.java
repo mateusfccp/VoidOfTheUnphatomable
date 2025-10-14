@@ -10,6 +10,8 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Engine implements AutoCloseable, Context {
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
@@ -19,6 +21,8 @@ public class Engine implements AutoCloseable, Context {
     private final SceneManager sceneManager;
     private long lastNanoTime;
     private long deltaTime;
+    private final BlockingQueue<Integer> keyQueue = new LinkedBlockingQueue<>();
+    private final Thread inputThread;
 
     public Engine(Scene initialScene) throws IOException {
         sceneManager = new SceneManager(initialScene);
@@ -36,6 +40,14 @@ public class Engine implements AutoCloseable, Context {
 
         updateTerminalSize();
         refresh();
+
+        // Start input thread using a dedicated class
+        inputThread = new Thread(
+            new InputThread(reader, keyQueue),
+            "Engine-InputThread"
+        );
+        inputThread.setDaemon(true);
+        inputThread.start();
     }
 
     public boolean isAlive() {
@@ -44,11 +56,11 @@ public class Engine implements AutoCloseable, Context {
 
     public void tick() {
         try {
-            final int c = reader.read(1);
-            if (c != NonBlockingReader.READ_EXPIRED && c != NonBlockingReader.EOF) {
+            Integer c = keyQueue.poll();
+            if (c != null) {
                 sceneManager.currentScene().onKeyPress(this, c);
             }
-        } catch (final IOException e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -86,6 +98,7 @@ public class Engine implements AutoCloseable, Context {
 
     @Override
     public void close() throws IOException {
+        inputThread.interrupt();
         terminal.close();
     }
 
@@ -122,7 +135,7 @@ final class DebuggingLine extends Component {
         final int y = size.height() - 1;
 
         // FPS
-        final IdleSpinner spinner = new IdleSpinner((int) (System.nanoTime() % 10 / 10));
+        final IdleSpinner spinner = new IdleSpinner((int) ((System.nanoTime() / 100_000_000) % 6));
         spinner.layout(Constraints.tight(new Size(1, 1)));
         canvas.draw(spinner, 0, y);
 
@@ -137,5 +150,32 @@ final class DebuggingLine extends Component {
         final Text fpsValueText = new Text(String.format("%.2f", fps));
         fpsValueText.layout(Constraints.tight(new Size(6, 1)));
         canvas.draw(fpsValueText, 7, y);
+    }
+}
+
+/**
+ * Reads input from the NonBlockingReader and puts key codes into a queue.
+ */
+final class InputThread implements Runnable {
+    private final NonBlockingReader reader;
+    private final BlockingQueue<Integer> keyQueue;
+
+    InputThread(NonBlockingReader reader, BlockingQueue<Integer> keyQueue) {
+        this.reader = reader;
+        this.keyQueue = keyQueue;
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                int c = reader.read(1);
+                if (c != NonBlockingReader.READ_EXPIRED && c != NonBlockingReader.EOF) {
+                    keyQueue.put(c);
+                }
+            }
+        } catch (IOException | InterruptedException e) {
+            // Thread interrupted or IO error, exit thread
+        }
     }
 }
