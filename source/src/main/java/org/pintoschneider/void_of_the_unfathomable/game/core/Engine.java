@@ -47,6 +47,7 @@ public class Engine implements AutoCloseable, Context {
                 sceneManager.currentScene().onKeyPress(this, c);
             }
 
+            if (!isAlive()) return;
             refresh();
 
             deltaTime = System.nanoTime() - lastNanoTime;
