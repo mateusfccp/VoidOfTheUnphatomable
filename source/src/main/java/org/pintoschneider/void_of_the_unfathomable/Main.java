@@ -13,15 +13,8 @@ public class Main {
         final Scene scene = new MainMenu();
 
         try (final Engine engine = new Engine(scene)) {
-            while (engine.isAlive()) {
-                try {
-                    engine.tick();
-                    Thread.sleep(1000 / FPS);
-                } catch (final InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        } catch (final IOException e) {
+            engine.waitUntilStopped();
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

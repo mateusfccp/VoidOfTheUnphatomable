@@ -20,19 +20,16 @@ public final class Canvas {
     private final Paint[][] paints;
     private final int width;
     private final int height;
-    private final Component debugComponent;
 
     /**
      * Constructs a new {@link Canvas} with the specified width and height.
      *
      * @param width          The width of the canvas.
      * @param height         The height of the canvas.
-     * @param debugComponent
      */
-    public Canvas(int width, int height, Component debugComponent) {
+    public Canvas(int width, int height) {
         this.width = width;
         this.height = height;
-        this.debugComponent = debugComponent;
         tiles = new Character[width][height];
         paints = new Paint[width][height];
     }
@@ -42,8 +39,8 @@ public final class Canvas {
      *
      * @param size The size of the canvas.
      */
-    public Canvas(Size size, Component debugComponent) {
-        this(size.width(), size.height(), debugComponent);
+    public Canvas(Size size) {
+        this(size.width(), size.height());
     }
 
     /**
@@ -96,7 +93,8 @@ public final class Canvas {
      */
     public void draw(Character c, int x, int y, Paint paint) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
-            throw new IndexOutOfBoundsException("Coordinates out of bounds: (" + x + ", " + y + ") for canvas of size (" + width + ", " + height + ") in component " + debugComponent);
+            final String errorMessage = "Coordinates out of bounds: (%d, %d) for canvas of size (%d, %d).".formatted(x, y, width, height);
+            throw new IndexOutOfBoundsException(errorMessage);
         }
 
         tiles[x][y] = c;
@@ -134,7 +132,7 @@ public final class Canvas {
      * @return a new canvas sized for the component
      */
     static Canvas forDrawable(Component component) {
-        return new Canvas(component.size().width(), component.size().height(), component);
+        return new Canvas(component.size().width(), component.size().height());
     }
 
     /**

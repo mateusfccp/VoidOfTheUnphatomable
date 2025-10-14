@@ -3,7 +3,6 @@ package org.pintoschneider.void_of_the_unfathomable.ui.components;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
 
 /**
  * A general-purpose layout component that arranges its children linearly,

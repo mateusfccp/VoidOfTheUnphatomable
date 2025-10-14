@@ -16,4 +16,11 @@ public interface Context {
      * @return The delta time in nanoseconds.
      */
     long deltaTime();
+
+    /**
+     * Gets the number of ticks that have occurred since the engine started.
+     *
+     * @return The tick count.
+     */
+    long tickCount();
 }

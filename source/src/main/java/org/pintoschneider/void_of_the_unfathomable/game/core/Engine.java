@@ -10,65 +10,50 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class Engine implements AutoCloseable, Context {
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
-    private final NonBlockingReader reader = terminal.reader();
     private final PrintWriter writer = terminal.writer();
     private Size terminalSize;
     private final SceneManager sceneManager;
-    private long lastNanoTime;
-    private long deltaTime;
-    private final BlockingQueue<Integer> keyQueue = new LinkedBlockingQueue<>();
-    private final Thread inputThread;
+    private final InputThread inputThread;
+    private final UIThread uiThread;
+    private boolean running = true;
 
     public Engine(Scene initialScene) throws IOException {
         sceneManager = new SceneManager(initialScene);
         terminal.enterRawMode();
 
         // Register a signal handler for window resize events
-        terminal.handle(Terminal.Signal.WINCH, _ -> {
-            updateTerminalSize();
-            refresh();
-        });
+        terminal.handle(Terminal.Signal.WINCH, _ -> updateTerminalSize());
 
         terminal.puts(Capability.cursor_invisible);
 
-        lastNanoTime = System.nanoTime();
-
         updateTerminalSize();
-        refresh();
 
         // Start input thread using a dedicated class
-        inputThread = new Thread(
-            new InputThread(reader, keyQueue),
-            "Engine-InputThread"
-        );
+        final NonBlockingReader reader = terminal.reader();
+
+        inputThread = new InputThread(this, reader);
         inputThread.setDaemon(true);
         inputThread.start();
+
+        // Start the UI thread using a dedicated class
+        uiThread = new UIThread(this, 30);
+        uiThread.setDaemon(true);
+        uiThread.start();
     }
 
-    public boolean isAlive() {
-        return sceneManager.hasScene();
-    }
-
-    public void tick() {
-        try {
-            Integer c = keyQueue.poll();
-            if (c != null) {
-                sceneManager.currentScene().onKeyPress(this, c);
-            }
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
+    void tick() {
+        if (sceneManager.hasScene()) {
+            refresh();
+        } else {
+            stop();
         }
+    }
 
-        if (!isAlive()) return;
-        refresh();
-
-        deltaTime = System.nanoTime() - lastNanoTime;
-        lastNanoTime = System.nanoTime();
+    void processKey(int key) {
+        sceneManager.currentScene().onKeyPress(this, key);
     }
 
     private void clearScreen() {
@@ -86,7 +71,7 @@ public class Engine implements AutoCloseable, Context {
         );
         rootComponent.layout(Constraints.tight(terminalSize.width(), terminalSize.height()));
 
-        final Canvas rootCanvas = new Canvas(rootComponent.size(), rootComponent);
+        final Canvas rootCanvas = new Canvas(rootComponent.size());
         rootComponent.draw(rootCanvas);
         rootCanvas.writeTo(writer);
         writer.flush();
@@ -96,10 +81,20 @@ public class Engine implements AutoCloseable, Context {
         terminalSize = new Size(terminal.getWidth(), terminal.getHeight());
     }
 
-    @Override
-    public void close() throws IOException {
-        inputThread.interrupt();
-        terminal.close();
+    /**
+     * Returns whether the engine is still running.
+     */
+    public synchronized void waitUntilStopped() throws InterruptedException {
+        while (running) {
+            wait();
+        }
+    }
+
+    private void stop() {
+        running = false;
+        synchronized (this) {
+            notifyAll();
+        }
     }
 
     @Override
@@ -109,7 +104,18 @@ public class Engine implements AutoCloseable, Context {
 
     @Override
     public long deltaTime() {
-        return deltaTime;
+        return uiThread.deltaTime();
+    }
+
+    @Override
+    public long tickCount() {
+        return uiThread.tickCount();
+    }
+
+    @Override
+    public void close() throws IOException {
+        inputThread.interrupt();
+        terminal.close();
     }
 }
 
@@ -156,13 +162,19 @@ final class DebuggingLine extends Component {
 /**
  * Reads input from the NonBlockingReader and puts key codes into a queue.
  */
-final class InputThread implements Runnable {
+final class InputThread extends Thread {
     private final NonBlockingReader reader;
-    private final BlockingQueue<Integer> keyQueue;
+    private final Engine engine;
 
-    InputThread(NonBlockingReader reader, BlockingQueue<Integer> keyQueue) {
+    /**
+     * Creates an InputThread.
+     *
+     * @param engine The game engine to send input to.
+     * @param reader The NonBlockingReader to read input from.
+     */
+    InputThread(Engine engine, NonBlockingReader reader) {
+        this.engine = engine;
         this.reader = reader;
-        this.keyQueue = keyQueue;
     }
 
     @Override
@@ -171,11 +183,65 @@ final class InputThread implements Runnable {
             while (!Thread.currentThread().isInterrupted()) {
                 int c = reader.read(1);
                 if (c != NonBlockingReader.READ_EXPIRED && c != NonBlockingReader.EOF) {
-                    keyQueue.put(c);
+                    engine.processKey(c);
                 }
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             // Thread interrupted or IO error, exit thread
+        }
+    }
+}
+
+/**
+ * A thread that runs the game UI, updating the engine at a fixed frames per second (FPS).
+ */
+final class UIThread extends Thread {
+    private final Engine engine;
+    private final int fps;
+    private long lastNanoTime;
+    private long tickCount = 0;
+    private long deltaTime = 0;
+
+    /**
+     * Creates a UIThread.
+     *
+     * @param engine The game engine to update.
+     * @param fps    The target frames per second.
+     */
+    UIThread(Engine engine, int fps) {
+        this.engine = engine;
+        this.fps = fps;
+    }
+
+    /**
+     * Returns the number of ticks that have occurred since the thread started.
+     *
+     * @return The tick count.
+     */
+    public long tickCount() {
+        return tickCount;
+    }
+
+    /**
+     * Returns the time in nanoseconds since the last tick.
+     *
+     * @return The delta time in nanoseconds.
+     */
+    public long deltaTime() {
+        return deltaTime;
+    }
+
+    @Override
+    public void run() {
+        while (!Thread.currentThread().isInterrupted()) {
+            final long nanoSeconds = System.nanoTime();
+
+            if (nanoSeconds - lastNanoTime >= 1_000_000_000L / fps) {
+                deltaTime = nanoSeconds - lastNanoTime;
+                lastNanoTime = nanoSeconds;
+                tickCount++;
+                engine.tick();
+            }
         }
     }
 }

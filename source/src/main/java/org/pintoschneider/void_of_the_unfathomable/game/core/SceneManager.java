@@ -1,12 +1,12 @@
 package org.pintoschneider.void_of_the_unfathomable.game.core;
 
-import java.util.Stack;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class SceneManager {
-    private final Stack<Scene> scenes;
+    private final ConcurrentLinkedDeque<Scene> scenes;
 
     public SceneManager(Scene initialScene) {
-        scenes = new Stack<>();
+        scenes = new ConcurrentLinkedDeque<>();
         scenes.push(initialScene);
     }
 

@@ -68,9 +68,7 @@ public final class MainMenu implements Scene {
                     selectedOption = MenuOption.values()[selectedOption.ordinal() + 1];
                 }
             }
-            case 10, 13 -> { // Enter
-                handleSelection(context);
-            }
+            case 10, 13 -> handleSelection(context); // Enter
             default -> {
                 // Ignore other keys
             }
@@ -88,9 +86,7 @@ public final class MainMenu implements Scene {
             case SETTINGS -> {
                 // Transition to the settings scene
             }
-            case EXIT -> {
-                context.sceneManager().pop();
-            }
+            case EXIT -> context.sceneManager().pop();
         }
     }
 
