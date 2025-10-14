@@ -1,9 +1,51 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
+import java.util.Objects;
+
 /**
  * A class representing layout constraints with minimum and maximum width and height.
  */
-public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeight) {
+public final class Constraints {
+    private final int minWidth;
+    private final int maxWidth;
+    private final int minHeight;
+    private final int maxHeight;
+
+    /**
+     * Constructs a Constraints object with the specified minimum and maximum width and height.
+     * <p>
+     * Null values are treated as unbounded (0 for minimums and Integer.MAX_VALUE for maximums).
+     *
+     * @param minWidth  The minimum width constraint (nullable).
+     * @param maxWidth  The maximum width constraint (nullable).
+     * @param minHeight The minimum height constraint (nullable).
+     * @param maxHeight The maximum height constraint (nullable).
+     * @throws IllegalArgumentException if any of the constraints are negative or if minimums are greater than maximums.
+     */
+    public Constraints(Integer minWidth, Integer maxWidth, Integer minHeight, Integer maxHeight) {
+        if (minWidth == null) minWidth = 0;
+        if (maxWidth == null) maxWidth = Integer.MAX_VALUE;
+        if (minHeight == null) minHeight = 0;
+        if (maxHeight == null) maxHeight = Integer.MAX_VALUE;
+
+        if (minWidth < 0 || maxWidth < 0 || minHeight < 0 || maxHeight < 0) {
+            throw new IllegalArgumentException("Constraints values must be non-negative.");
+        }
+
+        if (minWidth > maxWidth) {
+            throw new IllegalArgumentException("Minimum width cannot be greater than maximum width.");
+        }
+
+        if (minHeight > maxHeight) {
+            throw new IllegalArgumentException("Minimum height cannot be greater than maximum height.");
+        }
+
+        this.minWidth = minWidth;
+        this.maxWidth = maxWidth;
+        this.minHeight = minHeight;
+        this.maxHeight = maxHeight;
+    }
+
     /**
      * Creates a Constraints object with tight constraints.
      *
@@ -109,4 +151,64 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
                 Math.clamp(maxHeight, constraints.minHeight, constraints.maxHeight)
         );
     }
+
+    /**
+     * Returns new constraints that are enlarged by the given amounts in width and height.
+     * <p>
+     * Only the maximum constraints are enlarged.
+     *
+     * @param width  The amount to enlarge the height constraints.
+     * @param height The amount to enlarge the width constraints.
+     * @return A new {@link Constraints} object that is enlarged by the given amounts.
+     */
+    public Constraints enlarge(int width, int height) {
+        return new Constraints(
+                Math.max(0, minWidth),
+                Math.max(0, maxWidth + width),
+                Math.max(0, minHeight),
+                Math.max(0, maxHeight + height)
+        );
+    }
+
+    public int minWidth() {
+        return minWidth;
+    }
+
+    public int maxWidth() {
+        return maxWidth;
+    }
+
+    public int minHeight() {
+        return minHeight;
+    }
+
+    public int maxHeight() {
+        return maxHeight;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Constraints) obj;
+        return this.minWidth == that.minWidth &&
+                this.maxWidth == that.maxWidth &&
+                this.minHeight == that.minHeight &&
+                this.maxHeight == that.maxHeight;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(minWidth, maxWidth, minHeight, maxHeight);
+    }
+
+    @Override
+    public String toString() {
+        return "Constraints[" +
+                "minWidth=" + minWidth + ", " +
+                "maxWidth=" + maxWidth + ", " +
+                "minHeight=" + minHeight + ", " +
+                "maxHeight=" + maxHeight + ']';
+    }
+
 }

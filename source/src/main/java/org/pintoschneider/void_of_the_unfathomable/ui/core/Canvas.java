@@ -56,7 +56,9 @@ public final class Canvas {
      * @param y         The y-coordinate to draw at.
      */
     public void draw(Component component, int x, int y) {
-        assert component.size != null : "Component must be laid out before drawing";
+        if (component.size() == null) {
+            throw new IllegalStateException("Component size is null. Did you forget to call layout()?");
+        }
 
         final Canvas canvas = forDrawable(component);
         component.draw(canvas);
@@ -132,7 +134,7 @@ public final class Canvas {
      * @return a new canvas sized for the component
      */
     static Canvas forDrawable(Component component) {
-        return new Canvas(component.size.width(), component.size.height(), component);
+        return new Canvas(component.size().width(), component.size().height(), component);
     }
 
     /**

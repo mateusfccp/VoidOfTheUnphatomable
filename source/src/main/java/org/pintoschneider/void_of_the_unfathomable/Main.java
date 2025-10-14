@@ -1,89 +1,25 @@
 package org.pintoschneider.void_of_the_unfathomable;
 
-import org.pintoschneider.void_of_the_unfathomable.ui.Engine;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Align;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Column;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.Intrinsic;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Border;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
+import org.pintoschneider.void_of_the_unfathomable.game.core.Engine;
+import org.pintoschneider.void_of_the_unfathomable.game.core.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.scenes.MainMenu;
 
 import java.io.IOException;
 
 public class Main {
+    static final int FPS = 30;
 
-    public static void main(String[] args) {
-        final Paint bold = new Paint();
-        bold.bold = true;
+    static void main() {
+        final Scene scene = new MainMenu();
 
-        final Paint italic = new Paint();
-        italic.italic = true;
-
-        final Paint underline = new Paint();
-        underline.underline = true;
-
-        final Paint strikethrough = new Paint();
-        strikethrough.strikethrough = true;
-
-        final Paint dim = new Paint();
-        dim.dim = true;
-
-        final Paint inverted = new Paint();
-        inverted.inverted = true;
-
-        final Paint blink = new Paint();
-        blink.blink = true;
-
-        final Paint red = new Paint();
-        red.foregroundColor = 0xFF0000;
-
-        final Paint redBackground = new Paint();
-        redBackground.backgroundColor = 0xFF0000;
-
-        final Border border = new Border(
-                new Column(
-                        new Intrinsic(
-                                new Text("Bold", bold)
-                        ),
-                        new Intrinsic(
-                                new Text("Italic", italic)
-                        ),
-                        new Intrinsic(
-                                new Text("Underline", underline)
-                        ),
-                        new Intrinsic(
-                                new Text("Strikethrough", strikethrough)
-                        ),
-                        new Intrinsic(
-                                new Text("Dim", dim)
-                        ),
-                        new Intrinsic(
-                                new Text("Inverted", inverted)
-                        ),
-                        new Intrinsic(
-                                new Text("Blink", blink)
-                        ),
-                        new Intrinsic(
-                                new Text("Red", red)
-                        ),
-                        new Intrinsic(
-                                new Text("Red Background", redBackground)
-                        )
-                        ,
-                        new Intrinsic(
-                            new Border(
-                                    new Align(
-                                            Alignment.CENTER,
-                                            new Text("Centered Text", red)
-                                    )
-                            )
-                        )
-                )
-        );
-        try (final Engine engine = new Engine(border)) {
+        try (final Engine engine = new Engine(scene)) {
             while (engine.isAlive()) {
-                engine.tick();
+                try {
+                    engine.tick();
+                    Thread.sleep(1000 / FPS);
+                } catch (final InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         } catch (final IOException e) {
             throw new RuntimeException(e);

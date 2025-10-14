@@ -45,7 +45,7 @@ public class LinearLayout extends Component {
     public static final class Flexible extends Item {
         private final int flex;
 
-        public Flexible(Component child, int flex) {
+        public Flexible(int flex, Component child) {
             super(child);
             this.flex = flex;
         }
@@ -82,7 +82,7 @@ public class LinearLayout extends Component {
 
         for (Item item : items) {
             switch (item) {
-                case Intrinsic intrinsic -> {
+                case Intrinsic _ -> {
                     final Constraints childConstraints = switch (orientation) {
                         case HORIZONTAL -> Constraints.loose(availableSpace, crossAxisLength());
                         case VERTICAL -> Constraints.loose(crossAxisLength(), availableSpace);

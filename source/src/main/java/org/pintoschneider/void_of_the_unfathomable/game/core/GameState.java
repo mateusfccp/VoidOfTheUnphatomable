@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.game;
+package org.pintoschneider.void_of_the_unfathomable.game.core;
 
 public sealed class GameState {
 }
