@@ -6,6 +6,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.core;
 public interface Context {
     /**
      * Gets the scene manager responsible for managing scenes in the game.
+     *
      * @return The scene manager.
      */
     SceneManager sceneManager();

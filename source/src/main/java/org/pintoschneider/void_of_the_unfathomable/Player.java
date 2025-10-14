@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 public class Player {
     // Health
+
     /**
      * Gets the current health of the player.
      *
@@ -12,6 +13,7 @@ public class Player {
     public int getCurrentHealth() {
         return currentHealth;
     }
+
     private int currentHealth;
 
     /**
@@ -22,6 +24,7 @@ public class Player {
     public int getMaximumHealth() {
         return maximumHealth;
     }
+
     private int maximumHealth;
 
     // Attributes
@@ -30,6 +33,7 @@ public class Player {
     private int creativityPower;
 
     // Status Effects
+
     /**
      * Gets the current status effects affecting the player.
      *
@@ -38,6 +42,7 @@ public class Player {
     public EnumSet<StatusEffect> getStatusEffects() {
         return statusEffects.clone();
     }
+
     private EnumSet<StatusEffect> statusEffects;
 
 }

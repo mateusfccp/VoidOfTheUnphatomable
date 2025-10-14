@@ -67,7 +67,7 @@ public class Engine implements AutoCloseable, Context {
 
     private void drawScene() {
         final Component rootComponent = new DebuggingLine(this,
-                sceneManager.currentScene().build(this)
+            sceneManager.currentScene().build(this)
         );
         rootComponent.layout(Constraints.tight(terminalSize.width(), terminalSize.height()));
 

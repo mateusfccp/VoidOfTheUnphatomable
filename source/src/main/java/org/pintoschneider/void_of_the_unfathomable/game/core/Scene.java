@@ -16,7 +16,8 @@ public interface Scene {
      */
     Component build(Context context);
 
-    default void onKeyPress(Context context, int keyCode) {}
+    default void onKeyPress(Context context, int keyCode) {
+    }
 
     /**
      * Disposes of any resources held by the scene.
@@ -24,5 +25,6 @@ public interface Scene {
      * This method is called when the scene is no longer needed, allowing it to clean up resources such as textures,
      * sounds, or other assets.
      */
-    default void dispose() {}
+    default void dispose() {
+    }
 }

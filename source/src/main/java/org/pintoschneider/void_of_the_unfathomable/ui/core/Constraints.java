@@ -181,10 +181,10 @@ public final class Constraints {
      */
     public Constraints enforce(Constraints constraints) {
         return new Constraints(
-                Math.clamp(minWidth, constraints.minWidth, constraints.maxWidth),
-                Math.clamp(maxWidth, constraints.minWidth, constraints.maxWidth),
-                Math.clamp(minHeight, constraints.minHeight, constraints.maxHeight),
-                Math.clamp(maxHeight, constraints.minHeight, constraints.maxHeight)
+            Math.clamp(minWidth, constraints.minWidth, constraints.maxWidth),
+            Math.clamp(maxWidth, constraints.minWidth, constraints.maxWidth),
+            Math.clamp(minHeight, constraints.minHeight, constraints.maxHeight),
+            Math.clamp(maxHeight, constraints.minHeight, constraints.maxHeight)
         );
     }
 
@@ -197,10 +197,10 @@ public final class Constraints {
      */
     public Constraints enlarge(int width, int height) {
         return new Constraints(
-                Math.max(0, minWidth),
-                Math.max(0, maxWidth + width),
-                Math.max(0, minHeight),
-                Math.max(0, maxHeight + height)
+            Math.max(0, minWidth),
+            Math.max(0, maxWidth + width),
+            Math.max(0, minHeight),
+            Math.max(0, maxHeight + height)
         );
     }
 
@@ -219,10 +219,10 @@ public final class Constraints {
         final int deflatedMinHeight = Math.max(0, minHeight - height);
 
         return new Constraints(
-                deflatedMinWidth,
-                Math.max(deflatedMinWidth, maxWidth - width),
-                deflatedMinHeight,
-                Math.max(deflatedMinHeight, maxHeight - width)
+            deflatedMinWidth,
+            Math.max(deflatedMinWidth, maxWidth - width),
+            deflatedMinHeight,
+            Math.max(deflatedMinHeight, maxHeight - width)
         );
     }
 
@@ -232,9 +232,9 @@ public final class Constraints {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Constraints) obj;
         return this.minWidth == that.minWidth &&
-                this.maxWidth == that.maxWidth &&
-                this.minHeight == that.minHeight &&
-                this.maxHeight == that.maxHeight;
+            this.maxWidth == that.maxWidth &&
+            this.minHeight == that.minHeight &&
+            this.maxHeight == that.maxHeight;
     }
 
     @Override
@@ -245,10 +245,10 @@ public final class Constraints {
     @Override
     public String toString() {
         return "Constraints[" +
-                "minWidth=" + minWidth + ", " +
-                "maxWidth=" + maxWidth + ", " +
-                "minHeight=" + minHeight + ", " +
-                "maxHeight=" + maxHeight + ']';
+            "minWidth=" + minWidth + ", " +
+            "maxWidth=" + maxWidth + ", " +
+            "minHeight=" + minHeight + ", " +
+            "maxHeight=" + maxHeight + ']';
     }
 
 }

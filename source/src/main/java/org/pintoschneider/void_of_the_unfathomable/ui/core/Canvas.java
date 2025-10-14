@@ -24,8 +24,8 @@ public final class Canvas {
     /**
      * Constructs a new {@link Canvas} with the specified width and height.
      *
-     * @param width          The width of the canvas.
-     * @param height         The height of the canvas.
+     * @param width  The width of the canvas.
+     * @param height The height of the canvas.
      */
     public Canvas(int width, int height) {
         this.width = width;
@@ -66,7 +66,7 @@ public final class Canvas {
      * Draws a {@link Component} object onto this canvas at the specified offset.
      *
      * @param component The {@link Component} to render.
-     * @param offset   The {@link Offset} to draw at.
+     * @param offset    The {@link Offset} to draw at.
      */
     public void draw(Component component, Offset offset) {
         draw(component, offset.dx(), offset.dy());
