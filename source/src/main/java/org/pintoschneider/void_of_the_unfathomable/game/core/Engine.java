@@ -61,11 +61,12 @@ public class Engine implements AutoCloseable, Context {
     }
 
     private void refresh() {
-        clearScreen();
+//        clearScreen();
         drawScene();
     }
 
     private void drawScene() {
+        terminal.puts(Capability.cursor_address, 0, 0);
         final Component rootComponent = new DebuggingLine(this,
             sceneManager.currentScene().build(this)
         );
@@ -74,7 +75,7 @@ public class Engine implements AutoCloseable, Context {
         final Canvas rootCanvas = new Canvas(rootComponent.size());
         rootComponent.draw(rootCanvas);
         rootCanvas.writeTo(writer);
-        writer.flush();
+        terminal.flush();
     }
 
     private void updateTerminalSize() {
@@ -110,6 +111,11 @@ public class Engine implements AutoCloseable, Context {
     @Override
     public long tickCount() {
         return uiThread.tickCount();
+    }
+
+    @Override
+    public Size size() {
+        return terminalSize;
     }
 
     @Override

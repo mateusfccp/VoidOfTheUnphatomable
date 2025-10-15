@@ -8,6 +8,6 @@ public final class Potion extends Item {
     }
 
     void effect(Player player) {
-        player.setCurrentHealth(player.getCurrentHealth() + 10);
+        player.setCurrentHealth(player.currentHealth() + 10);
     }
 }

@@ -17,5 +17,10 @@ public enum StatusEffect {
     /**
      * The entity is insane and has unpredictable behavior.
      */
-    INSANE;
+    INSANE,
+
+    /**
+     * The entity is dead and cannot be revived.
+     */
+    DEAD
 }

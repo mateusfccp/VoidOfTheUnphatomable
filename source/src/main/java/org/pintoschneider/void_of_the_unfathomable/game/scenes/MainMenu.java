@@ -28,7 +28,7 @@ public final class MainMenu implements Scene {
                         new Align(
                             Alignment.CENTER,
                             new Text(
-                                option.getText(),
+                                option.text(),
                                 option == selectedOption ? selectedTextPaint : null
                             )
                         )
@@ -97,7 +97,7 @@ enum MenuOption {
 
     private final String text;
 
-    public String getText() {
+    public String text() {
         return text;
     }
 }

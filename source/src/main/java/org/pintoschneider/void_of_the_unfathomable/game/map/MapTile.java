@@ -92,6 +92,22 @@ public enum MapTile {
     private final boolean walkable;
     final boolean autoTile;
 
+    /**
+     * Returns whether the tile is walkable.
+     *
+     * @return True if the tile is walkable, false otherwise.
+     */
+    public boolean walkable() {
+        return walkable;
+    }
+
+    /**
+     * Gets the character representation of the tile based on the bitmask of neighboring tiles.
+     *
+     * @param bitmask The bitmask representing the presence of neighboring tiles.
+     *                The bits are ordered as follows: 0bBTLR (Bottom, Top, Left, Right)
+     * @return The character representation of the tile.
+     */
     Character getCharacter(int bitmask) {
         return switch (bitmask) {
             case 0b0000 -> cross; // No neighbors

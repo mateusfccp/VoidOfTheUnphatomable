@@ -13,19 +13,19 @@ public class Enemy {
         this.defense = defense;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public int getHealth() {
+    public int health() {
         return health;
     }
 
-    public int getAttack() {
+    public int attack() {
         return attack;
     }
 
-    public int getDefense() {
+    public int defense() {
         return defense;
     }
 

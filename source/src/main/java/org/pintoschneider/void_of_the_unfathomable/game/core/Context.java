@@ -1,5 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.core;
 
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
+
 /**
  * The engine context that provides access to engine services and information.
  */
@@ -24,4 +26,11 @@ public interface Context {
      * @return The tick count.
      */
     long tickCount();
+
+    /**
+     * Gets the current size of the game window.
+     *
+     * @return The size of the game window.
+     */
+    Size size();
 }

@@ -4,8 +4,9 @@ import java.util.EnumSet;
 
 public class Player {
     private int currentHealth;
-    private int currentColorPoints;
     private int maximumHealth;
+    private int currentColorPoints;
+    private int maximumColorPoints;
     private int attackPower;
     private int defensePower;
     private int creativityPower;
@@ -16,7 +17,7 @@ public class Player {
      *
      * @return The current health of the player
      */
-    public int getCurrentHealth() {
+    public int currentHealth() {
         return currentHealth;
     }
 
@@ -25,13 +26,35 @@ public class Player {
      *
      * @return The maximum health of the player
      */
-    public int getMaximumHealth() {
+    public int maximumHealth() {
         return maximumHealth;
     }
 
-    public int setCurrentHealth(int health) {
-        this.currentHealth = Math.min(health, maximumHealth);
-        return currentHealth;
+    /**
+     * Sets the current health of the player and updates status effects accordingly.
+     *
+     * @param health The new current health of the player
+     */
+    public void setCurrentHealth(int health) {
+        this.currentHealth = Math.clamp(health, 0, maximumHealth);
+    }
+
+    /**
+     * Heals the player by a specified amount.
+     *
+     * @param health The amount of health to restore
+     */
+    public void heal(int health) {
+        setCurrentHealth(currentHealth + health);
+    }
+
+    /**
+     * Inflicts damage to the player, reducing their current health.
+     *
+     * @param damage The amount of damage to inflict
+     */
+    public void damage(int damage) {
+        setCurrentHealth(currentHealth - damage);
     }
 
     /**
@@ -39,11 +62,41 @@ public class Player {
      *
      * @return An {@link EnumSet} of {@link StatusEffect} representing the player's current status effects
      */
-    public EnumSet<StatusEffect> getStatusEffects() {
-        return statusEffects.clone();
+    public EnumSet<StatusEffect> statusEffects() {
+        final EnumSet<StatusEffect> statusEffects = this.statusEffects.clone();
+        if (currentHealth == 0) {
+            statusEffects.add(StatusEffect.DEAD);
+        }
+
+        if (currentHealth < maximumHealth * 0.3) {
+            statusEffects.add(StatusEffect.INSANE);
+        }
+
+        return statusEffects;
     }
 
-    public void healStatusEffects() {
+    /**
+     * Applies a status effect to the player.
+     *
+     * @param statusEffect The status effect to apply.
+     */
+    public void applyStatusEffect(StatusEffect statusEffect) {
+        statusEffects.add(statusEffect);
+    }
+
+    /**
+     * Removes a status effect from the player.
+     *
+     * @param statusEffect The status effect to remove.
+     */
+    public void removeStatusEffect(StatusEffect statusEffect) {
+        statusEffects.remove(statusEffect);
+    }
+
+    /**
+     * Clears all status effects from the player.
+     */
+    public void clearStatusEffects() {
         statusEffects.clear();
     }
 }
