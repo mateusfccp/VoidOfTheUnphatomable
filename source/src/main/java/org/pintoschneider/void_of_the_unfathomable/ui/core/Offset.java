@@ -8,6 +8,11 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
  */
 public record Offset(int dx, int dy) {
     /**
+     * A constant representing an offset of (0, 0).
+     */
+    public static final Offset ZERO = new Offset(0, 0);
+
+    /**
      * Returns a new Offset that is the sum of this offset and another.
      *
      * @param other The other offset to add.
@@ -45,5 +50,16 @@ public record Offset(int dx, int dy) {
      */
     public Offset divide(int divisor) {
         return new Offset(this.dx / divisor, this.dy / divisor);
+    }
+
+    /**
+     * Returns a new Offset that is this offset translated by given deltas.
+     *
+     * @param dx The horizontal delta to translate by.
+     * @param dy The vertical delta to translate by.
+     * @return The resulting Offset after translation.
+     */
+    public Offset translate(int dx, int dy) {
+        return new Offset(this.dx + dx, this.dy + dy);
     }
 }

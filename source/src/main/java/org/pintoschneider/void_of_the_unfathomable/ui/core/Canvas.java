@@ -84,6 +84,16 @@ public final class Canvas {
     }
 
     /**
+     * Draws a character at the specified offset with no style.
+     *
+     * @param c      The character to draw.
+     * @param offset The offset to draw at.
+     */
+    public void draw(Character c, Offset offset) {
+        draw(c, offset.dx(), offset.dy(), null);
+    }
+
+    /**
      * Draws a character at the specified position with an optional style.
      *
      * @param c     The character to draw.

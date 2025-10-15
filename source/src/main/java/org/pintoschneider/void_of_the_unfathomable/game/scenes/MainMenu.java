@@ -37,34 +37,27 @@ public final class MainMenu implements Scene {
             )
             .toArray(Item[]::new);
 
-        return new Column(
-            new Flexible(
-                1,
-                new Align(
-                    Alignment.CENTER,
-                    new Border(
-                        new SizedBox(
-                            20, 4,
-                            new Column(menuItems)
-                        )
+        return
+            new Align(
+                Alignment.CENTER,
+                new Border(
+                    new SizedBox(
+                        20, 4,
+                        new Column(menuItems)
                     )
                 )
-            ),
-            new Intrinsic(
-                new IdleSpinner(frame)
-            )
-        );
+            );
     }
 
     @Override
     public void onKeyPress(Context context, int keyCode) {
         switch (keyCode) {
-            case 'w', 'W', Keys.UP -> { // Up
+            case 'w', Keys.UP -> { // Up
                 if (selectedOption.ordinal() > 0) {
                     selectedOption = MenuOption.values()[selectedOption.ordinal() - 1];
                 }
             }
-            case 's', 'S', Keys.DOWN -> { // Down
+            case 's', Keys.DOWN -> { // Down
                 if (selectedOption.ordinal() < MenuOption.values().length - 1) {
                     selectedOption = MenuOption.values()[selectedOption.ordinal() + 1];
                 }
@@ -75,9 +68,7 @@ public final class MainMenu implements Scene {
 
     private void handleSelection(Context context) {
         switch (selectedOption) {
-            case NEW_GAME -> {
-                // Transition to the game scene
-            }
+            case NEW_GAME -> context.sceneManager().push(new InGame());
             case LOAD_GAME -> {
                 // Transition to the load game scene
             }
@@ -95,10 +86,10 @@ public final class MainMenu implements Scene {
 }
 
 enum MenuOption {
-    NEW_GAME("New Game"),
-    LOAD_GAME("Load Game"),
-    SETTINGS("Settings"),
-    EXIT("Exit");
+    NEW_GAME("Nuevo Juego"),
+    LOAD_GAME("Cargar Juego"),
+    SETTINGS("Configuraciones"),
+    EXIT("Salir");
 
     MenuOption(String text) {
         this.text = text;

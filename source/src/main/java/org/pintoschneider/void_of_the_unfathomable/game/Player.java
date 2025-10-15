@@ -1,9 +1,15 @@
-package org.pintoschneider.void_of_the_unfathomable;
+package org.pintoschneider.void_of_the_unfathomable.game;
 
 import java.util.EnumSet;
 
 public class Player {
-    // Health
+    private int currentHealth;
+    private int currentColorPoints;
+    private int maximumHealth;
+    private int attackPower;
+    private int defensePower;
+    private int creativityPower;
+    private EnumSet<StatusEffect> statusEffects;
 
     /**
      * Gets the current health of the player.
@@ -14,8 +20,6 @@ public class Player {
         return currentHealth;
     }
 
-    private int currentHealth;
-
     /**
      * Gets the maximum health of the player.
      *
@@ -25,14 +29,10 @@ public class Player {
         return maximumHealth;
     }
 
-    private int maximumHealth;
-
-    // Attributes
-    private int attackPower;
-    private int defensePower;
-    private int creativityPower;
-
-    // Status Effects
+    public int setCurrentHealth(int health) {
+        this.currentHealth = Math.min(health, maximumHealth);
+        return currentHealth;
+    }
 
     /**
      * Gets the current status effects affecting the player.
@@ -43,6 +43,7 @@ public class Player {
         return statusEffects.clone();
     }
 
-    private EnumSet<StatusEffect> statusEffects;
-
+    public void healStatusEffects() {
+        statusEffects.clear();
+    }
 }
