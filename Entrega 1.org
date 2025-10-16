@@ -115,3 +115,140 @@ atributos del personaje o le dan estados.
 El jugador podrá elegir entre tres /slots/ de /save/. Al salir del juego se
 guardará el progreso en el /slot/ seleccionado. Si el jugador muere, se borra el
 /save/ y se guarda en el histórico de puntaje.
+
+** Enemigos
+
+*** Disonancia Estática
+
+**** Descripción
+
+Una figura vagamente humanoide compuesta enteramente de estática visual, como un
+televisor sin señal. Se mueve con espasmos erráticos y emite un constante
+chirrido de ruido blanco que crispa los nervios. Su tacto no corta ni golpea,
+sino que "desafina" una parte de tu ser.
+
+**** Características
+- HP: Bajo
+- Daño: Bajo
+- Peligro principal: Aparecen en grandes grupos y pueden rodear al jugador
+  fácilmente.
+- Comportamiento: Se mueven de forma directa y sin inteligencia hacia el
+  Peregrino. Su simple presencia causa una ligera distorsión visual en la
+  pantalla. Atacan al entrar en contacto, sin una animación clara,
+  simplemente "corrompiendo" lo que tocan.
+
+*** Eco Errático
+
+**** Descripción
+
+Una silueta temblorosa y semitransparente de lo que pudo ser una persona o una
+criatura. Parpadea, apareciendo y desapareciendo de la existencia
+momentáneamente. No camina, sino que "salta" entre puntos cercanos de forma
+impredecible.
+
+**** Características
+- HP: Bajo
+- Daño: Medio
+- Peligro principal: Su movimiento es extremadamente difícil de predecir.
+- Comportamiento: Permanece inmóvil durante uno o dos turnos, para luego
+  teletransportarse instantáneamente a una casilla adyacente al Peregrino y
+  atacar en el mismo turno. Tras atacar, a menudo se teletransporta de nuevo a
+  una distancia segura. Es un enemigo de "golpea y corre".
+
+*** Sanguijuela Cromática
+
+**** Descripción
+
+Una criatura amorfa y reptante, similar a una babosa de un negro aceitoso que
+absorbe la luz a su alrededor. No tiene ojos ni boca visibles. A medida que se
+arrastra, deja un rastro temporal de color gris y desaturado en el suelo.
+
+**** Características
+
+- HP: Medio
+- Daño Físico: Muy bajo
+- Peligro principal: Drena los Puntos de Color (CP/maná) del jugador a un ritmo
+  alarmante.
+- Comportamiento: Se mueve lentamente pero de forma implacable hacia el
+  Peregrino. Su ataque no daña el HP, sino que se adhiere y drena una gran
+  cantidad de CP cada turno, curándose a sí misma en el proceso. Es una amenaza
+  estratégica que debe ser eliminada rápidamente para poder usar habilidades.
+
+*** Pesar Olvidado
+
+**** Descripción
+
+Un gigante encorvado hecho de lo que parece ser arcilla húmeda y gris, con
+grietas que supuran una sustancia oscura. Su forma es masiva y su cabeza está
+permanentemente inclinada, como si estuviera abrumada por una pena
+infinita. Cada uno de sus pasos es lento, pesado y hace retumbar el suelo.
+
+**** Características
+
+- HP: Muy Alto
+- Defensa: Alta
+- Daño: Muy Alto
+- Peligro principal: Sus golpes son devastadores y tienen un área de efecto.
+- Comportamiento: Se mueve muy lentamente, a menudo solo una casilla cada dos
+  turnos del jugador. Antes de atacar, "telegrafía" su movimiento, levantando
+  uno de sus enormes brazos durante un turno. En el siguiente turno, golpea el
+  suelo con una fuerza aplastante, dañando al jugador y a cualquier otra entidad
+  en las casillas adyacentes. El golpe puede aplicar el estado "Ralentizado".
+
+*** Tejedor de Silogismos
+
+**** Descripción
+
+Una entidad cristalina y flotante con múltiples facetas que giran y se reordenan
+constantemente, reflejando imágenes distorsionadas del entorno. Emite un zumbido
+bajo e hipnótico y parece observar al jugador desde todas las direcciones a la
+vez.
+
+
+**** Características
+
+- HP: Medio-Bajo
+- Defensa: Baja, pero puede tener una barrera temporal.
+- Peligro principal: Ataca a distancia con proyectiles que confunden y
+  debilitan.
+- Comportamiento: Mantiene la distancia con el Peregrino, flotando en los bordes
+  de las salas. No ataca el cuerpo, sino la mente. Lanza "proyectiles de
+  paradoja", rayos de luz que al impactar no causan daño de HP, pero pueden
+  infligir el estado "Confundido" (invirtiendo los controles) o "Silenciado"
+  (impidiendo el uso de habilidades de CP).
+
+*** El Corazón del Vacío, La Última Ausencia
+
+**** Descripción
+
+No se presenta como una criatura, sino como una anomalía espacial en el centro
+de la sala más profunda. Es una esfera perfecta de negrura absoluta, un agujero
+en la realidad que no refleja luz alguna y que absorbe activamente el sonido y
+el color a su alrededor. El aire cerca de ella se ondula y se fragmenta. No es
+algo que vive; es el epicentro del no ser.
+
+**** Características
+
+- HP: Inmenso, dividido en fases.
+- Inmune a la mayoría de los estados.
+- Sus ataques alteran las reglas del juego y la propia arena de batalla.
+- Comportamiento: La batalla se desarrolla en tres fases.
+- Fase 1 - Anclas de la Realidad: El Corazón es invulnerable. En la sala
+  aparecen varios "Ecos Erráticos" y "Tejedores de Silogismos". El objetivo del
+  jugador no es atacar al jefe, sino destruir los Anclajes de Realidad (pilares
+  de cristal frágil) que aparecen en la sala mientras sobrevive a las oleadas de
+  enemigos. 
+- Fase 2 - El Núcleo Expuesto: Una vez destruidos los anclajes, el Corazón se
+  vuelve vulnerable. Ahora ataca directamente:
+  + Borrado Conceptual: Lanza un rayo de pura nada que inflige un daño masivo.
+  + Pulso de Estaticidad: Emite una onda que cubre toda la sala, causando daño
+    moderado y aplicando un estado negativo aleatorio (confusión, silencio,
+    ralentización).
+  + Invocación de la Nada: Crea zonas de "vacío" en el suelo (similares al
+    rastro de la Sanguijuela Cromática) que dañan y drenan CP si el jugador las
+    pisa. Invoca "Disonancias Estáticas" y un "Pesar Olvidado".
+- Fase 3 - Olvido Inminente: Con su HP crítico, el Corazón del Vacío intensifica
+  sus ataques. Los pulsos son más frecuentes, invoca enemigos de élite y el
+  suelo de la arena comienza a desaparecer lentamente, reduciendo el espacio de
+  maniobra. El jugador debe derrotarlo antes de que la realidad de la sala (y la
+  suya) sea completamente borrada.
