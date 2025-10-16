@@ -4,9 +4,7 @@ import java.util.EnumSet;
 
 public class Player {
     private int currentHealth;
-    private int maximumHealth;
     private int currentColorPoints;
-    private int maximumColorPoints;
     private int attackPower;
     private int defensePower;
     private int creativityPower;
@@ -27,7 +25,7 @@ public class Player {
      * @return The maximum health of the player
      */
     public int maximumHealth() {
-        return maximumHealth;
+        return 100;
     }
 
     /**
@@ -36,7 +34,7 @@ public class Player {
      * @param health The new current health of the player
      */
     public void setCurrentHealth(int health) {
-        this.currentHealth = Math.clamp(health, 0, maximumHealth);
+        this.currentHealth = Math.clamp(health, 0, maximumHealth());
     }
 
     /**
@@ -68,7 +66,7 @@ public class Player {
             statusEffects.add(StatusEffect.DEAD);
         }
 
-        if (currentHealth < maximumHealth * 0.3) {
+        if (currentHealth < maximumHealth() * 0.3) {
             statusEffects.add(StatusEffect.INSANE);
         }
 

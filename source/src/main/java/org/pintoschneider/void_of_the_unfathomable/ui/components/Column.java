@@ -1,5 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
+
 /**
  * A vertical linear layout that arranges its children in a column.
  *
@@ -11,7 +13,7 @@ public class Column extends LinearLayout {
      *
      * @param items the children as LinearLayout.Item
      */
-    public Column(Item... items) {
+    public Column(Component... items) {
         super(Orientation.VERTICAL, items);
     }
 }

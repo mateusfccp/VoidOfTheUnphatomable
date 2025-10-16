@@ -20,22 +20,19 @@ public final class MainMenu implements Scene {
         final Paint selectedTextPaint = new Paint();
         selectedTextPaint.inverted = true;
 
-        Item[] menuItems = Arrays.stream(MenuOption.values())
+        Component[] menuItems = Arrays.stream(MenuOption.values())
             .map(option ->
-                new Intrinsic(
-                    new ConstrainedBox(
-                        new Constraints(null, null, 1, 1),
-                        new Align(
-                            Alignment.CENTER,
-                            new Text(
-                                option.text(),
-                                option == selectedOption ? selectedTextPaint : null
-                            )
+                new ConstrainedBox(
+                    new Constraints(null, null, 1, 1),
+                    new Align(
+                        Alignment.CENTER,
+                        new Text(
+                            option.text(),
+                            option == selectedOption ? selectedTextPaint : null
                         )
                     )
                 )
-            )
-            .toArray(Item[]::new);
+            ).toArray(Component[]::new);
 
         return
             new Align(

@@ -5,6 +5,7 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
  */
 public abstract class Component {
     protected Size size;
+    protected Object data;
 
     /**
      * Lays out the component within the given constraints and their children.
@@ -35,6 +36,10 @@ public abstract class Component {
      */
     public Size size() {
         return size;
+    }
+
+    public Object data() {
+        return data;
     }
 }
 
