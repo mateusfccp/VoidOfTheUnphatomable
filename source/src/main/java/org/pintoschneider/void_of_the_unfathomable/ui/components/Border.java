@@ -51,7 +51,7 @@ public final class Border extends Component {
             // We first lay out the child with the parent constraints so it can determine its size
             child.layout(constraints);
 
-            final Constraints bordersConstraints = Constraints.tight(child.size()).enlarge(2, 2).enforce(minimalConstraints);
+            final Constraints bordersConstraints = Constraints.tight(child.size()).inflate(2, 2).enforce(minimalConstraints);
             size = bordersConstraints.biggest();
             final Constraints childConstraints = Constraints.loose(
                 Math.max(0, size.width() - 2),

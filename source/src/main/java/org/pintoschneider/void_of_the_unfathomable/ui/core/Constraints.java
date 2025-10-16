@@ -189,19 +189,31 @@ public final class Constraints {
     }
 
     /**
-     * Returns new constraints that are enlarged by the given amounts in width and height.
+     * Returns new constraints that are inflated by the given amounts in width and height.
+     * <p>
+     * Only {@link #maxWidth} and {@link #maxHeight} are affected.
      *
      * @param width  The amount to enlarge the height constraints.
      * @param height The amount to enlarge the width constraints.
-     * @return A new {@link Constraints} object that is enlarged by the given amounts.
+     * @return A new {@link Constraints} object that is inflated by the given amounts.
      */
-    public Constraints enlarge(int width, int height) {
+    public Constraints inflate(int width, int height) {
         return new Constraints(
             Math.max(0, minWidth),
             Math.max(0, maxWidth + width),
             Math.max(0, minHeight),
             Math.max(0, maxHeight + height)
         );
+    }
+
+    /**
+     * Returns new constraints that are inflated by the given insets.
+     *
+     * @param insets The insets to inflate the constraints by.
+     * @return A new {@link Constraints} object that is inflated by the given {@code insets}.
+     */
+    public Constraints inflate(EdgeInsets insets) {
+        return inflate(insets.horizontal(), insets.vertical());
     }
 
     /**
@@ -224,6 +236,25 @@ public final class Constraints {
             deflatedMinHeight,
             Math.max(deflatedMinHeight, maxHeight - width)
         );
+    }
+
+    /**
+     * Returns new constraints that are deflated by the given insets.
+     *
+     * @param insets The insets to deflate the constraints by.
+     * @return A new {@link Constraints} object that is deflated by the given {@code insets}.
+     */
+    public Constraints deflate(EdgeInsets insets) {
+        return deflate(insets.horizontal(), insets.vertical());
+    }
+
+    /**
+     * Returns new tight constraints based on the current maximum width and height.
+     *
+     * @return A new {@link Constraints} object that is tight.
+     */
+    public Constraints tighten() {
+        return new Constraints(maxWidth, maxWidth, maxHeight, maxHeight);
     }
 
     @Override
