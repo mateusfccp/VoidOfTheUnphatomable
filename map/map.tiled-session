@@ -1,0 +1,46 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "map.tmx": {
+            "scale": 1.1553,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 56.69523067601486,
+                "y": 325.8893793819787
+            }
+        },
+        "tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "/Users/mateusfccp/Documents/Ingen. en Sistemas/Algoritmos y estructura de datos/TPI/map",
+    "last.imagePath": "/Users/mateusfccp/Documents/Ingen. en Sistemas/Algoritmos y estructura de datos/TPI/map",
+    "map.fixedSize": false,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "map.tmx",
+        "tileset.tsx"
+    ],
+    "project": "map.tiled-project",
+    "recentFiles": [
+        "tileset.tsx",
+        "map.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
