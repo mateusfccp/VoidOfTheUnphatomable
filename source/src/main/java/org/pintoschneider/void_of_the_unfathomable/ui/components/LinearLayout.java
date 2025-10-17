@@ -65,7 +65,10 @@ public class LinearLayout extends Component {
 
     @Override
     public void layout(Constraints constraints) {
-        if (children.length == 0) return;
+        if (children.length == 0) {
+            size = constraints.smallest();
+            return;
+        }
 
         size = constraints.biggest();
         int availableSpace = mainAxisLength();

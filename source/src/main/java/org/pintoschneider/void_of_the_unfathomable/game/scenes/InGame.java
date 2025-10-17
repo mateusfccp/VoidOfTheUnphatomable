@@ -4,6 +4,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.core.Context;
 import org.pintoschneider.void_of_the_unfathomable.game.core.Keys;
 import org.pintoschneider.void_of_the_unfathomable.game.core.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -18,11 +19,21 @@ public final class InGame implements Scene {
     final Map.Entity playerEntity = map.new Entity(new Offset(4, 4), '@');
     Offset offset = Offset.ZERO;
 
+    InGame() {
+        for (int i = 0; i < 10; i++) {
+            player.addItemToInventory(Consumable.all().getFirst());
+        }
+    }
+
     @Override
     public Component build(Context context) {
         centerOnPlayer(context);
         final Paint boldPaint = new Paint();
         boldPaint.bold = true;
+
+        final Component[] statusList = player.statusEffects().stream()
+            .map(statusEffect -> new Text("- " + statusEffect.displayString()))
+            .toArray(Component[]::new);
 
         return new Row(
             new Flexible(1, new MapComponent(map, offset, null)),
@@ -44,21 +55,18 @@ public final class InGame implements Scene {
                                 new Constraints(null, null, 1, 1),
                                 new Row(
                                     new Text("CP:", boldPaint),
-                                    new Text("%3d/%3d".formatted(player.getCurrentColorPoints(), player.getMaximumColorPoints()))
+                                    new Text("%3d/%3d".formatted(player.getCurrentColorPoints(), player.maximumColorPoints()))
                                 )
-                            )
+                            ),
+                            new SizedBox(new Size(0, 1), null),
+                            new Text("Estatus:", boldPaint),
+                            new SizedBox(new Size(0, 1), null),
+                            new Column(statusList)
+                                .mainAxisSize(MainAxisSize.MIN)
+                                .crossAxisAlignment(CrossAxisAlignment.STRETCH)
                         ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
                             .mainAxisSize(MainAxisSize.MIN)
-                    ),
-                    new SizedBox(new Size(0, 1), null),
-                    new Column(
-                        new Padding(
-                            EdgeInsets.symmetric(1, 0),
-                            new Text("Statuses:", boldPaint)
-                        ),
-                        new Border()
-                    ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
-                        .mainAxisSize(MainAxisSize.MIN)
+                    )
                 ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
             )
         ).crossAxisAlignment(CrossAxisAlignment.STRETCH);
@@ -71,6 +79,7 @@ public final class InGame implements Scene {
             case Keys.DOWN -> playerEntity.moveBy(verticalOffset);
             case Keys.LEFT -> playerEntity.moveBy(horizontalOffset.multiply(-1));
             case Keys.RIGHT -> playerEntity.moveBy(horizontalOffset);
+            case 'f' -> player.useItem(Consumable.all().getFirst());
         }
     }
 

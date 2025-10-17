@@ -1,22 +1,17 @@
 package org.pintoschneider.void_of_the_unfathomable.game.items;
 
-import org.pintoschneider.void_of_the_unfathomable.game.Player;
-
-public class Item {
+public sealed class Item permits Consumable, Equippable {
     private final String name;
-    private final ItemType type;
+    private final String description;
 
-    public Item(String name, ItemType type) {
+    public Item(String name, String description) {
         this.name = name;
-        this.type = type;
-    }
-
-    void effect(Player player) {
+        this.description = description;
     }
 }
 
-enum ItemType {
-    CONSUMABLE,
-    ARMOR,
-    WEAPON;
+final class Equippable extends Item {
+    public Equippable(String name, String description) {
+        super(name, description);
+    }
 }

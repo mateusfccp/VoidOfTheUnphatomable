@@ -1,14 +1,23 @@
 package org.pintoschneider.void_of_the_unfathomable.game;
 
+import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
+
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 public class Player {
-    private int currentHealth;
-    private int currentColorPoints;
+    private int currentHealth = maximumHealth() / 2;
+    private int currentColorPoints = maximumColorPoints();
     private int attackPower;
     private int defensePower;
     private int creativityPower;
-    private EnumSet<StatusEffect> statusEffects;
+    private int neuralToxicity = 0;
+    private int fluoxetineDoses = 0;
+    private int turnsWithoutFluoxetine = 0;
+    private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
+    private final List<Item> inventory = new ArrayList<>();
 
     /**
      * Gets the current health of the player.
@@ -42,7 +51,7 @@ public class Player {
      *
      * @return The maximum color points of the player.
      */
-    public int getMaximumColorPoints() {
+    public int maximumColorPoints() {
         return 10;
     }
 
@@ -74,18 +83,50 @@ public class Player {
     }
 
     /**
+     * Increases the player's neural toxicity by a specified amount.
+     *
+     * @param amount The amount to increase neural toxicity by.
+     */
+    public void increaseNeuralToxicityBy(int amount) {
+        neuralToxicity = neuralToxicity + amount;
+    }
+
+    /**
+     * Increases the player's fluoxetine doses and resets the turns without fluoxetine counter.
+     */
+    public void takeFluoxetineDose() {
+        fluoxetineDoses = fluoxetineDoses + 1;
+        turnsWithoutFluoxetine = 0;
+    }
+
+    /**
      * Gets the current status effects affecting the player.
      *
      * @return An {@link EnumSet} of {@link StatusEffect} representing the player's current status effects
      */
     public EnumSet<StatusEffect> statusEffects() {
         final EnumSet<StatusEffect> statusEffects = this.statusEffects.clone();
+
         if (currentHealth == 0) {
-            statusEffects.add(StatusEffect.DEAD);
+            statusEffects.add(StatusEffect.DEATH);
         }
 
         if (currentHealth < maximumHealth() * 0.3) {
-            statusEffects.add(StatusEffect.INSANE);
+            statusEffects.add(StatusEffect.INSANITY);
+        }
+
+        if (neuralToxicity >= 5) {
+            statusEffects.add(StatusEffect.TARDIVE_DYSKINESIA);
+        } else if (neuralToxicity >= 3) {
+            statusEffects.add(StatusEffect.DYSKINESIA);
+        }
+
+        if (fluoxetineDoses > 0) {
+            statusEffects.add(StatusEffect.DEPENDENCY);
+        }
+
+        if (turnsWithoutFluoxetine >= 100 && statusEffects.contains(StatusEffect.DEPENDENCY)) {
+            statusEffects.add(StatusEffect.DISCONTINUATION_SYNDROME);
         }
 
         return statusEffects;
@@ -114,5 +155,16 @@ public class Player {
      */
     public void clearStatusEffects() {
         statusEffects.clear();
+    }
+
+    public void addItemToInventory(Item item) {
+        inventory.add(item);
+    }
+
+    public void useItem(Consumable item) {
+        if (inventory.contains(item)) {
+            item.onConsume(this);
+            inventory.remove(item);
+        }
     }
 }

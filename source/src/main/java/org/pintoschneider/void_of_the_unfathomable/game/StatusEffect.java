@@ -7,20 +7,55 @@ public enum StatusEffect {
     /**
      * The entity is stunned and cannot take actions.
      */
-    CONFUSED,
+    CONFUSION("Confusión"),
 
     /**
      * The entity is weakened and has reduced attack power.
      */
-    DEPRESSED,
+    DEPRESSION("Depresión"),
+
+    /**
+     * The entity is addicted to a substance.
+     */
+    DEPENDENCY("Adicción"),
+
+    /**
+     * The entity is experiencing withdrawal symptoms from stopping a medication.
+     */
+    DISCONTINUATION_SYNDROME("Síndrome de Discontinuación"),
+
+    /**
+     * The entity is experiencing involuntary muscle spasms.
+     */
+    DYSKINESIA("Discinesia"),
+
+    /**
+     * The entity has severe involuntary movements.
+     */
+    TARDIVE_DYSKINESIA("Discinesia Tardía"),
 
     /**
      * The entity is insane and has unpredictable behavior.
      */
-    INSANE,
+    INSANITY("Insanidad"),
 
     /**
-     * The entity is dead and cannot be revived.
+     * The entity is dead.
      */
-    DEAD
+    DEATH("Muerte");
+
+    final String displayString;
+
+    StatusEffect(String displayString) {
+        this.displayString = displayString;
+    }
+
+    /**
+     * Gets the name of the status effect.
+     *
+     * @return The name of the status effect.
+     */
+    public String displayString() {
+        return displayString;
+    }
 }
