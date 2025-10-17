@@ -7,10 +7,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.core.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 public final class InGame implements Scene {
     static private final Offset verticalOffset = new Offset(0, 1);
@@ -31,13 +28,40 @@ public final class InGame implements Scene {
             new Flexible(1, new MapComponent(map, offset, null)),
             new VerticalDivider(),
             new ConstrainedBox(
-                new Constraints(20, 20, null, null),
+                new Constraints(12, 12, null, null),
                 new Column(
-                    new Text("HP:", boldPaint),
-                    new Text("%-3d/%d".formatted(player.currentHealth(), player.maximumHealth()))
-                )
+                    new Padding(
+                        EdgeInsets.all(1),
+                        new Column(
+                            new ConstrainedBox(
+                                new Constraints(null, null, 1, 1),
+                                new Row(
+                                    new Text("HP:", boldPaint),
+                                    new Text("%3d/%3d".formatted(player.currentHealth(), player.maximumHealth()))
+                                )
+                            ),
+                            new ConstrainedBox(
+                                new Constraints(null, null, 1, 1),
+                                new Row(
+                                    new Text("CP:", boldPaint),
+                                    new Text("%3d/%3d".formatted(player.getCurrentColorPoints(), player.getMaximumColorPoints()))
+                                )
+                            )
+                        ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
+                            .mainAxisSize(MainAxisSize.MIN)
+                    ),
+                    new SizedBox(new Size(0, 1), null),
+                    new Column(
+                        new Padding(
+                            EdgeInsets.symmetric(1, 0),
+                            new Text("Statuses:", boldPaint)
+                        ),
+                        new Border()
+                    ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
+                        .mainAxisSize(MainAxisSize.MIN)
+                ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
             )
-        );
+        ).crossAxisAlignment(CrossAxisAlignment.STRETCH);
     }
 
     @Override

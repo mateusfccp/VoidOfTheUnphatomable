@@ -32,17 +32,17 @@ public final class EdgeInsets {
      * @param horizontal The inset from the left and right edges.
      * @param vertical   The inset from the top and bottom edges.
      */
-    public EdgeInsets(int horizontal, int vertical) {
-        this(horizontal, horizontal, vertical, vertical);
+    public static EdgeInsets symmetric(int horizontal, int vertical) {
+        return new EdgeInsets(horizontal, horizontal, vertical, vertical);
     }
 
     /**
      * Creates an inset with the same value for all edges.
      *
-     * @param all The inset from all edges.
+     * @param value The inset from all edges.
      */
-    public EdgeInsets(int all) {
-        this(all, all, all, all);
+    public static EdgeInsets all(int value) {
+        return new EdgeInsets(value, value, value, value);
     }
 
     /**

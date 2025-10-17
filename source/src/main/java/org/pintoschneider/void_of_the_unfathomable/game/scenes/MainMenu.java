@@ -1,10 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
-import org.pintoschneider.void_of_the_unfathomable.game.core.Context;
-import org.pintoschneider.void_of_the_unfathomable.game.core.Keys;
-import org.pintoschneider.void_of_the_unfathomable.game.core.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.core.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.LinearLayout.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.Arrays;
@@ -37,10 +34,12 @@ public final class MainMenu implements Scene {
         return
             new Align(
                 Alignment.CENTER,
-                new Border(
-                    new SizedBox(
-                        20, 4,
+                new ConstrainedBox(
+                    new Constraints(null, 20, null, null),
+                    new Border(
                         new Column(menuItems)
+                            .crossAxisAlignment(CrossAxisAlignment.STRETCH)
+                            .mainAxisSize(MainAxisSize.MIN)
                     )
                 )
             );

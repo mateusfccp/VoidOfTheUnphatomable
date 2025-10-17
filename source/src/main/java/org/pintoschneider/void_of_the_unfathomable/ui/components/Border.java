@@ -1,8 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 /**
  * A bordered box that can contain a single {@link Component} child.
@@ -43,7 +41,7 @@ public final class Border extends Component {
 
     @Override
     public void layout(Constraints constraints) {
-        final Constraints minimalConstraints = new Constraints(2, Integer.MAX_VALUE, 2, Integer.MAX_VALUE);
+        final Constraints minimalConstraints = new Constraints(2, null, 2, null);
 
         if (child == null) {
             size = constraints.enforce(minimalConstraints).smallest();
@@ -51,7 +49,12 @@ public final class Border extends Component {
             // We first lay out the child with the parent constraints so it can determine its size
             child.layout(constraints);
 
-            final Constraints bordersConstraints = Constraints.tight(child.size()).inflate(2, 2).enforce(minimalConstraints);
+            final Constraints bordersConstraints = new Constraints(
+                2,
+                child.size().width() + 2,
+                2,
+                child.size().height() + 2
+            ).enforce(constraints);
             size = bordersConstraints.biggest();
             final Constraints childConstraints = Constraints.loose(
                 Math.max(0, size.width() - 2),

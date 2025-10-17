@@ -29,6 +29,24 @@ public class Player {
     }
 
     /**
+     * Gets the current color points of the player.
+     *
+     * @return The current color points of the player.
+     */
+    public int getCurrentColorPoints() {
+        return currentColorPoints;
+    }
+
+    /**
+     * Gets the maximum color points of the player.
+     *
+     * @return The maximum color points of the player.
+     */
+    public int getMaximumColorPoints() {
+        return 10;
+    }
+
+    /**
      * Sets the current health of the player and updates status effects accordingly.
      *
      * @param health The new current health of the player

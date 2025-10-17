@@ -80,6 +80,16 @@ public final class Constraints {
     }
 
     /**
+     * Creates a Constraints object with loose constraints from a Size object.
+     *
+     * @param size The maximum size constraint.
+     * @return A {@link Constraints} object with loose constraints.
+     */
+    public static Constraints loose(Size size) {
+        return new Constraints(0, size.width(), 0, size.height());
+    }
+
+    /**
      * The minimum width constraint.
      *
      * @return The minimum width constraint.

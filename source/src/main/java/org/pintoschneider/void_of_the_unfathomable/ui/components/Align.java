@@ -26,7 +26,7 @@ public final class Align extends Component {
     @Override
     public void layout(Constraints constraints) {
         size = constraints.biggest();
-        child.layout(constraints);
+        child.layout(Constraints.loose(size));
     }
 
     @Override
