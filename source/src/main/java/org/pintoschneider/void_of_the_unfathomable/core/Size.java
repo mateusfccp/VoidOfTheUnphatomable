@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.ui.core;
+package org.pintoschneider.void_of_the_unfathomable.core;
 
 /**
  * A class representing a cartesian size, with width and height.

@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.game.core;
+package org.pintoschneider.void_of_the_unfathomable.game.engine;
 
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 

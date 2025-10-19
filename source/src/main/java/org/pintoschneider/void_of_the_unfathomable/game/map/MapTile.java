@@ -1,6 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 public enum MapTile {
+    VOID(' ', false, true),
     WALL('┼',
         '─',
         '╴',
@@ -16,10 +17,11 @@ public enum MapTile {
         '┤',
         '┬',
         '┴',
-        false),
-    FLOOR(' ', true);
+        false,
+        true),
+    FLOOR('·', true, false);
 
-    MapTile(Character symbol, boolean walkable) {
+    MapTile(Character symbol, boolean walkable, boolean opaque) {
         this.cross = symbol;
         this.horizontalFull = symbol;
         this.horizontalLeft = symbol;
@@ -36,6 +38,7 @@ public enum MapTile {
         this.topTee = symbol;
         this.bottomTee = symbol;
         this.walkable = walkable;
+        this.opaque = opaque;
         this.autoTile = false;
     }
 
@@ -54,7 +57,8 @@ public enum MapTile {
             Character rightTee,
             Character topTee,
             Character bottomTee,
-            boolean walkable) {
+            boolean walkable,
+            boolean opaque) {
         this.cross = cross;
         this.horizontalFull = horizontalFull;
         this.horizontalLeft = horizontalLeft;
@@ -71,6 +75,7 @@ public enum MapTile {
         this.topTee = topTee;
         this.bottomTee = bottomTee;
         this.walkable = walkable;
+        this.opaque = opaque;
         this.autoTile = true;
     }
 
@@ -90,6 +95,7 @@ public enum MapTile {
     private final Character topTee;
     private final Character bottomTee;
     private final boolean walkable;
+    private final boolean opaque;
     final boolean autoTile;
 
     /**
@@ -99,6 +105,15 @@ public enum MapTile {
      */
     public boolean walkable() {
         return walkable;
+    }
+
+    /**
+     * Returns whether the tile is opaque (blocks vision).
+     *
+     * @return True if the tile is opaque, false otherwise.
+     */
+    public boolean opaque() {
+        return opaque;
     }
 
     /**

@@ -1,19 +1,23 @@
-package org.pintoschneider.void_of_the_unfathomable.game.map;
+package org.pintoschneider.void_of_the_unfathomable.game.components;
 
+import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
+
+import java.util.Objects;
 
 public final class MapComponent extends Component {
     final Map map;
+    final Visibility visibility;
     final Offset offset;
-    final Offset invertAt;
+    final Offset playerOffset;
 
-    public MapComponent(Map map, Offset offset, Offset invertAt) {
-        this.map = map;
-        this.offset = offset;
-        this.invertAt = invertAt;
-
-        assert map != null;
-        assert offset != null;
+    public MapComponent(Map map, Visibility visibility, Offset offset, Offset playerOffset) {
+        this.map = Objects.requireNonNull(map);
+        this.visibility = visibility;
+        this.offset = Objects.requireNonNull(offset);
+        this.playerOffset = playerOffset;
     }
 
     @Override
@@ -31,11 +35,7 @@ public final class MapComponent extends Component {
         final Character[][] tiles = map.toCharacterArray();
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
-                if (invertAt != null && x - offset.dx() == invertAt.dx() && y - offset.dy() == invertAt.dy()) {
-                    final Paint invertedPaint = new Paint();
-                    invertedPaint.inverted = true;
-
-                    canvas.draw(tiles[x][y], (x - offset.dx()), (y - offset.dy()), invertedPaint);
+                if (!visibility.isVisible(playerOffset, new Offset(x, y))) {
                     continue;
                 }
                 canvas.draw(tiles[x][y], x - offset.dx(), y - offset.dy());

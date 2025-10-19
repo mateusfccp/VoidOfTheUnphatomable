@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.ui.core;
+package org.pintoschneider.void_of_the_unfathomable.core;
 
 /**
  * An immutable 2D integer offset.
@@ -61,5 +61,20 @@ public record Offset(int dx, int dy) {
      */
     public Offset translate(int dx, int dy) {
         return new Offset(this.dx + dx, this.dy + dy);
+    }
+
+    /**
+     * Calculates the Chebyshev distance to another offset.
+     * <p>
+     * The Chebyshev distance is defined as the maximum of the absolute differences in each dimension. It is used in
+     * scenarios where movement can occur in any direction, including diagonally.
+     *
+     * @param to The target offset.
+     * @return The Chebyshev distance to the target offset.
+     */
+    public int chebyshevDistanceTo(Offset to) {
+        final int dx = Math.abs(this.dx - to.dx);
+        final int dy = Math.abs(this.dy - to.dy);
+        return Math.max(dx, dy);
     }
 }

@@ -2,6 +2,8 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
+import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.core.Size;
 
 import java.io.PrintWriter;
 

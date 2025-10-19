@@ -1,9 +1,10 @@
-package org.pintoschneider.void_of_the_unfathomable.game.core;
+package org.pintoschneider.void_of_the_unfathomable.game.engine;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp.Capability;
 import org.jline.utils.NonBlockingReader;
+import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.IdleSpinner;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;

@@ -1,6 +1,6 @@
-package org.pintoschneider.void_of_the_unfathomable.game.core;
+package org.pintoschneider.void_of_the_unfathomable.game.engine;
 
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Size;
+import org.pintoschneider.void_of_the_unfathomable.core.Size;
 
 /**
  * The engine context that provides access to engine services and information.

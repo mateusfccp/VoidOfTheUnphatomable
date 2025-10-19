@@ -1,12 +1,17 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
+import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
-import org.pintoschneider.void_of_the_unfathomable.game.core.Context;
-import org.pintoschneider.void_of_the_unfathomable.game.core.Keys;
-import org.pintoschneider.void_of_the_unfathomable.game.core.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Keys;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
-import org.pintoschneider.void_of_the_unfathomable.game.map.MapComponent;
+import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.RayCastingVisibility;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
@@ -15,6 +20,8 @@ public final class InGame implements Scene {
     static private final Offset horizontalOffset = new Offset(1, 0);
 
     final Map map = new Map(100, 100);
+    final Visibility visibility = new AdamMillazosVisibility(map);
+//    final Visibility visibility = new RayCastingVisibility(map);
     final Player player = new Player();
     final Map.Entity playerEntity = map.new Entity(new Offset(4, 4), '@');
     Offset offset = Offset.ZERO;
@@ -36,7 +43,7 @@ public final class InGame implements Scene {
             .toArray(Component[]::new);
 
         return new Row(
-            new Flexible(1, new MapComponent(map, offset, null)),
+            new Flexible(1, new MapComponent(map, visibility, offset, playerEntity.position())),
             new VerticalDivider(),
             new ConstrainedBox(
                 new Constraints(12, 12, null, null),

@@ -1,5 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
+import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 /**

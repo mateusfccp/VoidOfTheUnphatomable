@@ -1,5 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
+import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.core.Size;
+
 /**
  * A point within a rectangle.
  * <p>

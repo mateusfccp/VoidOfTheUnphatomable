@@ -1,5 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
+import org.pintoschneider.void_of_the_unfathomable.core.Size;
+
 import java.util.Objects;
 
 /**
