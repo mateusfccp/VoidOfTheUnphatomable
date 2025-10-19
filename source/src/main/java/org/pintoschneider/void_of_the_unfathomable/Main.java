@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable;
 
-import org.pintoschneider.void_of_the_unfathomable.game.core.Engine;
-import org.pintoschneider.void_of_the_unfathomable.game.core.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.MainMenu;
 
 import java.io.IOException;
