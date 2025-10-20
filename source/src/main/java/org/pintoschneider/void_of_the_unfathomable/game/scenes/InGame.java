@@ -7,6 +7,8 @@ import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Keys;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
@@ -21,14 +23,15 @@ public final class InGame implements Scene {
 
     final Map map = new Map(100, 100);
     final Visibility visibility = new AdamMillazosVisibility(map);
-//    final Visibility visibility = new RayCastingVisibility(map);
     final Player player = new Player();
     final Map.Entity playerEntity = map.new Entity(new Offset(4, 4), '@');
     Offset offset = Offset.ZERO;
 
     InGame() {
+        // Add items for testing purposes
         for (int i = 0; i < 10; i++) {
-            player.addItemToInventory(Consumable.all().getFirst());
+            player.addItemToInventory(new FluoxetineBottle());
+            player.addItemToInventory(new HaloperidolAmpoule());
         }
     }
 
@@ -86,7 +89,6 @@ public final class InGame implements Scene {
             case Keys.DOWN -> playerEntity.moveBy(verticalOffset);
             case Keys.LEFT -> playerEntity.moveBy(horizontalOffset.multiply(-1));
             case Keys.RIGHT -> playerEntity.moveBy(horizontalOffset);
-            case 'f' -> player.useItem(Consumable.all().getFirst());
         }
     }
 

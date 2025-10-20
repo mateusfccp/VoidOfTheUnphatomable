@@ -10,8 +10,3 @@ public sealed class Item permits Consumable, Equippable {
     }
 }
 
-final class Equippable extends Item {
-    public Equippable(String name, String description) {
-        super(name, description);
-    }
-}
