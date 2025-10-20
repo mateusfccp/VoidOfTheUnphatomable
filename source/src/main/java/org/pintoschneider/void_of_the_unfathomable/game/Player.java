@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+/**
+ * A class representing the player character in the game including their attributes, status effects, and inventory.
+ */
 public class Player {
     private int currentHealth = maximumHealth() / 2;
     private int currentColorPoints = maximumColorPoints();
