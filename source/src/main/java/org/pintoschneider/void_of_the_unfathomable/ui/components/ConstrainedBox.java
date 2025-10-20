@@ -18,9 +18,8 @@ public class ConstrainedBox extends Component {
 
     @Override
     public void layout(Constraints constraints) {
-        final Constraints combinedConstraints = this.constraints.enforce(constraints);
-        size = combinedConstraints.biggest();
-        child.layout(combinedConstraints);
+        child.layout(this.constraints.enforce(constraints));
+        size = child.size();
     }
 
     @Override
