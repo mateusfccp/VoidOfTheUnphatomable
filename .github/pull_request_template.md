@@ -1,6 +1,8 @@
 <!-- If this PR does not fixes any specific issue, you can remove this section -->
 ## Related issue
 
+<!-- Replace the issue_id (without the `<>` symbols). -->
+<!-- For instance, #1 to refer to the issue 1. -->
 This PR fixes #<issue_id>.
 
 <!-- This section is mandatory and you should check for these points every time you open a PR -->
