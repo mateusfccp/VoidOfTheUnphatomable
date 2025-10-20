@@ -7,17 +7,28 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.Objects;
 
+/**
+ * A component that renders a portion of the game map.
+ */
 public final class MapComponent extends Component {
-    final Map map;
-    final Visibility visibility;
-    final Offset offset;
-    final Offset playerOffset;
+    private final Map map;
+    private final Visibility visibility;
+    private final Offset offset;
+    private final Offset playerOffset;
 
+    /**
+     * Creates a new MapComponent.
+     *
+     * @param map The map to render.
+     * @param visibility The visibility strategy to use.
+     * @param offset The offset of the map to render.
+     * @param playerOffset The offset of the player on the map.
+     */
     public MapComponent(Map map, Visibility visibility, Offset offset, Offset playerOffset) {
         this.map = Objects.requireNonNull(map);
-        this.visibility = visibility;
+        this.visibility = Objects.requireNonNull(visibility);
         this.offset = Objects.requireNonNull(offset);
-        this.playerOffset = playerOffset;
+        this.playerOffset = Objects.requireNonNull(playerOffset);
     }
 
     @Override

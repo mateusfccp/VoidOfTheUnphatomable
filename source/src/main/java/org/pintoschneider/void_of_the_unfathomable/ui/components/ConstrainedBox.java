@@ -4,16 +4,15 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 
+import java.util.Objects;
+
 public class ConstrainedBox extends Component {
     final Component child;
     final Constraints constraints;
 
     public ConstrainedBox(Constraints constraints, Component child) {
-        this.child = child;
-        this.constraints = constraints;
-
-        assert child != null : "ConstrainedBox requires a non-null child.";
-        assert constraints != null : "ConstrainedBox requires non-null constraints.";
+        this.child = Objects.requireNonNull(child);
+        this.constraints = Objects.requireNonNull(constraints);
     }
 
     @Override

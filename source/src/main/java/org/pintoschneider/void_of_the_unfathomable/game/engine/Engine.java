@@ -11,6 +11,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 public class Engine implements AutoCloseable, Context {
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
@@ -22,7 +23,7 @@ public class Engine implements AutoCloseable, Context {
     private boolean running = true;
 
     public Engine(Scene initialScene) throws IOException {
-        sceneManager = new SceneManager(initialScene);
+        sceneManager = new SceneManager(Objects.requireNonNull(initialScene));
         terminal.enterRawMode();
 
         // Register a signal handler for window resize events
@@ -180,8 +181,8 @@ final class InputThread extends Thread {
      * @param reader The NonBlockingReader to read input from.
      */
     InputThread(Engine engine, NonBlockingReader reader) {
-        this.engine = engine;
-        this.reader = reader;
+        this.engine = Objects.requireNonNull(engine);
+        this.reader = Objects.requireNonNull(reader);
     }
 
     @Override
@@ -216,7 +217,7 @@ final class UIThread extends Thread {
      * @param fps    The target frames per second.
      */
     UIThread(Engine engine, int fps) {
-        this.engine = engine;
+        this.engine = Objects.requireNonNull(engine);
         this.fps = fps;
     }
 

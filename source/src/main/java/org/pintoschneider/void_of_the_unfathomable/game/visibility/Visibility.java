@@ -5,6 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.MapTile;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * An interface defining the visibility rules on a map.
@@ -17,10 +18,20 @@ public abstract class Visibility {
     private final HashMap<Offset, boolean[][]> visibilityCache = new HashMap<>();
 
     protected Visibility(Map map) {
-        this.map = map;
+        this.map = Objects.requireNonNull(map);
     }
 
+    /**
+     * Determines if the target position is visible from the origin position.
+     *
+     * @param origin The starting position.
+     * @param target The target position to check visibility for.
+     * @return True if the target is visible from the origin, false otherwise.
+     */
     public boolean isVisible(Offset origin, Offset target) {
+        Objects.requireNonNull(origin);
+        Objects.requireNonNull(target);
+
         if (!visibilityCache.containsKey(origin)) {
             final boolean[][] visibility = compute(origin);
             visibilityCache.put(origin, visibility);
@@ -33,7 +44,7 @@ public abstract class Visibility {
 
     abstract boolean[][] compute(Offset origin);
 
-    boolean blocksLight(Offset position) {
+    protected boolean blocksLight(Offset position) {
         final MapTile tile = map.getTileAt(position);
 
         if (tile == null) {

@@ -4,6 +4,7 @@ import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A class representing a 2D map composed of tiles and entities.
@@ -18,7 +19,12 @@ public class Map {
     private final int width;
     private final int height;
 
-    public Map(int width, int height) {
+    /**
+     * Creates a new map.
+     * <p>
+     * Currently, this constructor creates a temporary hardcoded map for testing purposes.
+     */
+    public Map() {
         this.width = 31;
         this.height = 33;
         tiles = new MapTile[31][33];
@@ -203,8 +209,8 @@ public class Map {
         private final Character representation;
 
         public Entity(Offset position, Character representation) {
-            this.position = position;
-            this.representation = representation;
+            this.position = Objects.requireNonNull(position);
+            this.representation = Objects.requireNonNull(representation);
             entities.add(this);
         }
 

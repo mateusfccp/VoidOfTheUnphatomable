@@ -1,5 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game;
 
+import java.util.Objects;
+
 public class Enemy {
     private final String name;
     private final int health;
@@ -7,7 +9,7 @@ public class Enemy {
     private final int defense;
 
     public Enemy(String name, int health, int attack, int defense) {
-        this.name = name;
+        this.name = Objects.requireNonNull(name);
         this.health = health;
         this.attack = attack;
         this.defense = defense;

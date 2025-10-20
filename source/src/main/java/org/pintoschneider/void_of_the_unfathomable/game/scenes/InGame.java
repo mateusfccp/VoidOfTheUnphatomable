@@ -6,27 +6,31 @@ import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Keys;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
-import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
-import org.pintoschneider.void_of_the_unfathomable.game.visibility.RayCastingVisibility;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
+/**
+ * The in-game scene where the player can explore the map and interact with the game world.
+ */
 public final class InGame implements Scene {
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
 
-    final Map map = new Map(100, 100);
-    final Visibility visibility = new AdamMillazosVisibility(map);
-    final Player player = new Player();
-    final Map.Entity playerEntity = map.new Entity(new Offset(4, 4), '@');
-    Offset offset = Offset.ZERO;
+    private final Map map = new Map();
+    private final Visibility visibility = new AdamMillazosVisibility(map);
+    private final Player player = new Player();
+    private final Map.Entity playerEntity = map.new Entity(new Offset(4, 4), '@');
+    private Offset offset = Offset.ZERO;
 
+    /**
+     * Creates a new in-game scene.
+     */
     InGame() {
         // Add items for testing purposes
         for (int i = 0; i < 10; i++) {

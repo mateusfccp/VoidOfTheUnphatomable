@@ -15,10 +15,16 @@ import java.util.HashMap;
  * to B may differ from visibility from B to A).
  */
 public final class RayCastingVisibility extends Visibility {
+    /**
+     * Constructs a RayCastingVisibility instance for the given map.
+     *
+     * @param map The map on which visibility calculations will be performed.
+     */
     public RayCastingVisibility(Map map) {
         super(map);
     }
 
+    @Override
     boolean[][] compute(Offset origin) {
         final boolean[][] visibility = new boolean[map.width()][map.height()];
 
@@ -38,7 +44,7 @@ public final class RayCastingVisibility extends Visibility {
         return visibility;
     }
 
-    void computeRay(Offset origin, Offset target, boolean[][] visibility) {
+    private void computeRay(Offset origin, Offset target, boolean[][] visibility) {
         final int dx = Math.abs(target.dx() - origin.dx());
         final int dy = Math.abs(target.dy() - origin.dy());
         final int sx = origin.dx() < target.dx() ? 1 : -1;

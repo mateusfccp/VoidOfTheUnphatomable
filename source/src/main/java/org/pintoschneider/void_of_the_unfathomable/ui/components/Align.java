@@ -3,6 +3,8 @@ package org.pintoschneider.void_of_the_unfathomable.ui.components;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
+import java.util.Objects;
+
 /**
  * A component that aligns its child within itself according to the specified alignment.
  */
@@ -19,9 +21,7 @@ public final class Align extends Component {
      */
     public Align(Alignment alignment, Component child) {
         this.alignment = alignment;
-        this.child = child;
-
-        assert child != null : "Align component requires a non-null child.";
+        this.child = Objects.requireNonNull(child);
     }
 
     @Override

@@ -160,10 +160,20 @@ public class Player {
         statusEffects.clear();
     }
 
+    /**
+     * Adds an item to the player's inventory.
+     *
+     * @param item The item to add to the inventory.
+     */
     public void addItemToInventory(Item item) {
         inventory.add(item);
     }
 
+    /**
+     * Uses a consumable item from the player's inventory.
+     *
+     * @param item The consumable item to use.
+     */
     public void useItem(Consumable item) {
         if (inventory.contains(item)) {
             item.onConsume(this);

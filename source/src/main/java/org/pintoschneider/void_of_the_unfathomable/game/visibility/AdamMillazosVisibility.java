@@ -10,12 +10,15 @@ import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
  * <p>
  * You can read more about it on <a href="https://www.adammil.net/blog/v125_Roguelike_Vision_Algorithms.html">this
  * article</a>.
- * <p>
- * For some reason, this algorighm is not working 😭
  */
 final public class AdamMillazosVisibility extends Visibility {
     final int rangeLimit = Math.max(map.width(), map.height());
 
+    /**
+     * Constructs a AdamMillazosVisibility instance for the given map.
+     *
+     * @param map The map on which visibility calculations will be performed.
+     */
     public AdamMillazosVisibility(Map map) {
         super(map);
     }
