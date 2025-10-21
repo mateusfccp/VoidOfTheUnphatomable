@@ -40,7 +40,7 @@ public class Engine implements AutoCloseable, Context {
         inputThread.start();
 
         // Start the UI thread using a dedicated class
-        uiThread = new UIThread(this, 30);
+        uiThread = new UIThread(this, 60);
         uiThread.setDaemon(true);
         uiThread.start();
     }
