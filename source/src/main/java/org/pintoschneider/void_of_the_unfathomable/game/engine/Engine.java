@@ -57,12 +57,7 @@ public class Engine implements AutoCloseable, Context {
         sceneManager.currentScene().onKeyPress(this, key);
     }
 
-    private void clearScreen() {
-        terminal.puts(Capability.clear_screen);
-    }
-
     private void refresh() {
-//        clearScreen();
         drawScene();
     }
 
