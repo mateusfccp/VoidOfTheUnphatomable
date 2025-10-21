@@ -40,6 +40,11 @@ public abstract class Component {
         return size;
     }
 
+    /**
+     * Returns the data associated with this component.
+     *
+     * @return The data associated with this component.
+     */
     public Object data() {
         return data;
     }

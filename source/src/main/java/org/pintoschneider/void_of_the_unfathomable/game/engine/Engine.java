@@ -5,8 +5,7 @@ import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp.Capability;
 import org.jline.utils.NonBlockingReader;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.IdleSpinner;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
+import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
@@ -127,43 +126,30 @@ public class Engine implements AutoCloseable, Context {
     }
 }
 
-final class DebuggingLine extends Component {
+final class DebuggingLine extends Composent {
     final Engine engine;
     final Component child;
+
+    static final Paint boldPaint = new Paint();
 
     DebuggingLine(Engine engine, Component child) {
         this.engine = engine;
         this.child = child;
-    }
 
-    @Override
-    public void layout(Constraints constraints) {
-        size = constraints.biggest();
-        child.layout(constraints.deflate(0, 1));
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-        canvas.draw(child, 0, 0);
-
-        final int y = size.height() - 1;
-
-        // FPS
-        final IdleSpinner spinner = new IdleSpinner((int) ((System.nanoTime() / 100_000_000) % 6));
-        spinner.layout(Constraints.tight(new Size(1, 1)));
-        canvas.draw(spinner, 0, y);
-
-        final Paint boldPaint = new Paint();
         boldPaint.bold = true;
+    }
 
-        final Text fpsText = new Text("FPS: ", boldPaint);
-        fpsText.layout(Constraints.tight(new Size(4, 1)));
-        canvas.draw(fpsText, 2, y);
-
-        final double fps = 1_000_000_000.0 / engine.deltaTime();
-        final Text fpsValueText = new Text(String.format("%.2f", fps));
-        fpsValueText.layout(Constraints.tight(new Size(6, 1)));
-        canvas.draw(fpsValueText, 7, y);
+    @Override
+    public Component build() {
+        return new Column(
+            new Flexible(child),
+            new Row(
+                new IdleSpinner((int) ((System.nanoTime() / 100_000_000) % 6)),
+                new SizedBox(new Size(1, 0), null),
+                new Text("FPS: ", boldPaint),
+                new Text(String.format("%.2f", 1_000_000_000.0 / engine.deltaTime()))
+            )
+        );
     }
 }
 

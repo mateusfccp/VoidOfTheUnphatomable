@@ -73,7 +73,8 @@ public class LinearLayout extends Component {
 
         size = constraints.biggest();
         int availableSpace = mainAxisLength();
-        int usedSpace = 0;
+        int mainAxisLength = 0;
+        int crossAxisLength = 0;
         int totalFlex = 0;
 
         for (Component child : children) {
@@ -100,7 +101,8 @@ public class LinearLayout extends Component {
                 child.layout(childConstraints);
 
                 availableSpace = availableSpace - getChildMainAxisLength(child);
-                usedSpace = usedSpace + getChildMainAxisLength(child);
+                mainAxisLength = mainAxisLength + getChildMainAxisLength(child);
+                crossAxisLength = Math.max(crossAxisLength, getChildCrossAxisLength(child));
             }
         }
 
@@ -127,17 +129,22 @@ public class LinearLayout extends Component {
 
                 child.layout(childConstraints);
 
-                usedSpace = usedSpace + getChildMainAxisLength(child);
+                mainAxisLength = mainAxisLength + getChildMainAxisLength(child);
             }
         }
 
-        switch (mainAxisSize) {
-            case MIN -> size = switch (orientation) {
-                case HORIZONTAL -> new Size(usedSpace, constraints.maxHeight());
-                case VERTICAL -> new Size(constraints.maxWidth(), usedSpace);
+        final Size naturalSize = switch (mainAxisSize) {
+            case MIN -> switch (orientation) {
+                case HORIZONTAL -> new Size(mainAxisLength, crossAxisLength);
+                case VERTICAL -> new Size(crossAxisLength, mainAxisLength);
             };
-            case MAX -> size = constraints.biggest();
-        }
+            case MAX -> switch (orientation) {
+                case HORIZONTAL -> new Size(constraints.maxWidth(), crossAxisLength);
+                case VERTICAL -> new Size(crossAxisLength, constraints.maxHeight());
+            };
+        };
+
+        size = constraints.constrain(naturalSize);
     }
 
     @Override
