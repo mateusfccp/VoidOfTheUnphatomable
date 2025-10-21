@@ -178,58 +178,58 @@ public final class Canvas {
     static AttributedStyle getStyle(Paint paint) {
         AttributedStyle style = AttributedStyle.DEFAULT;
 
-        if (paint.bold) {
+        if (paint.bold()) {
             style = style.bold();
         } else {
             style = style.boldOff();
         }
 
-        if (paint.italic) {
+        if (paint.italic()) {
             style = style.italic();
         } else {
             style = style.italicOff();
         }
 
-        if (paint.underline) {
+        if (paint.underline()) {
             style = style.underline();
         } else {
             style = style.underlineOff();
         }
 
-        if (paint.strikethrough) {
+        if (paint.strikethrough()) {
             style = style.crossedOut();
         } else {
             style = style.crossedOutOff();
         }
 
-        if (paint.dim) {
+        if (paint.dim()) {
             style = style.faint();
         } else {
             style = style.faintOff();
         }
 
-        if (paint.inverted) {
+        if (paint.inverted()) {
             style = style.inverse();
         } else {
             style = style.inverseOff();
         }
 
-        if (paint.blink) {
+        if (paint.blink()) {
             style = style.blink();
         } else {
             style = style.blinkOff();
         }
 
-        if (paint.foregroundColor == null) {
+        if (paint.foregroundColor() == null) {
             style = style.foregroundOff();
         } else {
-            style = style.foregroundRgb(paint.foregroundColor);
+            style = style.foregroundRgb(paint.foregroundColor().toInt());
         }
 
-        if (paint.backgroundColor == null) {
+        if (paint.backgroundColor() == null) {
             style = style.backgroundOff();
         } else {
-            style = style.backgroundRgb(paint.backgroundColor);
+            style = style.backgroundRgb(paint.backgroundColor().toInt());
         }
 
         return style;

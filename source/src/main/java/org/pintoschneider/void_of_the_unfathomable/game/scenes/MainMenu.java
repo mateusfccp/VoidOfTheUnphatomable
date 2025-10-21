@@ -14,8 +14,7 @@ public final class MainMenu implements Scene {
     public Component build(Context context) {
         frame = (frame + 1) % Integer.MAX_VALUE;
 
-        final Paint selectedTextPaint = new Paint();
-        selectedTextPaint.inverted = true;
+        final Paint selectedTextPaint = new Paint().withInverted(true);
 
         Component[] menuItems = Arrays.stream(MenuOption.values())
             .map(option ->

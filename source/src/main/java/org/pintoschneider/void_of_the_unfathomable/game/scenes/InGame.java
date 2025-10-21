@@ -28,6 +28,8 @@ public final class InGame implements Scene {
     private final Map.Entity playerEntity = map.new Entity(new Offset(4, 4), '@');
     private Offset offset = Offset.ZERO;
 
+    static final Paint boldPaint = new Paint().withBold(true);
+
     /**
      * Creates a new in-game scene.
      */
@@ -42,8 +44,6 @@ public final class InGame implements Scene {
     @Override
     public Component build(Context context) {
         centerOnPlayer(context);
-        final Paint boldPaint = new Paint();
-        boldPaint.bold = true;
 
         final Component[] statusList = player.statusEffects().stream()
             .map(statusEffect -> new Text("- " + statusEffect.displayString()))

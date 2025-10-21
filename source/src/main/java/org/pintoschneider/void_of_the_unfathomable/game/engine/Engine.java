@@ -125,13 +125,11 @@ final class DebuggingLine extends Composent {
     final Engine engine;
     final Component child;
 
-    static final Paint boldPaint = new Paint();
+    static final Paint boldPaint = new Paint().withBold(true);
 
     DebuggingLine(Engine engine, Component child) {
         this.engine = engine;
         this.child = child;
-
-        boldPaint.bold = true;
     }
 
     @Override
