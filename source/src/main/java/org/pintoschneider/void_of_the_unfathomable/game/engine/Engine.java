@@ -170,7 +170,7 @@ final class InputThread extends Thread {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                int c = reader.read(1);
+                int c = reader.read();
                 if (c != NonBlockingReader.READ_EXPIRED && c != NonBlockingReader.EOF) {
                     engine.processKey(c);
                 }
