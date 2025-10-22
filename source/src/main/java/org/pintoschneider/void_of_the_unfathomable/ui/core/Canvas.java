@@ -46,6 +46,76 @@ public final class Canvas {
     }
 
     /**
+     * Creates a new canvas sized to fit the given component.
+     *
+     * @param component The component to fit.
+     * @return a new canvas sized for the component
+     */
+    static Canvas forDrawable(Component component) {
+        return new Canvas(component.size().width(), component.size().height());
+    }
+
+    static AttributedStyle getStyle(Paint paint) {
+        AttributedStyle style = AttributedStyle.DEFAULT;
+
+        if (paint.bold()) {
+            style = style.bold();
+        } else {
+            style = style.boldOff();
+        }
+
+        if (paint.italic()) {
+            style = style.italic();
+        } else {
+            style = style.italicOff();
+        }
+
+        if (paint.underline()) {
+            style = style.underline();
+        } else {
+            style = style.underlineOff();
+        }
+
+        if (paint.strikethrough()) {
+            style = style.crossedOut();
+        } else {
+            style = style.crossedOutOff();
+        }
+
+        if (paint.dim()) {
+            style = style.faint();
+        } else {
+            style = style.faintOff();
+        }
+
+        if (paint.inverted()) {
+            style = style.inverse();
+        } else {
+            style = style.inverseOff();
+        }
+
+        if (paint.blink()) {
+            style = style.blink();
+        } else {
+            style = style.blinkOff();
+        }
+
+        if (paint.foregroundColor() == null) {
+            style = style.foregroundOff();
+        } else {
+            style = style.foregroundRgb(paint.foregroundColor().toInt());
+        }
+
+        if (paint.backgroundColor() == null) {
+            style = style.backgroundOff();
+        } else {
+            style = style.backgroundRgb(paint.backgroundColor().toInt());
+        }
+
+        return style;
+    }
+
+    /**
      * Draws a {@link Component} object onto this canvas at the specified position.
      * <p>
      * The component is rendered onto a temporary canvas and then merged into this canvas.
@@ -138,16 +208,6 @@ public final class Canvas {
     }
 
     /**
-     * Creates a new canvas sized to fit the given component.
-     *
-     * @param component The component to fit.
-     * @return a new canvas sized for the component
-     */
-    static Canvas forDrawable(Component component) {
-        return new Canvas(component.size().width(), component.size().height());
-    }
-
-    /**
      * Writes the contents of this canvas to the given {@link PrintWriter}.
      * <p>
      * Each row is written in order, with null cells rendered as spaces.
@@ -173,65 +233,5 @@ public final class Canvas {
                 }
             }
         }
-    }
-
-    static AttributedStyle getStyle(Paint paint) {
-        AttributedStyle style = AttributedStyle.DEFAULT;
-
-        if (paint.bold()) {
-            style = style.bold();
-        } else {
-            style = style.boldOff();
-        }
-
-        if (paint.italic()) {
-            style = style.italic();
-        } else {
-            style = style.italicOff();
-        }
-
-        if (paint.underline()) {
-            style = style.underline();
-        } else {
-            style = style.underlineOff();
-        }
-
-        if (paint.strikethrough()) {
-            style = style.crossedOut();
-        } else {
-            style = style.crossedOutOff();
-        }
-
-        if (paint.dim()) {
-            style = style.faint();
-        } else {
-            style = style.faintOff();
-        }
-
-        if (paint.inverted()) {
-            style = style.inverse();
-        } else {
-            style = style.inverseOff();
-        }
-
-        if (paint.blink()) {
-            style = style.blink();
-        } else {
-            style = style.blinkOff();
-        }
-
-        if (paint.foregroundColor() == null) {
-            style = style.foregroundOff();
-        } else {
-            style = style.foregroundRgb(paint.foregroundColor().toInt());
-        }
-
-        if (paint.backgroundColor() == null) {
-            style = style.backgroundOff();
-        } else {
-            style = style.backgroundRgb(paint.backgroundColor().toInt());
-        }
-
-        return style;
     }
 }

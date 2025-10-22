@@ -3,8 +3,6 @@ package org.pintoschneider.void_of_the_unfathomable.game.visibility;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 
-import java.util.HashMap;
-
 /**
  * A {@link Visibility} implementation that uses a ray-casting algorithm to determine visibility.
  * <p>

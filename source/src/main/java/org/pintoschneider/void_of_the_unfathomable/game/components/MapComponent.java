@@ -2,8 +2,9 @@ package org.pintoschneider.void_of_the_unfathomable.game.components;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
-import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 
 import java.util.Objects;
 

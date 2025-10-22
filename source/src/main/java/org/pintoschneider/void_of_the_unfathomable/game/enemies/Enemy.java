@@ -1,12 +1,10 @@
 package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 
-import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * A class representing an enemy in the game.

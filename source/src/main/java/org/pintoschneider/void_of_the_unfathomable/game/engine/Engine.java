@@ -15,10 +15,10 @@ import java.util.Objects;
 public class Engine implements AutoCloseable, Context {
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
     private final PrintWriter writer = terminal.writer();
-    private Size terminalSize;
     private final SceneManager sceneManager;
     private final InputThread inputThread;
     private final UIThread uiThread;
+    private Size terminalSize;
     private boolean running = true;
 
     public Engine(Scene initialScene) throws IOException {
@@ -138,10 +138,9 @@ public class Engine implements AutoCloseable, Context {
 }
 
 final class DebuggingLine extends Composent {
+    static final Paint boldPaint = new Paint().withBold(true);
     final Engine engine;
     final Component child;
-
-    static final Paint boldPaint = new Paint().withBold(true);
 
     DebuggingLine(Engine engine, Component child) {
         this.engine = engine;

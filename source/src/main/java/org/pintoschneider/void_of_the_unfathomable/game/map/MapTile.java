@@ -21,6 +21,24 @@ public enum MapTile {
         true),
     FLOOR('·', true, false);
 
+    final boolean autoTile;
+    private final Character cross;
+    private final Character horizontalFull;
+    private final Character horizontalLeft;
+    private final Character horizontalRight;
+    private final Character verticalFull;
+    private final Character verticalTop;
+    private final Character verticalBottom;
+    private final Character cornerNorthWest;
+    private final Character cornerNorthEast;
+    private final Character cornerSouthWest;
+    private final Character cornerSouthEast;
+    private final Character leftTee;
+    private final Character rightTee;
+    private final Character topTee;
+    private final Character bottomTee;
+    private final boolean walkable;
+    private final boolean opaque;
     MapTile(Character symbol, boolean walkable, boolean opaque) {
         this.cross = symbol;
         this.horizontalFull = symbol;
@@ -41,7 +59,6 @@ public enum MapTile {
         this.opaque = opaque;
         this.autoTile = false;
     }
-
     MapTile(Character cross,
             Character horizontalFull,
             Character horizontalLeft,
@@ -78,25 +95,6 @@ public enum MapTile {
         this.opaque = opaque;
         this.autoTile = true;
     }
-
-    private final Character cross;
-    private final Character horizontalFull;
-    private final Character horizontalLeft;
-    private final Character horizontalRight;
-    private final Character verticalFull;
-    private final Character verticalTop;
-    private final Character verticalBottom;
-    private final Character cornerNorthWest;
-    private final Character cornerNorthEast;
-    private final Character cornerSouthWest;
-    private final Character cornerSouthEast;
-    private final Character leftTee;
-    private final Character rightTee;
-    private final Character topTee;
-    private final Character bottomTee;
-    private final boolean walkable;
-    private final boolean opaque;
-    final boolean autoTile;
 
     /**
      * Returns whether the tile is walkable.

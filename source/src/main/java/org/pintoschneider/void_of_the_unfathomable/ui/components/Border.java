@@ -1,6 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
-import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 
 /**
  * A bordered box that can contain a single {@link Component} child.
@@ -95,6 +97,42 @@ public final class Border extends Component {
      * Represents the style of the corners of a border.
      */
     public static class CornerStyle {
+        /**
+         * Square corners (single line).
+         * <p>
+         * <pre>{@code
+         * ┌ ┐
+         * └ ┘
+         * }</pre>
+         */
+        public static final CornerStyle SQUARE = new CornerStyle('┌', '┐', '└', '┘');
+        /**
+         * Double line corners.
+         * <p>
+         * <pre>{@code
+         * ╔ ╗
+         * ╚ ╝
+         * }</pre>
+         */
+        public static final CornerStyle DOUBLE = new CornerStyle('╔', '╗', '╚', '╝');
+        /**
+         * Rounded corners.
+         * <p>
+         * <pre>{@code
+         * ╭ ╮
+         * ╰ ╯
+         * }</pre>
+         */
+        public static final CornerStyle ROUNDED = new CornerStyle('╭', '╮', '╰', '╯');
+        /**
+         * Heavy line corners.
+         * <p>
+         * <pre>{@code
+         * ┏ ┓
+         * ┗ ┛
+         * }</pre>
+         */
+        public static final CornerStyle HEAVY = new CornerStyle('┏', '┓', '┗', '┛');
         public final char topLeft;
         public final char topRight;
         public final char bottomLeft;
@@ -106,60 +144,12 @@ public final class Border extends Component {
             this.bottomLeft = bottomLeft;
             this.bottomRight = bottomRight;
         }
-
-        /**
-         * Square corners (single line).
-         * <p>
-         * <pre>{@code
-         * ┌ ┐
-         * └ ┘
-         * }</pre>
-         */
-        public static final CornerStyle SQUARE = new CornerStyle('┌', '┐', '└', '┘');
-
-        /**
-         * Double line corners.
-         * <p>
-         * <pre>{@code
-         * ╔ ╗
-         * ╚ ╝
-         * }</pre>
-         */
-        public static final CornerStyle DOUBLE = new CornerStyle('╔', '╗', '╚', '╝');
-
-        /**
-         * Rounded corners.
-         * <p>
-         * <pre>{@code
-         * ╭ ╮
-         * ╰ ╯
-         * }</pre>
-         */
-        public static final CornerStyle ROUNDED = new CornerStyle('╭', '╮', '╰', '╯');
-
-        /**
-         * Heavy line corners.
-         * <p>
-         * <pre>{@code
-         * ┏ ┓
-         * ┗ ┛
-         * }</pre>
-         */
-        public static final CornerStyle HEAVY = new CornerStyle('┏', '┓', '┗', '┛');
     }
 
     /**
      * Represents the style of the lines of a border.
      */
     public static class LineStyle {
-        public final char horizontal;
-        public final char vertical;
-
-        private LineStyle(char horizontal, char vertical) {
-            this.horizontal = horizontal;
-            this.vertical = vertical;
-        }
-
         /**
          * Single line style.
          * <p>
@@ -168,7 +158,6 @@ public final class Border extends Component {
          * }</pre>
          */
         public static final LineStyle SINGLE = new LineStyle('─', '│');
-
         /**
          * Double line style.
          * <p>
@@ -177,7 +166,6 @@ public final class Border extends Component {
          * }</pre>
          */
         public static final LineStyle DOUBLE = new LineStyle('═', '║');
-
         /**
          * Dashed line style.
          * <p>
@@ -186,7 +174,6 @@ public final class Border extends Component {
          * }</pre>
          */
         public static final LineStyle DASHED = new LineStyle('┄', '┆');
-
         /**
          * Dotted line style.
          * <p>
@@ -195,7 +182,6 @@ public final class Border extends Component {
          * }</pre>
          */
         public static final LineStyle DOTTED = new LineStyle('┈', '┊');
-
         /**
          * Large dashed line style.
          * <p>
@@ -204,7 +190,6 @@ public final class Border extends Component {
          * }</pre>
          */
         public static final LineStyle DASHED_LARGE = new LineStyle('╌', '╎');
-
         /**
          * Heavy line style.
          * <p>
@@ -213,5 +198,12 @@ public final class Border extends Component {
          * }</pre>
          */
         public static final LineStyle HEAVY = new LineStyle('━', '┃');
+        public final char horizontal;
+        public final char vertical;
+
+        private LineStyle(char horizontal, char vertical) {
+            this.horizontal = horizontal;
+            this.vertical = vertical;
+        }
     }
 }

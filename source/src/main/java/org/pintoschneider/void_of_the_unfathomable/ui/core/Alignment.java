@@ -25,6 +25,43 @@ import org.pintoschneider.void_of_the_unfathomable.core.Size;
  */
 public record Alignment(double x, double y) {
     /**
+     * Alignment in the top-left corner of a rectangle.
+     */
+    public static final Alignment TOP_LEFT = new Alignment(-1.0, -1.0);
+    /**
+     * Alignment in the top-center of a rectangle.
+     */
+    public static final Alignment TOP_CENTER = new Alignment(0.0, -1.0);
+    /**
+     * Alignment in the top-right corner of a rectangle.
+     */
+    public static final Alignment TOP_RIGHT = new Alignment(1.0, -1.0);
+    /**
+     * Alignment in the center-left of a rectangle.
+     */
+    public static final Alignment CENTER_LEFT = new Alignment(-1.0, 0.0);
+    /**
+     * Alignment in the center of a rectangle.
+     */
+    public static final Alignment CENTER = new Alignment(0.0, 0.0);
+    /**
+     * Alignment in the center-right of a rectangle.
+     */
+    public static final Alignment CENTER_RIGHT = new Alignment(1.0, 0.0);
+    /**
+     * Alignment in the bottom-left corner of a rectangle.
+     */
+    public static final Alignment BOTTOM_LEFT = new Alignment(-1.0, 1.0);
+    /**
+     * Alignment in the bottom-center of a rectangle.
+     */
+    public static final Alignment BOTTOM_CENTER = new Alignment(0.0, 1.0);
+    /**
+     * Alignment in the bottom-right corner of a rectangle.
+     */
+    public static final Alignment BOTTOM_RIGHT = new Alignment(1.0, 1.0);
+
+    /**
      * Creates an alignment with the given x and y values.
      *
      * @param x The x value of the alignment, ranging from -1.0 (left) to 1.0 (right).
@@ -32,51 +69,6 @@ public record Alignment(double x, double y) {
      */
     public Alignment {
     }
-
-    /**
-     * Alignment in the top-left corner of a rectangle.
-     */
-    public static final Alignment TOP_LEFT = new Alignment(-1.0, -1.0);
-
-    /**
-     * Alignment in the top-center of a rectangle.
-     */
-    public static final Alignment TOP_CENTER = new Alignment(0.0, -1.0);
-
-    /**
-     * Alignment in the top-right corner of a rectangle.
-     */
-    public static final Alignment TOP_RIGHT = new Alignment(1.0, -1.0);
-
-    /**
-     * Alignment in the center-left of a rectangle.
-     */
-    public static final Alignment CENTER_LEFT = new Alignment(-1.0, 0.0);
-
-    /**
-     * Alignment in the center of a rectangle.
-     */
-    public static final Alignment CENTER = new Alignment(0.0, 0.0);
-
-    /**
-     * Alignment in the center-right of a rectangle.
-     */
-    public static final Alignment CENTER_RIGHT = new Alignment(1.0, 0.0);
-
-    /**
-     * Alignment in the bottom-left corner of a rectangle.
-     */
-    public static final Alignment BOTTOM_LEFT = new Alignment(-1.0, 1.0);
-
-    /**
-     * Alignment in the bottom-center of a rectangle.
-     */
-    public static final Alignment BOTTOM_CENTER = new Alignment(0.0, 1.0);
-
-    /**
-     * Alignment in the bottom-right corner of a rectangle.
-     */
-    public static final Alignment BOTTOM_RIGHT = new Alignment(1.0, 1.0);
 
     /**
      * Computes the offset within a given size that corresponds to this alignment.

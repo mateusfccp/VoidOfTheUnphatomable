@@ -3,33 +3,36 @@ package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
-import org.pintoschneider.void_of_the_unfathomable.game.enemies.*;
-import org.pintoschneider.void_of_the_unfathomable.game.engine.*;
-import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.*;
-import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
+import org.pintoschneider.void_of_the_unfathomable.game.enemies.Enemy;
+import org.pintoschneider.void_of_the_unfathomable.game.enemies.StaticDissonance;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Keys;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
+import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * The in-game scene where the player can explore the map and interact with the game world.
  */
 public final class InGame implements Scene {
+    static final Paint boldPaint = new Paint().withBold(true);
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
-
     private final Map map = new Map();
     private final Player player = new Player();
     private final Map.Entity<Player> playerEntity = map.new Entity<>(new Offset(4, 4), '@', player);
-    private Offset offset = Offset.ZERO;
-    static final Paint boldPaint = new Paint().withBold(true);
-
     boolean processingTurn = false;
+    private Offset offset = Offset.ZERO;
 
     /**
      * Creates a new in-game scene.

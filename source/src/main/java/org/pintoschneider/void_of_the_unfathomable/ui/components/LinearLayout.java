@@ -13,24 +13,14 @@ import java.util.Objects;
  */
 public class LinearLayout extends Component {
     /**
-     * The orientation of the layout: horizontal (row) or vertical (column).
-     */
-    public enum Orientation {
-        HORIZONTAL, VERTICAL
-    }
-
-    /**
      * The child items to be arranged.
      */
     protected final Component[] children;
-
     /**
      * The orientation of this layout.
      */
     protected final Orientation orientation;
-
     private MainAxisSize mainAxisSize = MainAxisSize.MAX;
-
     private CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.START;
 
     /**
@@ -200,6 +190,13 @@ public class LinearLayout extends Component {
             case HORIZONTAL -> component.size().height();
             case VERTICAL -> component.size().width();
         };
+    }
+
+    /**
+     * The orientation of the layout: horizontal (row) or vertical (column).
+     */
+    public enum Orientation {
+        HORIZONTAL, VERTICAL
     }
 }
 

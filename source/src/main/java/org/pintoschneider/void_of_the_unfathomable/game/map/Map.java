@@ -267,9 +267,9 @@ public class Map {
      * enemies, items, etc.
      */
     public class Entity<T> {
-        private Offset position;
         private final Character representation;
         private final T associatedObject;
+        private Offset position;
 
         public Entity(Offset position, Character representation, T associatedObject) {
             this.position = Objects.requireNonNull(position);
