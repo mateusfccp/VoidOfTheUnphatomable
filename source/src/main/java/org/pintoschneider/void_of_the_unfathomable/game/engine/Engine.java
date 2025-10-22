@@ -48,6 +48,10 @@ public class Engine implements AutoCloseable, Context {
     void tick() {
         if (sceneManager.hasScene()) {
             refresh();
+
+            synchronized (this) {
+                notifyAll();
+            }
         } else {
             stop();
         }
@@ -112,6 +116,18 @@ public class Engine implements AutoCloseable, Context {
     @Override
     public Size size() {
         return terminalSize;
+    }
+
+    @Override
+    public long waitTick() throws InterruptedException {
+        final long observed = uiThread.tickCount();
+        synchronized (this) {
+            while (uiThread.tickCount() == observed) {
+                this.wait();
+            }
+        }
+
+        return uiThread.deltaTime();
     }
 
     @Override
@@ -186,8 +202,8 @@ final class UIThread extends Thread {
     private final Engine engine;
     private final int fps;
     private long lastNanoTime;
-    private long tickCount = 0;
-    private long deltaTime = 0;
+    private volatile long tickCount = 0;
+    private volatile long deltaTime = 0;
 
     /**
      * Creates a UIThread.
@@ -226,7 +242,11 @@ final class UIThread extends Thread {
             if (nanoSeconds - lastNanoTime >= 1_000_000_000L / fps) {
                 deltaTime = nanoSeconds - lastNanoTime;
                 lastNanoTime = nanoSeconds;
-                tickCount++;
+
+                synchronized (this) {
+                    tickCount++;
+                }
+
                 engine.tick();
             }
         }
