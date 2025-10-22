@@ -1,6 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +16,11 @@ import java.util.Objects;
  */
 public class Map {
     private final MapTile[][] tiles;
-    private final List<Entity> entities;
+    private final List<Entity<?>> entities;
 
     private final int width;
     private final int height;
+    private final Visibility visibility;
 
     /**
      * Creates a new map.
@@ -78,6 +81,8 @@ public class Map {
                 }
             }
         }
+
+        visibility = new AdamMillazosVisibility(this);
     }
 
     /**
@@ -143,6 +148,24 @@ public class Map {
     }
 
     /**
+     * Gets the entity at the specified position.
+     * <p>
+     * If no entity is found at the given position, null is returned.
+     *
+     * @param position The position to check for an entity.
+     * @return The entity at the specified position, or null if none is found.
+     */
+    public Entity<?> getEntityAt(Offset position) {
+        for (Entity<?> entity : entities) {
+            if (entity.position().equals(position)) {
+                return entity;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Converts the map to a 2D array of characters, taking into the tile definitions.
      *
      * @return A 2D array of characters representing the map.
@@ -160,7 +183,7 @@ public class Map {
             final int ey = entity.position().dy();
 
             if (ex >= 0 && ex < width && ey >= 0 && ey < height) {
-                   charArray[ex][ey] = entity.representation();
+                charArray[ex][ey] = entity.representation();
             }
         }
 
@@ -199,18 +222,59 @@ public class Map {
     }
 
     /**
+     * Gets a list of all entities on the map.
+     *
+     * @return A list of all entities on the map.
+     */
+    public List<Entity<?>> entities() {
+        return new ArrayList<>(entities);
+    }
+
+    /**
+     * Gets a list of all entities of the specified type on the map.
+     *
+     * @param type The type of entities to retrieve.
+     * @param <T>  The type of the associated object of the entities.
+     * @return A list of all entities of the specified type on the map.
+     */
+    public <T> List<Entity<T>> entitiesOfType(Class<T> type) {
+        final List<Entity<T>> result = new ArrayList<>();
+
+        for (Entity<?> entity : entities) {
+            if (type.isInstance(entity.associatedObject())) {
+                //noinspection unchecked
+                result.add((Entity<T>) entity);
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Gets the visibility strategy used by the map.
+     *
+     * @return The visibility strategy used by the map.
+     */
+    public Visibility visibility() {
+        return visibility;
+    }
+
+    /**
      * A class representing an entity on the map.
      * <p>
      * An entity is any kind of object that can be placed in the map and have its position changed, such as the player,
      * enemies, items, etc.
      */
-    public class Entity {
+    public class Entity<T> {
         private Offset position;
         private final Character representation;
+        private final T associatedObject;
 
-        public Entity(Offset position, Character representation) {
+        public Entity(Offset position, Character representation, T associatedObject) {
             this.position = Objects.requireNonNull(position);
             this.representation = Objects.requireNonNull(representation);
+            this.associatedObject = Objects.requireNonNull(associatedObject);
             entities.add(this);
         }
 
@@ -234,20 +298,104 @@ public class Map {
 
         /**
          * Moves the entity by the specified offset.
+         * <p>
+         * The entity can only move horizontally or vertically by one tile at a time. Diagonal movement is not allowed.
          *
          * @param offset The offset to move the entity by.
          * @return True if the entity was moved, false if the move was blocked by a non-walkable tile.
          */
         public boolean moveBy(Offset offset) {
-            final Offset newPosition = position.translate(offset.dx(), offset.dy());
-            final MapTile tileAtNewPosition = getTileAt(newPosition.dx(), newPosition.dy());
+            // Okay, this algorithm, if you can call it that, is completely sh*t. We have to implement any kind of
+            // pathfinding later, but for now, this will have to do.
+            // TODO(mateusfccp): Implement proper pathfinding (A*)
+            final Offset targetPosition = position.translate(offset.dx(), offset.dy());
 
-            if (tileAtNewPosition != null && tileAtNewPosition.walkable()) {
-                position = newPosition;
+            if (Math.abs(targetPosition.dx()) + Math.abs(targetPosition.dy()) == 1) {
+                if (canMoveTo(targetPosition)) {
+                    position = targetPosition;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            final Offset horizontalMove = new Offset(offset.dx(), 0);
+
+            if (canMoveTo(position.translate(horizontalMove.dx(), horizontalMove.dy()))) {
+                position = position.translate(horizontalMove.dx(), horizontalMove.dy());
                 return true;
-            } else {
+            }
+
+            final Offset verticalMove = new Offset(0, offset.dy());
+            if (canMoveTo(position.translate(verticalMove.dx(), verticalMove.dy()))) {
+                position = position.translate(verticalMove.dx(), verticalMove.dy());
+                return true;
+            }
+
+            return true;
+        }
+
+        private boolean canMoveTo(Offset targetPosition) {
+            final MapTile tileAtNewPosition = getTileAt(targetPosition.dx(), targetPosition.dy());
+
+            if (tileAtNewPosition != null && !tileAtNewPosition.walkable()) {
                 return false;
             }
+
+            final Entity<?> entityAtNewPosition = getEntityAt(targetPosition);
+            return entityAtNewPosition == null;
+        }
+
+        /**
+         * Moves the entity one step towards the target position.
+         * <p>
+         *
+         * @param target The target position to move towards.
+         * @return True if the entity was moved, false if the move was blocked by a non-walkable tile.
+         */
+        public boolean moveTowards(Offset target) {
+            final int dx = Integer.compare(target.dx(), position.dx());
+            final int dy = Integer.compare(target.dy(), position.dy());
+            return moveBy(new Offset(dx, dy));
+        }
+
+        /**
+         * Gets the map this entity belongs to.
+         *
+         * @return The map this entity belongs to.
+         */
+        public Map map() {
+            return Map.this;
+        }
+
+        /**
+         * Gets the associated object of the entity.
+         *
+         * @return The associated object of the entity.
+         */
+        public T associatedObject() {
+            return associatedObject;
+        }
+
+        /**
+         * Determines if this entity can see another entity based on the map's visibility rules and the positions of
+         * both entities.
+         *
+         * @param other The other entity to check visibility against.
+         * @return True if this entity can see the other entity, false otherwise.
+         */
+        public boolean canSee(Entity<?> other) {
+            return visibility.isVisible(this.position, other.position);
+        }
+
+        /**
+         * Calculates the Chebyshev distance to another entity.
+         *
+         * @param other The other entity to calculate the distance to.
+         * @return The Chebyshev distance to the other entity.
+         */
+        public int distanceTo(Entity<?> other) {
+            return this.position.manhattanDistanceTo(other.position);
         }
     }
 }

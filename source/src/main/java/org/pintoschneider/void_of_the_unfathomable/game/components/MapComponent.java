@@ -12,21 +12,18 @@ import java.util.Objects;
  */
 public final class MapComponent extends Component {
     private final Map map;
-    private final Visibility visibility;
     private final Offset offset;
     private final Offset playerOffset;
 
     /**
      * Creates a new MapComponent.
      *
-     * @param map The map to render.
-     * @param visibility The visibility strategy to use.
-     * @param offset The offset of the map to render.
+     * @param map          The map to render.
+     * @param offset       The offset of the map to render.
      * @param playerOffset The offset of the player on the map.
      */
-    public MapComponent(Map map, Visibility visibility, Offset offset, Offset playerOffset) {
+    public MapComponent(Map map, Offset offset, Offset playerOffset) {
         this.map = Objects.requireNonNull(map);
-        this.visibility = Objects.requireNonNull(visibility);
         this.offset = Objects.requireNonNull(offset);
         this.playerOffset = Objects.requireNonNull(playerOffset);
     }
@@ -46,9 +43,10 @@ public final class MapComponent extends Component {
         final Character[][] tiles = map.toCharacterArray();
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
-                if (!visibility.isVisible(playerOffset, new Offset(x, y))) {
+                if (!map.visibility().isVisible(playerOffset, new Offset(x, y))) {
                     continue;
                 }
+
                 canvas.draw(tiles[x][y], x - offset.dx(), y - offset.dy());
             }
         }

@@ -77,4 +77,19 @@ public record Offset(int dx, int dy) {
         final int dy = Math.abs(this.dy - to.dy);
         return Math.max(dx, dy);
     }
+
+    /**
+     * Calculates the Manhattan distance to another offset.
+     * <p>
+     * The Manhattan distance is defined as the sum of the absolute differences in each dimension. It is used in
+     * scenarios where movement is restricted to horizontal and vertical directions.
+     *
+     * @param to The target offset.
+     * @return The Manhattan distance to the target offset.
+     */
+    public int manhattanDistanceTo(Offset to) {
+        final int dx = Math.abs(this.dx - to.dx);
+        final int dy = Math.abs(this.dy - to.dy);
+        return dx + dy;
+    }
 }
