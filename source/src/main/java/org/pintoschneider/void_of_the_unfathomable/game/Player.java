@@ -11,8 +11,6 @@ import java.util.List;
  * A class representing the player character in the game including their attributes, status effects, and inventory.
  */
 public final class Player {
-    private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
-    private final ArrayList<Item> inventory = new ArrayList<>();
     private int currentHealth = maximumHealth() / 2;
     private int currentColorPoints = maximumColorPoints();
     private int attackPower;
@@ -22,7 +20,7 @@ public final class Player {
     private int fluoxetineDoses = 0;
     private int turnsWithoutFluoxetine = 0;
     private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
-    private final List<Item> inventory = new ArrayList<>();
+    private final ArrayList<Item> inventory = new ArrayList<>();
 
     /**
      * Gets the current health of the player.
