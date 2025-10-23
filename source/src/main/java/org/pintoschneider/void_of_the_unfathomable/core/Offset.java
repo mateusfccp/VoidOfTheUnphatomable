@@ -1,5 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.core;
 
+import java.util.Objects;
+
 /**
  * An immutable 2D integer offset.
  *
@@ -91,5 +93,19 @@ public record Offset(int dx, int dy) {
         final int dx = Math.abs(this.dx - to.dx);
         final int dy = Math.abs(this.dy - to.dy);
         return dx + dy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Offset(int dx1, int dy1)) {
+            return dx() == dx1 && dy() == dy1;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dx(), dy());
     }
 }

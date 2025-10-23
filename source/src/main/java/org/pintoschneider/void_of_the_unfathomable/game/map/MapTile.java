@@ -39,6 +39,7 @@ public enum MapTile {
     private final Character bottomTee;
     private final boolean walkable;
     private final boolean opaque;
+
     MapTile(Character symbol, boolean walkable, boolean opaque) {
         this.cross = symbol;
         this.horizontalFull = symbol;
@@ -59,6 +60,7 @@ public enum MapTile {
         this.opaque = opaque;
         this.autoTile = false;
     }
+
     MapTile(Character cross,
             Character horizontalFull,
             Character horizontalLeft,

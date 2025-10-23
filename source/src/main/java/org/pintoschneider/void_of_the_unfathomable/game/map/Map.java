@@ -4,9 +4,7 @@ import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A class representing a 2D map composed of tiles and entities.
@@ -178,7 +176,7 @@ public class Map {
             }
         }
 
-        for (Entity entity : entities) {
+        for (Entity<?> entity : entities) {
             final int ex = entity.position().dx();
             final int ey = entity.position().dy();
 
@@ -305,34 +303,14 @@ public class Map {
          * @return True if the entity was moved, false if the move was blocked by a non-walkable tile.
          */
         public boolean moveBy(Offset offset) {
-            // Okay, this algorithm, if you can call it that, is completely sh*t. We have to implement any kind of
-            // pathfinding later, but for now, this will have to do.
-            // TODO(mateusfccp): Implement proper pathfinding (A*)
             final Offset targetPosition = position.translate(offset.dx(), offset.dy());
 
-            if (Math.abs(targetPosition.dx()) + Math.abs(targetPosition.dy()) == 1) {
-                if (canMoveTo(targetPosition)) {
-                    position = targetPosition;
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            final Offset horizontalMove = new Offset(offset.dx(), 0);
-
-            if (canMoveTo(position.translate(horizontalMove.dx(), horizontalMove.dy()))) {
-                position = position.translate(horizontalMove.dx(), horizontalMove.dy());
+            if (canMoveTo(targetPosition)) {
+                position = targetPosition;
                 return true;
+            } else {
+                return false;
             }
-
-            final Offset verticalMove = new Offset(0, offset.dy());
-            if (canMoveTo(position.translate(verticalMove.dx(), verticalMove.dy()))) {
-                position = position.translate(verticalMove.dx(), verticalMove.dy());
-                return true;
-            }
-
-            return true;
         }
 
         private boolean canMoveTo(Offset targetPosition) {
@@ -354,9 +332,16 @@ public class Map {
          * @return True if the entity was moved, false if the move was blocked by a non-walkable tile.
          */
         public boolean moveTowards(Offset target) {
-            final int dx = Integer.compare(target.dx(), position.dx());
-            final int dy = Integer.compare(target.dy(), position.dy());
-            return moveBy(new Offset(dx, dy));
+            final List<Offset> path = getPathTo(target);
+            final Offset nextStep = path.size() > 1 ? path.get(1) : null;
+
+            if (nextStep == null) {
+                return false;
+            } else {
+                final int dx = nextStep.dx() - position.dx();
+                final int dy = nextStep.dy() - position.dy();
+                return moveBy(new Offset(dx, dy));
+            }
         }
 
         /**
@@ -397,6 +382,93 @@ public class Map {
         public int distanceTo(Entity<?> other) {
             return this.position.manhattanDistanceTo(other.position);
         }
+
+        // We can optimize it if necessary by caching paths for unchanged maps
+        private List<Offset> getPathTo(Offset target) {
+            final Queue<PathNode<Offset>> openSet = new PriorityQueue<>();
+            final Set<Offset> closedSet = new HashSet<>();
+
+            final PathNode<Offset> startNode = new PathNode<>(position);
+            startNode.gCost = 0;
+            startNode.hCost = position.manhattanDistanceTo(target);
+            openSet.add(startNode);
+
+            while (!openSet.isEmpty()) {
+                final PathNode<Offset> currentNode = openSet.poll();
+
+                // Skip already evaluated nodes
+                if (closedSet.contains(currentNode.tile)) continue;
+
+                closedSet.add(currentNode.tile);
+
+                if (currentNode.tile.equals(target)) {
+                    final List<Offset> path = new ArrayList<>();
+                    PathNode<Offset> pathNode = currentNode;
+
+                    while (pathNode != null) {
+                        path.addFirst(pathNode.tile);
+                        pathNode = pathNode.parentNode;
+                    }
+
+                    return path;
+                }
+
+                final List<Offset> neighbors = List.of(
+                    currentNode.tile.translate(-1, 0),
+                    currentNode.tile.translate(1, 0),
+                    currentNode.tile.translate(0, -1),
+                    currentNode.tile.translate(0, 1)
+                );
+
+                for (Offset neighbor : neighbors) {
+                    // Skip non-walkable tiles
+                    if (getTileAt(neighbor) == null || !getTileAt(neighbor).walkable()) continue;
+
+                    // Skip entities unless it's the target position
+                    final Entity<?> entity = getEntityAt(neighbor);
+                    if (entity != null && !neighbor.equals(target)) {
+                        continue;
+                    }
+
+                    final PathNode<Offset> neighborNode = new PathNode<>(neighbor);
+                    neighborNode.gCost = currentNode.gCost + 1;
+                    neighborNode.hCost = neighbor.manhattanDistanceTo(target);
+                    neighborNode.parentNode = currentNode;
+
+                    openSet.add(neighborNode);
+                }
+            }
+
+            return Collections.emptyList();
+        }
     }
+
 }
 
+final class PathNode<T> implements Comparable<PathNode<T>> {
+    final T tile;
+    int gCost;
+    int hCost;
+    PathNode<T> parentNode;
+
+    PathNode(T tile) {
+        this.tile = tile;
+    }
+
+    int gCost() {
+        return gCost;
+    }
+
+    int hCost() {
+        return hCost;
+    }
+
+    int fCost() {
+        return gCost + hCost;
+    }
+
+    @Override
+    public int compareTo(PathNode<T> other) {
+        return Integer.compare(fCost(), other.fCost());
+    }
+}

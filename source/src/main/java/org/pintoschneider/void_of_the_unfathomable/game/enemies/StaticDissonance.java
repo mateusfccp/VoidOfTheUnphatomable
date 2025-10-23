@@ -36,7 +36,7 @@ public final class StaticDissonance extends Enemy {
             final int distance = entity.distanceTo(playerEntity);
 
             switch (distance) {
-                case 1 -> steps.add(new MoveTowardsPlayer(playerEntity));
+                case 1 -> steps.add(new RegularAttack(entity));
                 case 2 -> {
                     steps.add(new MoveTowardsPlayer(entity));
                     steps.add(
