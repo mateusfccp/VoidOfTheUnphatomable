@@ -41,7 +41,7 @@ public final class MapComponent extends Component {
         final int maxX = Math.min(offset.dx() + size.width(), map.width());
         final int maxY = Math.min(offset.dy() + size.height(), map.height());
 
-        final Character[][] tiles = map.toCharacterArray();
+        final char[][] tiles = map.toCharacterMatrix();
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
                 if (!map.visibility().isVisible(playerOffset, new Offset(x, y))) {

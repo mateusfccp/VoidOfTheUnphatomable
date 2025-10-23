@@ -30,9 +30,9 @@ public final class InGame implements Scene {
     static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
     private final Map map = new Map();
     private final Player player = new Player();
-    private final Map.Entity<Player> playerEntity = map.new Entity<>(new Offset(4, 4), '@', player);
+    private final Map.Entity<Player> playerEntity = map.new Entity<>(new Offset(4, 4), '@', new Player());
     boolean processingTurn = false;
-    private Offset offset = Offset.ZERO;
+    private Offset mapOffset = Offset.ZERO;
 
     /**
      * Creates a new in-game scene.
@@ -58,7 +58,7 @@ public final class InGame implements Scene {
             .toArray(Component[]::new);
 
         return new Row(
-            new Flexible(1, new MapComponent(map, offset, playerEntity.position())),
+            new Flexible(1, new MapComponent(map, mapOffset, playerEntity.position())),
             new VerticalDivider(),
             new ConstrainedBox(
                 new Constraints(12, 12, null, null),
@@ -156,8 +156,8 @@ public final class InGame implements Scene {
         processingTurn = false;
     }
 
-    void centerOnPlayer(Context context) {
-        offset = new Offset(
+    private void centerOnPlayer(Context context) {
+        mapOffset = new Offset(
             playerEntity.position().dx() - context.size().width() / 2,
             playerEntity.position().dy() - context.size().height() / 2
         );

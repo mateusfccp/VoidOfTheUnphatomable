@@ -6,9 +6,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.scenes.MainMenu;
 
 import java.io.IOException;
 
-public class Main {
-    static final int FPS = 30;
-
+public final class Main {
     static void main() {
         final Scene scene = new MainMenu();
 

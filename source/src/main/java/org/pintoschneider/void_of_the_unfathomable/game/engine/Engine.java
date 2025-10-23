@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
 
-public class Engine implements AutoCloseable, Context {
+public final class Engine implements AutoCloseable, Context {
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
     private final PrintWriter writer = terminal.writer();
     private final SceneManager sceneManager;

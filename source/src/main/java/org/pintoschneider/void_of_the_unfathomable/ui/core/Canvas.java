@@ -151,7 +151,7 @@ public final class Canvas {
      * @param x the x-coordinate
      * @param y the y-coordinate
      */
-    public void draw(Character c, int x, int y) {
+    public void draw(char c, int x, int y) {
         draw(c, x, y, null);
     }
 
@@ -161,7 +161,7 @@ public final class Canvas {
      * @param c      The character to draw.
      * @param offset The offset to draw at.
      */
-    public void draw(Character c, Offset offset) {
+    public void draw(char c, Offset offset) {
         draw(c, offset.dx(), offset.dy(), null);
     }
 
@@ -173,7 +173,7 @@ public final class Canvas {
      * @param y     The y-coordinate.
      * @param paint The paint style to apply, or null for no style.
      */
-    public void draw(Character c, int x, int y, Paint paint) {
+    public void draw(char c, int x, int y, Paint paint) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             final String errorMessage = "Coordinates out of bounds: (%d, %d) for canvas of size (%d, %d).".formatted(x, y, width, height);
             throw new IndexOutOfBoundsException(errorMessage);

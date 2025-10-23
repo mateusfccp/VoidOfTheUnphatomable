@@ -123,7 +123,7 @@ public enum MapTile {
      *                The bits are ordered as follows: 0bBTLR (Bottom, Top, Left, Right)
      * @return The character representation of the tile.
      */
-    Character getCharacter(int bitmask) {
+    char getCharacter(int bitmask) {
         return switch (bitmask) {
             case 0b0000 -> cross; // No neighbors
             case 0b0001 -> horizontalLeft; // Left neighbor

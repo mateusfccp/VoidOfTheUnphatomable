@@ -12,7 +12,7 @@ import java.util.*;
  * The tiles describe the terrain of the map, while the entities represent dynamic objects such as players, NPCs, or
  * items.
  */
-public class Map {
+public final class Map {
     private final MapTile[][] tiles;
     private final List<Entity<?>> entities;
 
@@ -168,11 +168,11 @@ public class Map {
      *
      * @return A 2D array of characters representing the map.
      */
-    public Character[][] toCharacterArray() {
-        Character[][] charArray = new Character[width][height];
+    public char[][] toCharacterMatrix() {
+        char[][] charArray = new char[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                charArray[x][y] = getTileCharacter(x, y);
+                charArray[x][y] = getTileCharacterAt(x, y);
             }
         }
 
@@ -188,7 +188,7 @@ public class Map {
         return charArray;
     }
 
-    private Character getTileCharacter(int x, int y) {
+    private Character getTileCharacterAt(int x, int y) {
         final MapTile tile = tiles[x][y];
         if (!tile.autoTile) {
             return tile.getCharacter(0);
@@ -265,13 +265,13 @@ public class Map {
      * enemies, items, etc.
      */
     public class Entity<T> {
-        private final Character representation;
+        private final char representation;
         private final T associatedObject;
         private Offset position;
 
-        public Entity(Offset position, Character representation, T associatedObject) {
+        public Entity(Offset position, char representation, T associatedObject) {
             this.position = Objects.requireNonNull(position);
-            this.representation = Objects.requireNonNull(representation);
+            this.representation = representation;
             this.associatedObject = Objects.requireNonNull(associatedObject);
             entities.add(this);
         }
@@ -290,7 +290,7 @@ public class Map {
          *
          * @return The character representation of the entity.
          */
-        public Character representation() {
+        public char representation() {
             return representation;
         }
 
@@ -445,6 +445,11 @@ public class Map {
 
 }
 
+/**
+ * A node used in the A* pathfinding algorithm.
+ *
+ * @param <T> The type of the tile associated with the node.
+ */
 final class PathNode<T> implements Comparable<PathNode<T>> {
     final T tile;
     int gCost;
