@@ -10,7 +10,9 @@ import java.util.List;
 /**
  * A class representing the player character in the game including their attributes, status effects, and inventory.
  */
-public class Player {
+public final class Player {
+    private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
+    private final ArrayList<Item> inventory = new ArrayList<>();
     private int currentHealth = maximumHealth() / 2;
     private int currentColorPoints = maximumColorPoints();
     private int attackPower;
@@ -169,6 +171,42 @@ public class Player {
         inventory.add(item);
     }
 
+    /**
+     * Sorts player's inventory alphabetically.
+     *
+     * @param item The item to add to the inventory.
+     */
+    public void sortInventory(Item item) {
+    	int index = binarySearch(this.inventory, item.name());
+    	this.inventory.set(index, item);
+    }
+    
+    /**
+     * Searches the player's inventory with an efficiency of O(log n). Returns the index of where to place the item in the ArrayList
+     *
+     * @param list the player's inventory, name the name of the item to be added.
+     */
+    public int binarySearch(ArrayList<Item> list, String name) {
+        int low = 0;
+        int high = list.size();
+        int mid = -1;
+
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+
+            if (list.get(mid).name().equals(name)) {
+                return mid;
+            }
+            else if (list.get(mid).name().compareToIgnoreCase(name) < 0) {
+                low = mid + 1;
+            }      else if (list.get(mid).name().compareToIgnoreCase(name) > 0) {
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
+    
+    
     /**
      * Uses a consumable item from the player's inventory.
      *
