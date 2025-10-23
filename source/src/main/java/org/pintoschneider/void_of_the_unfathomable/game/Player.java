@@ -167,8 +167,12 @@ public final class Player {
      * @param item The item to add to the inventory.
      */
     public void addItemToInventory(Item item) {
-    	int index = binarySearch(this.inventory, item.name());
-    	this.inventory.add(index, item);
+        int index = binarySearch(this.inventory, item.name());
+        if (index == inventory.size()) {
+            this.inventory.add(item);
+        } else {
+            this.inventory.add(index, item);
+        }
     }
 
     /**
