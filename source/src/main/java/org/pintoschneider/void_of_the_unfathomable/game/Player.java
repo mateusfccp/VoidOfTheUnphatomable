@@ -162,13 +162,13 @@ public final class Player {
 
     /**
      * Adds an item to the player's inventory.
-     * Sorts the inventory alphabetically as the items get added
+     * Sorts the inventory alphabetically  as the items get added
      *
      * @param item The item to add to the inventory.
      */
     public void addItemToInventory(Item item) {
     	int index = binarySearch(this.inventory, item.name());
-    	this.inventory.set(index, item);
+    	this.inventory.add(index, item);
     }
 
     /**
