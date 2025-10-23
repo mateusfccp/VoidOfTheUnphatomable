@@ -1,4 +1,5 @@
 @startuml
+scale 800 height
 
 ' Core
 +class Offset <<(R,orchid) record>> {
@@ -188,6 +189,7 @@ class InGame <<final>> {
 	-Player player
 	-Entity<Player> playerEntity
 	-boolean processingTurn
+	-Offset mapOffset
 	--
 	+void onKeyPress(int)
 	+void draw()
@@ -221,6 +223,7 @@ SceneManager "1" -u- "*" Scene
 OptionsMenu ..|> Scene
 
 InGame ..|> Scene
+InGame ..|> Offset
 InGame "1" -- "1" Map
 InGame "1" -- "1" Player
 InGame "1" -- "1" Entity
