@@ -189,7 +189,7 @@ public final class Player {
     private int binarySearch(ArrayList<Item> list, String name) {
         int low = 0;
         int high = list.size();
-        int mid;
+        int mid = low + (high - low) / 2;
 
         while (low <= high) {
             mid = low + (high - low) / 2;
@@ -203,7 +203,7 @@ public final class Player {
                 high = mid - 1;
             }
         }
-        return -1;
+        return mid;
     }
     
     
