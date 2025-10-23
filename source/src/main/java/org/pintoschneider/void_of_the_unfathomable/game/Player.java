@@ -174,20 +174,22 @@ public final class Player {
      *
      * @param item The item to add to the inventory.
      */
-    public void sortInventory(Item item) {
+    private void sortInventory(Item item) {
     	int index = binarySearch(this.inventory, item.name());
     	this.inventory.set(index, item);
     }
-    
+
     /**
-     * Searches the player's inventory with an efficiency of O(log n). Returns the index of where to place the item in the ArrayList
+     * Searches the player's inventory with an efficiency of O(log n).
      *
-     * @param list the player's inventory, name the name of the item to be added.
+     * @param list The player's inventory,
+     * @param name The name of the item to be added.
+     * @return The index of where to place the item in the ArrayList.
      */
-    public int binarySearch(ArrayList<Item> list, String name) {
+    private int binarySearch(ArrayList<Item> list, String name) {
         int low = 0;
         int high = list.size();
-        int mid = -1;
+        int mid;
 
         while (low <= high) {
             mid = low + (high - low) / 2;
