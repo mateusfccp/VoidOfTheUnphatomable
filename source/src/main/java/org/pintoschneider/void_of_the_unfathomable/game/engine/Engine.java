@@ -10,6 +10,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Objects;
 
 public final class Engine implements AutoCloseable, Context {
@@ -188,8 +189,12 @@ final class InputThread extends Thread {
                     engine.processKey(c);
                 }
             }
-        } catch (IOException e) {
-            // Thread interrupted or IO error, exit thread
+        } catch (IOException exception) {
+            System.err.printf(
+                "Exception caught in InputThread:%n%s%n%s%n",
+                exception.getMessage(),
+                Arrays.toString(exception.getStackTrace())
+            );
         }
     }
 }

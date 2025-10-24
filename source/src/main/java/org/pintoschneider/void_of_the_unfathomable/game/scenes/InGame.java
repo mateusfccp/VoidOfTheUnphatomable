@@ -17,6 +17,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
@@ -133,27 +134,31 @@ public final class InGame implements Scene {
         // For visual purposes, each turn step is processed in a fixed time interval
         long time = 0;
         Boolean lastStepResult = null;
-        while (!steps.isEmpty()) {
-            final long deltaTime;
-            try {
+        try {
+            while (!steps.isEmpty()) {
+                final long deltaTime;
                 deltaTime = context.waitTick();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
+                time = time + deltaTime;
+
+                if (time > turnStepInterval) { // 1 second
+                    time = time - turnStepInterval;
+
+                    final TurnStep step = steps.poll();
+
+                    assert step != null;
+                    lastStepResult = step.execute(lastStepResult);
+                }
             }
-
-            time = time + deltaTime;
-
-            if (time > turnStepInterval) { // 1 second
-                time = time - turnStepInterval;
-
-                final TurnStep step = steps.poll();
-
-                assert step != null;
-                lastStepResult = step.execute(lastStepResult);
-            }
+        } catch (InterruptedException exception) {
+            System.err.printf(
+                "Turn processing interrupted:%s%n%s%n",
+                exception.getMessage(),
+                Arrays.toString(exception.getStackTrace())
+            );
+        } finally {
+            processingTurn = false;
         }
-
-        processingTurn = false;
     }
 
     private void centerOnPlayer(Context context) {
