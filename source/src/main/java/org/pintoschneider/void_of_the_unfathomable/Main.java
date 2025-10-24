@@ -14,7 +14,7 @@ public final class Main {
             try (final DebugLogger _ = new DebugLogger()) {
                 run();
             } catch (IOException exception) {
-                System.out.printf(
+                System.err.printf(
                     "Failed to initialize debug logger: %n%s%n%s%n",
                     exception.getMessage(),
                     Arrays.toString(exception.getStackTrace())
@@ -31,7 +31,7 @@ public final class Main {
         try (final Engine engine = new Engine(scene)) {
             engine.waitUntilStopped();
         } catch (Exception exception) {
-            System.out.printf(
+            System.err.printf(
                 "Exception caught in Main:%n%s%n%s%n",
                 exception.getMessage(),
                 Arrays.toString(exception.getStackTrace())
