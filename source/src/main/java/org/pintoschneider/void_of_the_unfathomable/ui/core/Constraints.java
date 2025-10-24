@@ -269,6 +269,15 @@ public final class Constraints {
         return new Constraints(maxWidth, maxWidth, maxHeight, maxHeight);
     }
 
+    /**
+     * Returns new loose constraints based on the current maximum width and height.
+     *
+     * @return A new {@link Constraints} object that is loose.
+     */
+    public Constraints loosen() {
+        return new Constraints(0, maxWidth, 0, maxHeight);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
