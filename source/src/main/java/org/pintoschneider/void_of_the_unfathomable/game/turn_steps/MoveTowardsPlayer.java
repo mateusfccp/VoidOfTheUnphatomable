@@ -21,6 +21,7 @@ public final class MoveTowardsPlayer implements TurnStep {
     @Override
     public boolean execute(Boolean lastTurnResult) {
         final Map.Entity<Player> player = entity.map().entitiesOfType(Player.class).getFirst();
+
         return entity.moveTowards(player.position());
     }
 }

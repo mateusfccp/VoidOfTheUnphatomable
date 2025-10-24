@@ -340,7 +340,11 @@ public final class Map {
             } else {
                 final int dx = nextStep.dx() - position.dx();
                 final int dy = nextStep.dy() - position.dy();
-                return moveBy(new Offset(dx, dy));
+                final Offset offset = new Offset(dx, dy);
+
+                System.out.printf("%s moves towards the player (offset = %s).%n", this, offset);
+
+                return moveBy(offset);
             }
         }
 

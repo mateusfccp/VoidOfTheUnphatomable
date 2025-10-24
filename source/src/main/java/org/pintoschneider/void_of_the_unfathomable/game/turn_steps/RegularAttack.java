@@ -31,6 +31,8 @@ public final class RegularAttack implements TurnStep {
         final Enemy enemy = entity.associatedObject();
         player.damage(enemy.attack()); // TODO(mateusfccp): Consider player defense
 
+        System.out.printf("%s attacks the player for %d damage.%n", enemy.name(), enemy.attack());
+
         return true;
     }
 }
