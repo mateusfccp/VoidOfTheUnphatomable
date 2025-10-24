@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.ui.components;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.EdgeInsets;
 
 /**
  * A bordered box that can contain a single {@link Component} child.
@@ -48,8 +49,9 @@ public final class Border extends Component {
         if (child == null) {
             size = constraints.enforce(minimalConstraints).smallest();
         } else {
-            // We first lay out the child with the parent constraints so it can determine its size
-            child.layout(constraints);
+            // We first lay out the child with the padded constraints so it can determine its size
+            final Constraints paddedConstraints = constraints.deflate(EdgeInsets.all(1));
+            child.layout(paddedConstraints);
 
             final Constraints bordersConstraints = new Constraints(
                 2,
