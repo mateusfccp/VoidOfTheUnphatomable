@@ -4,13 +4,12 @@ import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
-import org.pintoschneider.void_of_the_unfathomable.game.enemies.Enemy;
-import org.pintoschneider.void_of_the_unfathomable.game.enemies.StaticDissonance;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Keys;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
-import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -31,35 +30,72 @@ public final class InGame implements Scene {
     static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
     private final Map map = new Map();
     private final Player player = new Player();
-    private final Map.Entity<Player> playerEntity = map.new Entity<>(new Offset(4, 4), '@', player);
+    private final Entity<Player> playerEntity = new PlayerEntity(new Offset(4, 4), player, map);
     boolean processingTurn = false;
     private Offset mapOffset = Offset.ZERO;
+
+    // REFACTOR THIS
+    private String dialog = """
+        You have entered The Void. You can barely make out shapes in the distance. It's hard to breathe, and a sense of
+        dread fills your mind. You must find the Resounding Core before The Void consumes you entirely.
+        """;
+
+    public void setDialog(String dialog) {
+        this.dialog = dialog;
+    }
+    // END REFACTOR THIS
 
     /**
      * Creates a new in-game scene.
      */
     InGame() {
-        // Add items for testing purposes
-        for (int i = 0; i < 10; i++) {
-            player.addItemToInventory(new FluoxetineBottle());
-            player.addItemToInventory(new HaloperidolAmpoule());
-        }
-
-        // Add enemy entity for testing purposes
-        map.new Entity<>(new Offset(14, 9), '*', new StaticDissonance());
-        map.new Entity<>(new Offset(15, 10), '*', new StaticDissonance());
+        // Add entity for testing purposes
+        new StaticDissonanceEntity(new Offset(14, 9), map);
+        new StaticDissonanceEntity(new Offset(15, 10), map);
+        new ItemEntity(new Offset(6, 6), new FluoxetineBottle(), map);
+        new StairEntity(new Offset(4, 2), map);
     }
 
     @Override
-    public Component build(Context context) {
-        centerOnPlayer(context);
+    public Component build() {
+        centerOnPlayer(Engine.context());
 
         final Component[] statusList = player.statusEffects().stream()
             .map(statusEffect -> new Text("- " + statusEffect.displayString()))
             .toArray(Component[]::new);
 
+        final Component[] itemsList = player.inventory().stream()
+            .map(item -> new Text("- " + item.name()))
+            .toArray(Component[]::new);
+
+        final Component[] stack;
+        if (dialog != null) {
+            stack = new Component[]{
+                new MapComponent(map, mapOffset, playerEntity.position()),
+                new Align(
+                    Alignment.BOTTOM_CENTER,
+                    new Padding(
+                        EdgeInsets.all(1),
+                        new Border(
+                            new Text(
+                                dialog.trim().replaceAll("\n", " ")
+                            )
+                        )
+                    )
+                )
+            };
+        } else {
+            stack = new Component[]{
+                new MapComponent(map, mapOffset, playerEntity.position()),
+            };
+        }
+
+
         return new Row(
-            new Flexible(1, new MapComponent(map, mapOffset, playerEntity.position())),
+            new Flexible(
+                1,
+                new Stack(stack)
+            ),
             new VerticalDivider(),
             new ConstrainedBox(
                 new Constraints(12, 12, null, null),
@@ -86,6 +122,12 @@ public final class InGame implements Scene {
                             new SizedBox(new Size(0, 1), null),
                             new Column(statusList)
                                 .mainAxisSize(MainAxisSize.MIN)
+                                .crossAxisAlignment(CrossAxisAlignment.STRETCH),
+                            new SizedBox(new Size(0, 1), null),
+                            new Text("Items:", boldPaint),
+                            new SizedBox(new Size(0, 1), null),
+                            new Column(itemsList)
+                                .mainAxisSize(MainAxisSize.MIN)
                                 .crossAxisAlignment(CrossAxisAlignment.STRETCH)
                         ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
                             .mainAxisSize(MainAxisSize.MIN)
@@ -96,38 +138,40 @@ public final class InGame implements Scene {
     }
 
     @Override
-    public void onKeyPress(Context context, int keyCode) {
-        if (!processingTurn) {
-            switch (keyCode) {
-                case Keys.UP -> {
-                    playerEntity.moveBy(verticalOffset.multiply(-1));
-                    processTurn(context);
-                }
-                case Keys.DOWN -> {
-                    playerEntity.moveBy(verticalOffset);
-                    processTurn(context);
-                }
-                case Keys.LEFT -> {
-                    playerEntity.moveBy(horizontalOffset.multiply(-1));
-                    processTurn(context);
-                }
-                case Keys.RIGHT -> {
-                    playerEntity.moveBy(horizontalOffset);
-                    processTurn(context);
-                }
-            }
+    public void onKeyPress(Key key) {
+        if (processingTurn || key.isUnknown()) return;
+
+        if (dialog != null) {
+            System.out.printf("Closing dialog with key: %s%n", key);
+            dialog = null;
+            return;
+        }
+
+        if (key == Key.UP) {
+            playerEntity.moveBy(verticalOffset.multiply(-1));
+            processTurn();
+        } else if (key == Key.DOWN) {
+            playerEntity.moveBy(verticalOffset);
+            processTurn();
+        } else if (key == Key.LEFT) {
+            playerEntity.moveBy(horizontalOffset.multiply(-1));
+            processTurn();
+        } else if (key == Key.RIGHT) {
+            playerEntity.moveBy(horizontalOffset);
+            processTurn();
         }
     }
 
-    private void processTurn(Context context) {
+    private void processTurn() {
+        if (processingTurn || dialog != null) return;
+
         processingTurn = true;
 
         // We first have to generate a list of all steps to process
         final Queue<TurnStep> steps = new ArrayDeque<>();
 
-        for (final Map.Entity<Enemy> enemyEntity : map.entitiesOfType(Enemy.class)) {
-            final Enemy enemy = enemyEntity.associatedObject();
-            final List<TurnStep> enemyTurnSteps = enemy.processTurn(enemyEntity);
+        for (final Entity<?> entity : map.entities()) {
+            final List<TurnStep> enemyTurnSteps = entity.processTurn();
             steps.addAll(enemyTurnSteps);
         }
 
@@ -137,7 +181,7 @@ public final class InGame implements Scene {
         try {
             while (!steps.isEmpty()) {
                 final long deltaTime;
-                deltaTime = context.waitTick();
+                deltaTime = Engine.context().waitTick();
 
                 time = time + deltaTime;
 

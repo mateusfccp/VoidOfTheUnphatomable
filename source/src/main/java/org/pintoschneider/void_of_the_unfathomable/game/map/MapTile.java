@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 public enum MapTile {
-    VOID(' ', false, true),
+    VOID(' ', new SpatialProperty(false, true)),
     WALL('┼',
         '─',
         '╴',
@@ -17,9 +17,9 @@ public enum MapTile {
         '┤',
         '┬',
         '┴',
-        false,
-        true),
-    FLOOR('·', true, false);
+        new SpatialProperty(false, true)
+    ),
+    FLOOR('·', new SpatialProperty(true, false));
 
     final boolean autoTile;
     private final Character cross;
@@ -37,10 +37,9 @@ public enum MapTile {
     private final Character rightTee;
     private final Character topTee;
     private final Character bottomTee;
-    private final boolean walkable;
-    private final boolean opaque;
+    private final SpatialProperty spatialProperty;
 
-    MapTile(Character symbol, boolean walkable, boolean opaque) {
+    MapTile(Character symbol, SpatialProperty spatialProperty) {
         this.cross = symbol;
         this.horizontalFull = symbol;
         this.horizontalLeft = symbol;
@@ -56,8 +55,7 @@ public enum MapTile {
         this.rightTee = symbol;
         this.topTee = symbol;
         this.bottomTee = symbol;
-        this.walkable = walkable;
-        this.opaque = opaque;
+        this.spatialProperty = spatialProperty;
         this.autoTile = false;
     }
 
@@ -76,8 +74,7 @@ public enum MapTile {
             Character rightTee,
             Character topTee,
             Character bottomTee,
-            boolean walkable,
-            boolean opaque) {
+            SpatialProperty spatialProperty) {
         this.cross = cross;
         this.horizontalFull = horizontalFull;
         this.horizontalLeft = horizontalLeft;
@@ -93,8 +90,7 @@ public enum MapTile {
         this.rightTee = rightTee;
         this.topTee = topTee;
         this.bottomTee = bottomTee;
-        this.walkable = walkable;
-        this.opaque = opaque;
+        this.spatialProperty = spatialProperty;
         this.autoTile = true;
     }
 
@@ -104,7 +100,7 @@ public enum MapTile {
      * @return True if the tile is walkable, false otherwise.
      */
     public boolean walkable() {
-        return walkable;
+        return spatialProperty.walkable();
     }
 
     /**
@@ -113,7 +109,7 @@ public enum MapTile {
      * @return True if the tile is opaque, false otherwise.
      */
     public boolean opaque() {
-        return opaque;
+        return spatialProperty.opaque();
     }
 
     /**

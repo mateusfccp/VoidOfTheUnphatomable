@@ -1,6 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
@@ -14,7 +15,7 @@ import java.util.*;
  */
 public final class Map {
     private final MapTile[][] tiles;
-    private final List<Entity<?>> entities;
+    private final Set<Entity<?>> entities = new HashSet<>();
 
     private final int width;
     private final int height;
@@ -29,7 +30,6 @@ public final class Map {
         this.width = 31;
         this.height = 33;
         tiles = new MapTile[31][33];
-        entities = new ArrayList<>();
 
         // Temporary map
         final int[][] map = {
@@ -248,6 +248,40 @@ public final class Map {
         return result;
     }
 
+    /**
+     * Adds an entity to the map.
+     * <p>
+     * This method should only be called by Entity.setMap(Map) to ensure consistency.
+     *
+     * @param entity The entity to add to the map.
+     */
+    public void addEntity(Entity<?> entity) {
+        Objects.requireNonNull(entity);
+
+        if (entity.map() != null) {
+            throw new IllegalStateException(
+                """
+                    Entity is already associated with another map.%n
+                    This means this method was called directly instead of using MapEntity.setMap(Map).%n
+                    Current map: %s%n
+                    """.formatted(entity.map())
+            );
+        }
+
+        entities.add(entity);
+    }
+
+    /**
+     * Removes an entity from the map.
+     * <p>
+     * This method should only be called by Entity.setMap(Map) to ensure consistency.
+     *
+     * @param entity The entity to remove from the map.
+     */
+    public void removeEntity(Entity<?> entity) {
+        Objects.requireNonNull(entity);
+        entities.remove(entity);
+    }
 
     /**
      * Gets the visibility strategy used by the map.
@@ -256,228 +290,5 @@ public final class Map {
      */
     public Visibility visibility() {
         return visibility;
-    }
-
-    /**
-     * A class representing an entity on the map.
-     * <p>
-     * An entity is any kind of object that can be placed in the map and have its position changed, such as the player,
-     * enemies, items, etc.
-     */
-    public class Entity<T> {
-        private final char representation;
-        private final T associatedObject;
-        private Offset position;
-
-        public Entity(Offset position, char representation, T associatedObject) {
-            this.position = Objects.requireNonNull(position);
-            this.representation = representation;
-            this.associatedObject = Objects.requireNonNull(associatedObject);
-            entities.add(this);
-        }
-
-        /**
-         * Gets the position of the entity on the map.
-         *
-         * @return The position of the entity.
-         */
-        public Offset position() {
-            return position;
-        }
-
-        /**
-         * Gets the character representation of the entity.
-         *
-         * @return The character representation of the entity.
-         */
-        public char representation() {
-            return representation;
-        }
-
-        /**
-         * Moves the entity by the specified offset.
-         * <p>
-         * The entity can only move horizontally or vertically by one tile at a time. Diagonal movement is not allowed.
-         *
-         * @param offset The offset to move the entity by.
-         * @return True if the entity was moved, false if the move was blocked by a non-walkable tile.
-         */
-        public boolean moveBy(Offset offset) {
-            final Offset targetPosition = position.translate(offset.dx(), offset.dy());
-
-            if (canMoveTo(targetPosition)) {
-                position = targetPosition;
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        private boolean canMoveTo(Offset targetPosition) {
-            final MapTile tileAtNewPosition = getTileAt(targetPosition.dx(), targetPosition.dy());
-
-            if (tileAtNewPosition != null && !tileAtNewPosition.walkable()) {
-                return false;
-            }
-
-            final Entity<?> entityAtNewPosition = getEntityAt(targetPosition);
-            return entityAtNewPosition == null;
-        }
-
-        /**
-         * Moves the entity one step towards the target position.
-         * <p>
-         *
-         * @param target The target position to move towards.
-         * @return True if the entity was moved, false if the move was blocked by a non-walkable tile.
-         */
-        public boolean moveTowards(Offset target) {
-            final List<Offset> path = getPathTo(target);
-            final Offset nextStep = path.size() > 1 ? path.get(1) : null;
-
-            if (nextStep == null) {
-                return false;
-            } else {
-                final int dx = nextStep.dx() - position.dx();
-                final int dy = nextStep.dy() - position.dy();
-                final Offset offset = new Offset(dx, dy);
-
-                System.out.printf("%s moves towards the player (offset = %s).%n", this, offset);
-
-                return moveBy(offset);
-            }
-        }
-
-        /**
-         * Gets the map this entity belongs to.
-         *
-         * @return The map this entity belongs to.
-         */
-        public Map map() {
-            return Map.this;
-        }
-
-        /**
-         * Gets the associated object of the entity.
-         *
-         * @return The associated object of the entity.
-         */
-        public T associatedObject() {
-            return associatedObject;
-        }
-
-        /**
-         * Determines if this entity can see another entity based on the map's visibility rules and the positions of
-         * both entities.
-         *
-         * @param other The other entity to check visibility against.
-         * @return True if this entity can see the other entity, false otherwise.
-         */
-        public boolean canSee(Entity<?> other) {
-            return visibility.isVisible(this.position, other.position);
-        }
-
-        /**
-         * Calculates the Chebyshev distance to another entity.
-         *
-         * @param other The other entity to calculate the distance to.
-         * @return The Chebyshev distance to the other entity.
-         */
-        public int distanceTo(Entity<?> other) {
-            return this.position.manhattanDistanceTo(other.position);
-        }
-
-        // We can optimize it if necessary by caching paths for unchanged maps
-        private List<Offset> getPathTo(Offset target) {
-            final Queue<PathNode<Offset>> openSet = new PriorityQueue<>();
-            final Set<Offset> closedSet = new HashSet<>();
-
-            final PathNode<Offset> startNode = new PathNode<>(position);
-            startNode.gCost = 0;
-            startNode.hCost = position.manhattanDistanceTo(target);
-            openSet.add(startNode);
-
-            while (!openSet.isEmpty()) {
-                final PathNode<Offset> currentNode = openSet.poll();
-
-                // Skip already evaluated nodes
-                if (closedSet.contains(currentNode.tile)) continue;
-
-                closedSet.add(currentNode.tile);
-
-                if (currentNode.tile.equals(target)) {
-                    final List<Offset> path = new ArrayList<>();
-                    PathNode<Offset> pathNode = currentNode;
-
-                    while (pathNode != null) {
-                        path.addFirst(pathNode.tile);
-                        pathNode = pathNode.parentNode;
-                    }
-
-                    return path;
-                }
-
-                final List<Offset> neighbors = List.of(
-                    currentNode.tile.translate(-1, 0),
-                    currentNode.tile.translate(1, 0),
-                    currentNode.tile.translate(0, -1),
-                    currentNode.tile.translate(0, 1)
-                );
-
-                for (Offset neighbor : neighbors) {
-                    // Skip non-walkable tiles
-                    if (getTileAt(neighbor) == null || !getTileAt(neighbor).walkable()) continue;
-
-                    // Skip entities unless it's the target position
-                    final Entity<?> entity = getEntityAt(neighbor);
-                    if (entity != null && !neighbor.equals(target)) {
-                        continue;
-                    }
-
-                    final PathNode<Offset> neighborNode = new PathNode<>(neighbor);
-                    neighborNode.gCost = currentNode.gCost + 1;
-                    neighborNode.hCost = neighbor.manhattanDistanceTo(target);
-                    neighborNode.parentNode = currentNode;
-
-                    openSet.add(neighborNode);
-                }
-            }
-
-            return Collections.emptyList();
-        }
-    }
-
-}
-
-/**
- * A node used in the A* pathfinding algorithm.
- *
- * @param <T> The type of the tile associated with the node.
- */
-final class PathNode<T> implements Comparable<PathNode<T>> {
-    final T tile;
-    int gCost;
-    int hCost;
-    PathNode<T> parentNode;
-
-    PathNode(T tile) {
-        this.tile = tile;
-    }
-
-    int gCost() {
-        return gCost;
-    }
-
-    int hCost() {
-        return hCost;
-    }
-
-    int fCost() {
-        return gCost + hCost;
-    }
-
-    @Override
-    public int compareTo(PathNode<T> other) {
-        return Integer.compare(fCost(), other.fCost());
     }
 }

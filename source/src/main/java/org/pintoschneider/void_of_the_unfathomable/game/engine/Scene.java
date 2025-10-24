@@ -14,7 +14,7 @@ public interface Scene {
      *
      * @return The root {@link Component} of the scene.
      */
-    Component build(Context context);
+    Component build();
 
     /**
      * Handles a key press event.
@@ -24,7 +24,7 @@ public interface Scene {
      * @param context The engine context.
      * @param keyCode The code of the key that was pressed.
      */
-    default void onKeyPress(Context context, int keyCode) {
+    default void onKeyPress(Key key) {
     }
 
     /**

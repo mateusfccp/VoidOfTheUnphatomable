@@ -10,6 +10,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -21,6 +22,16 @@ public final class Engine implements AutoCloseable, Context {
     private final UIThread uiThread;
     private Size terminalSize;
     private boolean running = true;
+
+    static public Context context() {
+        if (context == null) {
+            throw new IllegalStateException("No Engine instance is currently running.");
+        }
+
+        return context;
+    }
+
+    private static Engine context = null;
 
     public Engine(Scene initialScene) throws IOException {
         sceneManager = new SceneManager(Objects.requireNonNull(initialScene));
@@ -44,6 +55,12 @@ public final class Engine implements AutoCloseable, Context {
         uiThread = new UIThread(this, 60);
         uiThread.setDaemon(true);
         uiThread.start();
+
+        if (context != null) {
+            throw new IllegalStateException("There can only be one Engine instance at a time.");
+        }
+
+        context = this;
     }
 
     void tick() {
@@ -58,8 +75,8 @@ public final class Engine implements AutoCloseable, Context {
         }
     }
 
-    void processKey(int key) {
-        sceneManager.currentScene().onKeyPress(this, key);
+    void processKey(Key key) {
+        sceneManager.currentScene().onKeyPress(key);
     }
 
     private void refresh() {
@@ -69,7 +86,7 @@ public final class Engine implements AutoCloseable, Context {
     private void drawScene() {
         terminal.puts(Capability.cursor_address, 0, 0);
         final Component rootComponent = new DebuggingLine(this,
-            sceneManager.currentScene().build(this)
+            sceneManager.currentScene().build()
         );
         rootComponent.layout(Constraints.tight(terminalSize.width(), terminalSize.height()));
 
@@ -183,11 +200,33 @@ final class InputThread extends Thread {
     @Override
     public void run() {
         try {
+            final CharBuffer buffer = CharBuffer.allocate(3);
             while (!Thread.currentThread().isInterrupted()) {
-                int c = reader.read();
-                if (c != NonBlockingReader.READ_EXPIRED && c != NonBlockingReader.EOF) {
-                    engine.processKey(c);
+                int result = reader.read(buffer);
+                if (result > 0 && buffer.get(0) == 27) {
+                    // Possible start of an escape sequence
+                    result = reader.read(buffer);
+                    if (result > 0 && buffer.get(1) == 91) {
+                        result = reader.read(buffer);
+
+                        if (result > 0) {
+                            // CSI sequence
+                            final Key key = Key.parse(buffer.array());
+                            engine.processKey(key);
+                            buffer.clear();
+                            continue;
+                        }
+                    }
                 }
+
+                for (char ch : buffer.array()) {
+                    if (ch != 0) {
+                        final Key key = Key.parse(new char[]{ch});
+                        engine.processKey(key);
+                    }
+                }
+
+                buffer.clear();
             }
         } catch (IOException exception) {
             System.err.printf(

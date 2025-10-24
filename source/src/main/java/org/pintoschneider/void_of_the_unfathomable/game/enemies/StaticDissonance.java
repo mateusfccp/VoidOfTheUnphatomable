@@ -1,6 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.DoIfLastStepSucceeds;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.MoveTowardsPlayer;
@@ -22,36 +23,5 @@ import java.util.List;
 public final class StaticDissonance extends Enemy {
     public StaticDissonance() {
         super("Disonancia Estática", 10, 2, 1);
-    }
-
-    @Override
-    public List<TurnStep> processTurn(Map.Entity<Enemy> entity) {
-        // If the entity can see the player, it moves towards them
-        final Map map = entity.map();
-        final Map.Entity<Player> playerEntity = map.entitiesOfType(Player.class).getFirst();
-
-        List<TurnStep> steps = new ArrayList<>();
-
-        if (entity.canSee(playerEntity)) {
-            final int distance = entity.distanceTo(playerEntity);
-
-            switch (distance) {
-                case 1 -> steps.add(new RegularAttack(entity));
-                case 2 -> {
-                    steps.add(new MoveTowardsPlayer(entity));
-                    steps.add(
-                        new DoIfLastStepSucceeds(
-                            new RegularAttack(entity)
-                        )
-                    );
-                }
-                default -> {
-                    steps.add(new MoveTowardsPlayer(entity));
-                    steps.add(new MoveTowardsPlayer(entity));
-                }
-            }
-        }
-
-        return steps;
     }
 }

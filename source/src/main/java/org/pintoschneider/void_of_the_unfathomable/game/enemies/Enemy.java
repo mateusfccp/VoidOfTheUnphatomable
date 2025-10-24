@@ -1,6 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 
-import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 
 import java.util.List;
@@ -68,7 +68,5 @@ public abstract class Enemy {
     public int defense() {
         return defense;
     }
-
-    public abstract List<TurnStep> processTurn(Map.Entity<Enemy> entity);
 }
 

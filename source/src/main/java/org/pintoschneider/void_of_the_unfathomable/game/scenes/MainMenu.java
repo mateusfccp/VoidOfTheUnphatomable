@@ -1,7 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Keys;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
@@ -30,7 +31,7 @@ public final class MainMenu implements Scene {
     int frame = 0;
 
     @Override
-    public Component build(Context context) {
+    public Component build() {
         frame = (frame + 1) % Integer.MAX_VALUE;
 
         final Paint selectedTextPaint = new Paint().withInverted(true);
@@ -64,32 +65,30 @@ public final class MainMenu implements Scene {
     }
 
     @Override
-    public void onKeyPress(Context context, int keyCode) {
-        switch (keyCode) {
-            case 'w', Keys.UP -> { // Up
-                if (selectedOption.ordinal() > 0) {
-                    selectedOption = MenuOption.values()[selectedOption.ordinal() - 1];
-                }
+    public void onKeyPress(Key key) {
+        if (key == Key.UP) {
+            if (selectedOption.ordinal() > 0) {
+                selectedOption = MenuOption.values()[selectedOption.ordinal() - 1];
             }
-            case 's', Keys.DOWN -> { // Down
-                if (selectedOption.ordinal() < MenuOption.values().length - 1) {
-                    selectedOption = MenuOption.values()[selectedOption.ordinal() + 1];
-                }
+        } else if (key == Key.DOWN) {
+            if (selectedOption.ordinal() < MenuOption.values().length - 1) {
+                selectedOption = MenuOption.values()[selectedOption.ordinal() + 1];
             }
-            case Keys.ENTER -> handleSelection(context); // Enter
+        } else if (key == Key.ENTER) {
+            handleSelection();
         }
     }
 
-    private void handleSelection(Context context) {
+    private void handleSelection() {
         switch (selectedOption) {
-            case NEW_GAME -> context.sceneManager().push(new InGame());
+            case NEW_GAME -> Engine.context().sceneManager().push(new InGame());
             case LOAD_GAME -> {
                 // Transition to the load game scene
             }
             case SETTINGS -> {
                 // Transition to the settings scene
             }
-            case EXIT -> context.sceneManager().pop();
+            case EXIT -> Engine.context().sceneManager().pop();
         }
     }
 

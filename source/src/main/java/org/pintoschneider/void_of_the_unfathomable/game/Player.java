@@ -5,6 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * A class representing the player character in the game including their attributes, status effects, and inventory.
@@ -157,6 +158,15 @@ public final class Player {
      */
     public void clearStatusEffects() {
         statusEffects.clear();
+    }
+
+    /**
+     * Gets the player's inventory.
+     *
+     * @return A list of items in the player's inventory.
+     */
+    public List<Item> inventory() {
+        return inventory;
     }
 
     /**
