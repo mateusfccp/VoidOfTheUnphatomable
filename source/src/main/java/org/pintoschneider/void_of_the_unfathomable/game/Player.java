@@ -5,7 +5,6 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 /**
  * A class representing the player character in the game including their attributes, status effects, and inventory.
@@ -183,6 +182,8 @@ public final class Player {
      * @return The index of where to place the item in the ArrayList.
      */
     private int binarySearch(ArrayList<Item> list, String name) {
+        if (list.isEmpty()) return 0;
+
         int low = 0;
         int high = list.size();
         int mid = low + (high - low) / 2;
@@ -192,17 +193,16 @@ public final class Player {
 
             if (list.get(mid).name().equals(name)) {
                 return mid;
-            }
-            else if (list.get(mid).name().compareToIgnoreCase(name) < 0) {
+            } else if (list.get(mid).name().compareToIgnoreCase(name) < 0) {
                 low = mid + 1;
-            }      else if (list.get(mid).name().compareToIgnoreCase(name) > 0) {
+            } else if (list.get(mid).name().compareToIgnoreCase(name) > 0) {
                 high = mid - 1;
             }
         }
+
         return mid;
     }
-    
-    
+
     /**
      * Uses a consumable item from the player's inventory.
      *
