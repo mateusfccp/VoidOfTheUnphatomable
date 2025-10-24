@@ -16,6 +16,14 @@ public interface Scene {
      */
     Component build(Context context);
 
+    /**
+     * Handles a key press event.
+     * <p>
+     * This method is called whenever a key is pressed while this scene is active.
+     *
+     * @param context The engine context.
+     * @param keyCode The code of the key that was pressed.
+     */
     default void onKeyPress(Context context, int keyCode) {
     }
 
