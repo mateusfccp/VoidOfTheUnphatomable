@@ -12,9 +12,8 @@ import java.util.Objects;
  * A component that aligns its child within itself according to the specified alignment.
  */
 public final class Align extends Component {
-
-    final Alignment alignment;
-    final Component child;
+    private final Alignment alignment;
+    private final Component child;
 
     /**
      * Constructs an Align component with the specified alignment and child.

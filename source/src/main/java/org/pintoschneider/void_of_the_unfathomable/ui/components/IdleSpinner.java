@@ -4,6 +4,11 @@ import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Canvas;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 
+/**
+ * A component that displays a spinning character based on the current frame.
+ * <p>
+ * This component is typically used to indicate an idle state or a loading where we don't know the duration.
+ */
 public class IdleSpinner extends Component {
     final int frame;
 

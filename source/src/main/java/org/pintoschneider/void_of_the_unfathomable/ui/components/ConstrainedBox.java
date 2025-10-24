@@ -6,10 +6,19 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 
 import java.util.Objects;
 
+/**
+ * A component that imposes additional constraints on its child component.
+ */
 public class ConstrainedBox extends Component {
-    final Component child;
-    final Constraints constraints;
+    private final Component child;
+    private final Constraints constraints;
 
+    /**
+     * Constructs a ConstrainedBox with the given constraints and child component.
+     *
+     * @param constraints the constraints to impose on the child
+     * @param child       the child component to be constrained
+     */
     public ConstrainedBox(Constraints constraints, Component child) {
         this.child = Objects.requireNonNull(child);
         this.constraints = Objects.requireNonNull(constraints);

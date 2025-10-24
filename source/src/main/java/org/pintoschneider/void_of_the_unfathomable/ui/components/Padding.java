@@ -5,10 +5,19 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.EdgeInsets;
 
+/**
+ * A component that adds padding around its child component.
+ */
 public class Padding extends Component {
-    final EdgeInsets edgeInsets;
-    final Component child;
+    private final EdgeInsets edgeInsets;
+    private final Component child;
 
+    /**
+     * Constructs a Padding component with the given edge insets and child component.
+     *
+     * @param edgeInsets the edge insets defining the padding
+     * @param child      the child component to be padded
+     */
     public Padding(EdgeInsets edgeInsets, Component child) {
         this.edgeInsets = edgeInsets;
         this.child = child;
