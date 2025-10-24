@@ -1,10 +1,29 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
-import org.pintoschneider.void_of_the_unfathomable.game.engine.*;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Keys;
+import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.Arrays;
+
+enum MenuOption {
+    NEW_GAME("Nuevo Juego"),
+    LOAD_GAME("Cargar Juego"),
+    SETTINGS("Configuraciones"),
+    EXIT("Salir");
+
+    private final String text;
+
+    MenuOption(String text) {
+        this.text = text;
+    }
+
+    public String text() {
+        return text;
+    }
+}
 
 public final class MainMenu implements Scene {
     MenuOption selectedOption = MenuOption.NEW_GAME;
@@ -77,22 +96,5 @@ public final class MainMenu implements Scene {
     @Override
     public String toString() {
         return "MainMenu";
-    }
-}
-
-enum MenuOption {
-    NEW_GAME("Nuevo Juego"),
-    LOAD_GAME("Cargar Juego"),
-    SETTINGS("Configuraciones"),
-    EXIT("Salir");
-
-    MenuOption(String text) {
-        this.text = text;
-    }
-
-    private final String text;
-
-    public String text() {
-        return text;
     }
 }

@@ -2,7 +2,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.engine;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class SceneManager {
+public final class SceneManager {
     private final ConcurrentLinkedDeque<Scene> scenes;
 
     public SceneManager(Scene initialScene) {
@@ -23,7 +23,7 @@ public class SceneManager {
     }
 
     public void pop() {
-        Scene currentScene = scenes.pop();
+        final Scene currentScene = scenes.pop();
         currentScene.dispose();
     }
 }

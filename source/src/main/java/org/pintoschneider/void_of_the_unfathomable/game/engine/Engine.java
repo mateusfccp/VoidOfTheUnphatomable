@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
 
-public class Engine implements AutoCloseable, Context {
+public final class Engine implements AutoCloseable, Context {
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
     private final PrintWriter writer = terminal.writer();
-    private Size terminalSize;
     private final SceneManager sceneManager;
     private final InputThread inputThread;
     private final UIThread uiThread;
+    private Size terminalSize;
     private boolean running = true;
 
     public Engine(Scene initialScene) throws IOException {
@@ -48,6 +48,10 @@ public class Engine implements AutoCloseable, Context {
     void tick() {
         if (sceneManager.hasScene()) {
             refresh();
+
+            synchronized (this) {
+                notifyAll();
+            }
         } else {
             stop();
         }
@@ -115,6 +119,18 @@ public class Engine implements AutoCloseable, Context {
     }
 
     @Override
+    public long waitTick() throws InterruptedException {
+        final long observed = uiThread.tickCount();
+        synchronized (this) {
+            while (uiThread.tickCount() == observed) {
+                this.wait();
+            }
+        }
+
+        return uiThread.deltaTime();
+    }
+
+    @Override
     public void close() throws IOException {
         inputThread.interrupt();
         terminal.close();
@@ -122,10 +138,9 @@ public class Engine implements AutoCloseable, Context {
 }
 
 final class DebuggingLine extends Composent {
+    static final Paint boldPaint = new Paint().withBold(true);
     final Engine engine;
     final Component child;
-
-    static final Paint boldPaint = new Paint().withBold(true);
 
     DebuggingLine(Engine engine, Component child) {
         this.engine = engine;
@@ -186,8 +201,8 @@ final class UIThread extends Thread {
     private final Engine engine;
     private final int fps;
     private long lastNanoTime;
-    private long tickCount = 0;
-    private long deltaTime = 0;
+    private volatile long tickCount = 0;
+    private volatile long deltaTime = 0;
 
     /**
      * Creates a UIThread.
@@ -226,7 +241,11 @@ final class UIThread extends Thread {
             if (nanoSeconds - lastNanoTime >= 1_000_000_000L / fps) {
                 deltaTime = nanoSeconds - lastNanoTime;
                 lastNanoTime = nanoSeconds;
-                tickCount++;
+
+                synchronized (this) {
+                    tickCount++;
+                }
+
                 engine.tick();
             }
         }

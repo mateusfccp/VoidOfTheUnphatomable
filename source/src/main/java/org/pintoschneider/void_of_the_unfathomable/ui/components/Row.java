@@ -1,6 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.components;
 
-import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 
 /**
  * A horizontal linear layout that arranges its children in a row.

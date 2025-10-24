@@ -46,98 +46,6 @@ public final class Canvas {
     }
 
     /**
-     * Draws a {@link Component} object onto this canvas at the specified position.
-     * <p>
-     * The component is rendered onto a temporary canvas and then merged into this canvas.
-     *
-     * @param component The {@link Component} to render.
-     * @param x         The x-coordinate to draw at.
-     * @param y         The y-coordinate to draw at.
-     */
-    public void draw(Component component, int x, int y) {
-        if (component.size() == null) {
-            throw new IllegalStateException("Component size is null. Did you forget to call layout()?");
-        }
-
-        final Canvas canvas = forDrawable(component);
-        component.draw(canvas);
-        merge(canvas, x, y);
-    }
-
-    /**
-     * Draws a {@link Component} object onto this canvas at the specified offset.
-     *
-     * @param component The {@link Component} to render.
-     * @param offset    The {@link Offset} to draw at.
-     */
-    public void draw(Component component, Offset offset) {
-        draw(component, offset.dx(), offset.dy());
-    }
-
-    /**
-     * Draws a character at the specified position with no style.
-     *
-     * @param c the character to draw
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     */
-    public void draw(Character c, int x, int y) {
-        draw(c, x, y, null);
-    }
-
-    /**
-     * Draws a character at the specified offset with no style.
-     *
-     * @param c      The character to draw.
-     * @param offset The offset to draw at.
-     */
-    public void draw(Character c, Offset offset) {
-        draw(c, offset.dx(), offset.dy(), null);
-    }
-
-    /**
-     * Draws a character at the specified position with an optional style.
-     *
-     * @param c     The character to draw.
-     * @param x     The x-coordinate.
-     * @param y     The y-coordinate.
-     * @param paint The paint style to apply, or null for no style.
-     */
-    public void draw(Character c, int x, int y, Paint paint) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-            final String errorMessage = "Coordinates out of bounds: (%d, %d) for canvas of size (%d, %d).".formatted(x, y, width, height);
-            throw new IndexOutOfBoundsException(errorMessage);
-        }
-
-        tiles[x][y] = c;
-        paints[x][y] = paint;
-    }
-
-    /**
-     * Merges another canvas into this canvas at the specified offset.
-     * <p>
-     * Only non-null characters and styles from the other canvas are copied.
-     *
-     * @param other   The canvas to merge.
-     * @param xOffset The x offset to merge at.
-     * @param yOffset The y offset to merge at.
-     */
-    void merge(Canvas other, int xOffset, int yOffset) {
-        for (int x = 0; x < other.width; x++) {
-            for (int y = 0; y < other.height; y++) {
-                if (other.tiles[x][y] != null) {
-                    if (x + xOffset < 0 || x + xOffset >= width || y + yOffset < 0 || y + yOffset >= height) {
-                        continue; // Discard for now
-                    }
-
-                    tiles[x + xOffset][y + yOffset] = other.tiles[x][y];
-                    paints[x + xOffset][y + yOffset] = other.paints[x][y];
-                }
-            }
-        }
-    }
-
-    /**
      * Creates a new canvas sized to fit the given component.
      *
      * @param component The component to fit.
@@ -145,34 +53,6 @@ public final class Canvas {
      */
     static Canvas forDrawable(Component component) {
         return new Canvas(component.size().width(), component.size().height());
-    }
-
-    /**
-     * Writes the contents of this canvas to the given {@link PrintWriter}.
-     * <p>
-     * Each row is written in order, with null cells rendered as spaces.
-     *
-     * @param writer The writer to output to.
-     */
-    public void writeTo(PrintWriter writer) {
-        for (int y = 0; y < tiles[0].length; y++) {
-            for (int x = 0; x < tiles.length; x++) {
-                final Character tile = tiles[x][y];
-                final Paint paint = paints[x][y];
-
-                final Character c = tile == null ? ' ' : tile;
-
-                if (paint != null) {
-                    final AttributedStyle style = getStyle(paint);
-                    final AttributedStringBuilder builder = new AttributedStringBuilder();
-                    builder.style(style);
-                    builder.append(c);
-                    writer.print(builder.toAnsi());
-                } else {
-                    writer.print(c);
-                }
-            }
-        }
     }
 
     static AttributedStyle getStyle(Paint paint) {
@@ -233,5 +113,125 @@ public final class Canvas {
         }
 
         return style;
+    }
+
+    /**
+     * Draws a {@link Component} object onto this canvas at the specified position.
+     * <p>
+     * The component is rendered onto a temporary canvas and then merged into this canvas.
+     *
+     * @param component The {@link Component} to render.
+     * @param x         The x-coordinate to draw at.
+     * @param y         The y-coordinate to draw at.
+     */
+    public void draw(Component component, int x, int y) {
+        if (component.size() == null) {
+            throw new IllegalStateException("Component size is null. Did you forget to call layout()?");
+        }
+
+        final Canvas canvas = forDrawable(component);
+        component.draw(canvas);
+        merge(canvas, x, y);
+    }
+
+    /**
+     * Draws a {@link Component} object onto this canvas at the specified offset.
+     *
+     * @param component The {@link Component} to render.
+     * @param offset    The {@link Offset} to draw at.
+     */
+    public void draw(Component component, Offset offset) {
+        draw(component, offset.dx(), offset.dy());
+    }
+
+    /**
+     * Draws a character at the specified position with no style.
+     *
+     * @param c the character to draw
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     */
+    public void draw(char c, int x, int y) {
+        draw(c, x, y, null);
+    }
+
+    /**
+     * Draws a character at the specified offset with no style.
+     *
+     * @param c      The character to draw.
+     * @param offset The offset to draw at.
+     */
+    public void draw(char c, Offset offset) {
+        draw(c, offset.dx(), offset.dy(), null);
+    }
+
+    /**
+     * Draws a character at the specified position with an optional style.
+     *
+     * @param c     The character to draw.
+     * @param x     The x-coordinate.
+     * @param y     The y-coordinate.
+     * @param paint The paint style to apply, or null for no style.
+     */
+    public void draw(char c, int x, int y, Paint paint) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            final String errorMessage = "Coordinates out of bounds: (%d, %d) for canvas of size (%d, %d).".formatted(x, y, width, height);
+            throw new IndexOutOfBoundsException(errorMessage);
+        }
+
+        tiles[x][y] = c;
+        paints[x][y] = paint;
+    }
+
+    /**
+     * Merges another canvas into this canvas at the specified offset.
+     * <p>
+     * Only non-null characters and styles from the other canvas are copied.
+     *
+     * @param other   The canvas to merge.
+     * @param xOffset The x offset to merge at.
+     * @param yOffset The y offset to merge at.
+     */
+    void merge(Canvas other, int xOffset, int yOffset) {
+        for (int x = 0; x < other.width; x++) {
+            for (int y = 0; y < other.height; y++) {
+                if (other.tiles[x][y] != null) {
+                    if (x + xOffset < 0 || x + xOffset >= width || y + yOffset < 0 || y + yOffset >= height) {
+                        continue; // Discard for now
+                    }
+
+                    tiles[x + xOffset][y + yOffset] = other.tiles[x][y];
+                    paints[x + xOffset][y + yOffset] = other.paints[x][y];
+                }
+            }
+        }
+    }
+
+    /**
+     * Writes the contents of this canvas to the given {@link PrintWriter}.
+     * <p>
+     * Each row is written in order, with null cells rendered as spaces.
+     *
+     * @param writer The writer to output to.
+     */
+    public void writeTo(PrintWriter writer) {
+        for (int y = 0; y < tiles[0].length; y++) {
+            for (int x = 0; x < tiles.length; x++) {
+                final Character tile = tiles[x][y];
+                final Paint paint = paints[x][y];
+
+                final Character c = tile == null ? ' ' : tile;
+
+                if (paint != null) {
+                    final AttributedStyle style = getStyle(paint);
+                    final AttributedStringBuilder builder = new AttributedStringBuilder();
+                    builder.style(style);
+                    builder.append(c);
+                    writer.print(builder.toAnsi());
+                } else {
+                    writer.print(c);
+                }
+            }
+        }
     }
 }

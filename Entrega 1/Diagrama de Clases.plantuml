@@ -1,0 +1,260 @@
+@startuml
+scale 800 height
+
+' Core
++class Offset <<(R,orchid) record>> {
+	{static} +Offset ZERO
+	-int dx
+	-int dy
+	--
+	+int dx()
+	+int dy()
+	+Offset add(Offset)
+	+Offset subtract(Offset)
+	+Offset multiply(Offset)
+	+Offset divide(Offset)
+	+Offset translate(int, int)
+	+int chebyshevDistanceTo(Offset)
+	+int manhattanDistanceTo(Offset)
+}
+
++class Size <<(R,orchid) record>> {
+	+int width()
+	+int height()
+}
+
+' Game
++class Player <<final>> {
+	-int currentHealth
+	-int currentColorPoints
+	-int attackPower
+	-int defensePower
+	-int creativityPower
+	-int neuralToxicity
+	-int fluoxetineDoses
+	-int turnsWithoutFluoxetine
+	-List<Item> inventory
+	-Map<EquippableSlot, Equippable> equipedItems
+	--
+	+int currentHealth()
+	+int maximumHealth()
+	+int currentColorPoints()
+	+int maximumColorPoints()
+	+int attackPower()
+	+int defensePower()
+	+int creativityPower()
+	+void setCurrentHealth(int)
+	+void heal(int)
+	+void damage(int)
+	+void increaseNeuralToxicityBy(int)
+	+void takeFluoxetineDose()
+	+EnumSet<StatusEffect> statusEffects()
+	+void applyStatusEffect(StatusEffect)
+	+void removeStatusEffect(StatusEffect)
+	+void clearStatusEffects()
+	+void addItemToInventory(Item)
+	+void useItem(Consumable)
+	+void equipItem(Equippable)
+	+void unequipItem(Equippable)
+}
+
+enum StatusEffect {
+	DEATH
+	INSANITY
+	TARDIVE_DYSKINESIA
+	DYSKINESIA
+	DEPENDENCY
+	DISCONTINUATION_SYNDROME
+}
+
+' Engine
+interface Scene {
+	+void onKeyPress(int)
+	+void draw()
+}
+
+class SceneManager <<final>> {
+	-Scene currentScene
+	--
+	+boolean hasScene()
+	+Scene currentScene()
+	+void push(Scene)
+	+void pop()
+}
+
+' Items
+class Item <<sealed>> {
+	-String name
+	-String description
+	--
+	+String name()
+	+String description()
+}
+
+abstract class Consumable {
+	+void onConsume(Player)
+}
+
+abstract class Equippable {
+	-EquippableSlot slot
+}
+
+enum EquippableSlot {
+	HEAD
+	BODY
+	LEGS
+	WEAPON
+}
+
+' Enemies
+abstract class Enemy {
+	-String name
+	-int health
+	-int maxHealth
+	-int attack
+	-int defense
+	--
+	+String name()
+	+int health()
+	+int maxHealth()
+	+int attack()
+	+int defense()
+	+abstract List<TurnStep> processTurn(Entity<Enemy>)
+}
+
+' Map
+class Map <<final>> {
+	-Size size
+	-Visibility visibility
+	-List<MapTile> tiles
+	-List<Entity> entities
+	--
+	+Size size()
+	+MapTile getTileAt(int, int)
+	+MapTile getTileAt(Offset)
+	+Entity<?> getEntityAt(int, int)
+	+Entity<?> getEntityAt(Offset)
+	+char[][] toCharacterMatrix()
+	-Character getTileCharacterAt(int, int)
+	+List<Entity<?>> entities()
+	+List<Entity<T>> entitiesOfType<T>()
+	+Visibility visibility()
+}
+
+class Entity<T> {
+	-char representation
+	-T associatedObject
+	-Offset position
+	--
+	+char representation()
+	+Offset position()
+	+boolean moveBy(Offset)
+	-boolean canMoveTo(Offset)
+	+boolean moveTowards(Offset)
+	+Map map()
+	+boolean canSee(Entity<?>)
+	+int distanceTo(Entity<?>)
+	-List<Offset> getPathTo(Offset target)
+}
+
+enum MapTile {
+	VOID
+	WALL
+	FLOOR
+	--
+	-char character
+	-boolan walkable
+	-boolean opaque
+	--
+	+char character()
+	+boolean walkable()
+	+boolean opaque()
+}
+
+' Scenes
+class OptionsMenu <<final>> {
+	--
+	+void onKeyPress(int)
+	+void draw()
+}
+
+class LoadGameMenu <<final>> {
+	--
+	+void onKeyPress(int)
+	+void draw()
+}
+
+class InGame <<final>> {
+	-Map map
+	-Player player
+	-Entity<Player> playerEntity
+	-boolean processingTurn
+	-Offset mapOffset
+	--
+	+void onKeyPress(int)
+	+void draw()
+	-void processTurn()
+	-void centerOnPlayer()
+}
+
+class MainMenu <<final>> {
+	+void onKeyPress(int)
+	+void draw()
+}
+
+' Turn Steps
+interface TurnStep {
+	+boolean execute(Boolean)
+}
+
+' Visibility
+abstract class Visibility {
+	-Map map
+	-HashMap<Offset, boolean[][]> visibilityCache
+	--
+	+boolean isVisible(Offset, Offset)
+	+abstract boolean[][] compute(Offset)
+	#boolean blocksLight(Offset)
+}
+
+' Relationships
+SceneManager "1" -u- "*" Scene
+
+OptionsMenu ..|> Scene
+
+InGame ..|> Scene
+InGame ..|> Offset
+InGame "1" -- "1" Map
+InGame "1" -- "1" Player
+InGame "1" -- "1" Entity
+
+LoadGameMenu ..|> Scene
+
+MainMenu ..|> Scene
+
+Player "1" -- "*" StatusEffect
+Player "1" -- "*" Item
+Player "1" -- "*" Equippable
+Player "1" -- "*" EquippableSlot
+Player ..> Consumable
+
+Item <|-- Consumable
+Item <|-- Equippable
+
+Consumable ..> Player
+
+Equippable "1" -- "1" EquippableSlot
+
+Enemy ..> TurnStep
+Enemy ..> Entity
+
+Map "1" -- "1" Size
+Map "1" -- "1" Visibility
+Map "1" o-- "*" MapTile
+Map ..> Offset
+Map "1" *-- "*" Entity
+
+Entity "1" -- "1" Offset
+Entity ..> Entity
+
+@enduml

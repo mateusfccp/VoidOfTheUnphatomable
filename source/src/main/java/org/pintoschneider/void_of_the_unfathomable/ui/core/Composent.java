@@ -3,10 +3,11 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
 /**
  * A component that is the composition of other components.
  */
-public abstract class Composent extends Component{
+public abstract class Composent extends Component {
     private Component child;
 
-    protected Composent() {}
+    protected Composent() {
+    }
 
     @Override
     public void layout(Constraints constraints) {

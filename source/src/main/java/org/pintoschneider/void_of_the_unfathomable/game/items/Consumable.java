@@ -1,9 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.items;
 
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
-import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
-
-import java.util.List;
 
 /**
  * A class representing consumable items that can be used by the player to produce various effects.
