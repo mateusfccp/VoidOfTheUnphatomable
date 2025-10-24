@@ -11,8 +11,6 @@ import java.util.List;
  * A class representing the player character in the game including their attributes, status effects, and inventory.
  */
 public final class Player {
-    private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
-    private final List<Item> inventory = new ArrayList<>();
     private int currentHealth = maximumHealth() / 2;
     private int currentColorPoints = maximumColorPoints();
     private int attackPower;
@@ -21,6 +19,8 @@ public final class Player {
     private int neuralToxicity = 0;
     private int fluoxetineDoses = 0;
     private int turnsWithoutFluoxetine = 0;
+    private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
+    private final ArrayList<Item> inventory = new ArrayList<>();
 
     /**
      * Gets the current health of the player.
@@ -162,13 +162,47 @@ public final class Player {
 
     /**
      * Adds an item to the player's inventory.
+     * Sorts the inventory alphabetically  as the items get added
      *
      * @param item The item to add to the inventory.
      */
     public void addItemToInventory(Item item) {
-        inventory.add(item);
+        int index = binarySearch(this.inventory, item.name());
+        if (index == inventory.size()) {
+            this.inventory.add(item);
+        } else {
+            this.inventory.add(index, item);
+        }
     }
 
+    /**
+     * Searches the player's inventory with an efficiency of O(log n).
+     *
+     * @param list The player's inventory,
+     * @param name The name of the item to be added.
+     * @return The index of where to place the item in the ArrayList.
+     */
+    private int binarySearch(ArrayList<Item> list, String name) {
+        int low = 0;
+        int high = list.size();
+        int mid = low + (high - low) / 2;
+
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+
+            if (list.get(mid).name().equals(name)) {
+                return mid;
+            }
+            else if (list.get(mid).name().compareToIgnoreCase(name) < 0) {
+                low = mid + 1;
+            }      else if (list.get(mid).name().compareToIgnoreCase(name) > 0) {
+                high = mid - 1;
+            }
+        }
+        return mid;
+    }
+    
+    
     /**
      * Uses a consumable item from the player's inventory.
      *
