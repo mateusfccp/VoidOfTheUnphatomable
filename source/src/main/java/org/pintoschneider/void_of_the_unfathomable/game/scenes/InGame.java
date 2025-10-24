@@ -31,7 +31,7 @@ public final class InGame implements Scene {
     static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
     private final Map map = new Map();
     private final Player player = new Player();
-    private final Map.Entity<Player> playerEntity = map.new Entity<>(new Offset(4, 4), '@', new Player());
+    private final Map.Entity<Player> playerEntity = map.new Entity<>(new Offset(4, 4), '@', player);
     boolean processingTurn = false;
     private Offset mapOffset = Offset.ZERO;
 
