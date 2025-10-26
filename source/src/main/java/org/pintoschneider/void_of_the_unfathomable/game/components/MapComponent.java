@@ -44,11 +44,9 @@ public final class MapComponent extends Component {
         final char[][] tiles = map.toCharacterMatrix();
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
-                if (!map.visibility().isVisible(playerOffset, new Offset(x, y))) {
-                    continue;
+                if (map.visibility().isVisible(playerOffset, new Offset(x, y))) {
+                    canvas.draw(tiles[x][y], x - offset.dx(), y - offset.dy());
                 }
-
-                canvas.draw(tiles[x][y], x - offset.dx(), y - offset.dy());
             }
         }
     }

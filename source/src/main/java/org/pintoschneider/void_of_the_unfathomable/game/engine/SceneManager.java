@@ -1,5 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.engine;
 
+import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -64,5 +65,16 @@ public final class SceneManager {
     public void pop() {
         final Scene currentScene = scenes.pop();
         currentScene.dispose();
+    }
+
+    /**
+     * Gets a stack of all scenes currently managed by the SceneManager.
+     *
+     * @return A stack containing all scenes.
+     */
+    public Stack<Scene> scenes() {
+        final Stack<Scene> stack = new Stack<>();
+        stack.addAll(scenes);
+        return stack;
     }
 }

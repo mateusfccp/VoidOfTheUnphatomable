@@ -1,6 +1,5 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
@@ -55,7 +54,8 @@ public final class MainMenu implements Scene {
                 Alignment.CENTER,
                 new ConstrainedBox(
                     new Constraints(null, 20, null, null),
-                    new Border(
+                    new Box(
+                        Border.SINGLE_ROUNDED,
                         new Column(menuItems)
                             .crossAxisAlignment(CrossAxisAlignment.STRETCH)
                             .mainAxisSize(MainAxisSize.MIN)
@@ -90,10 +90,5 @@ public final class MainMenu implements Scene {
             }
             case EXIT -> Engine.context().sceneManager().pop();
         }
-    }
-
-    @Override
-    public String toString() {
-        return "MainMenu";
     }
 }

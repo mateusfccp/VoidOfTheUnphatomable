@@ -14,7 +14,7 @@ public final class Player {
     private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
     private final ArrayList<Item> inventory = new ArrayList<>();
     private int currentHealth = maximumHealth() / 2;
-    private int currentColorPoints = maximumColorPoints();
+    private final int currentColorPoints = maximumColorPoints();
     private int attackPower;
     private int defensePower;
     private int creativityPower;

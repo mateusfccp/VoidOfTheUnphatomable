@@ -3,7 +3,8 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.core.Size;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.exceptions.OverflowException;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.exceptions.UIException;
 
 import java.io.PrintWriter;
 
@@ -22,40 +23,21 @@ public final class Canvas {
     private final Paint[][] paints;
     private final int width;
     private final int height;
+    private final Component component;
 
     /**
      * Constructs a new {@link Canvas} with the specified width and height.
      *
-     * @param width  The width of the canvas.
-     * @param height The height of the canvas.
      */
-    public Canvas(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public Canvas(Component component) {
+        this.component = component;
+        this.width = component.size.width();
+        this.height = component.size.height();
         tiles = new Character[width][height];
         paints = new Paint[width][height];
     }
 
-    /**
-     * Constructs a new {@link Canvas} with the specified size.
-     *
-     * @param size The size of the canvas.
-     */
-    public Canvas(Size size) {
-        this(size.width(), size.height());
-    }
-
-    /**
-     * Creates a new canvas sized to fit the given component.
-     *
-     * @param component The component to fit.
-     * @return a new canvas sized for the component
-     */
-    static Canvas forDrawable(Component component) {
-        return new Canvas(component.size().width(), component.size().height());
-    }
-
-    static AttributedStyle getStyle(Paint paint) {
+    static private AttributedStyle getStyle(Paint paint) {
         AttributedStyle style = AttributedStyle.DEFAULT;
 
         if (paint.bold()) {
@@ -129,8 +111,15 @@ public final class Canvas {
             throw new IllegalStateException("Component size is null. Did you forget to call layout()?");
         }
 
-        final Canvas canvas = forDrawable(component);
-        component.draw(canvas);
+        final Canvas canvas = new Canvas(component);
+
+        try {
+            component.draw(canvas);
+        } catch (OverflowException e) {
+            final Paint paint = new Paint().withBackgroundColor(Color.RED);
+            canvas.draw('‼', e.component().size().width() - 1, e.component().size().height() - 1, paint);
+        }
+
         merge(canvas, x, y);
     }
 
@@ -173,10 +162,9 @@ public final class Canvas {
      * @param y     The y-coordinate.
      * @param paint The paint style to apply, or null for no style.
      */
-    public void draw(char c, int x, int y, Paint paint) {
+    public void draw(char c, int x, int y, Paint paint) throws UIException {
         if (x < 0 || x >= width || y < 0 || y >= height) {
-            final String errorMessage = "Coordinates out of bounds: (%d, %d) for canvas of size (%d, %d).".formatted(x, y, width, height);
-            throw new IndexOutOfBoundsException(errorMessage);
+            throw new OverflowException(component, new Offset(x, y));
         }
 
         tiles[x][y] = c;

@@ -1,16 +1,5 @@
 package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 
-import org.pintoschneider.void_of_the_unfathomable.game.Player;
-import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
-import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
-import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.DoIfLastStepSucceeds;
-import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.MoveTowardsPlayer;
-import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.RegularAttack;
-import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A class representing the Static Dissonance enemy.
  * <p>

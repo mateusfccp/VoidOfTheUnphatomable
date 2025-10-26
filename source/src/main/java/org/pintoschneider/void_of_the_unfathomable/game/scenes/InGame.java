@@ -34,17 +34,6 @@ public final class InGame implements Scene {
     boolean processingTurn = false;
     private Offset mapOffset = Offset.ZERO;
 
-    // REFACTOR THIS
-    private String dialog = """
-        You have entered The Void. You can barely make out shapes in the distance. It's hard to breathe, and a sense of
-        dread fills your mind. You must find the Resounding Core before The Void consumes you entirely.
-        """;
-
-    public void setDialog(String dialog) {
-        this.dialog = dialog;
-    }
-    // END REFACTOR THIS
-
     /**
      * Creates a new in-game scene.
      */
@@ -54,6 +43,12 @@ public final class InGame implements Scene {
         new StaticDissonanceEntity(new Offset(15, 10), map);
         new ItemEntity(new Offset(6, 6), new FluoxetineBottle(), map);
         new StairEntity(new Offset(4, 2), map);
+
+        Engine.context().sceneManager().push(
+            new DialogScene(
+                "You have entered The Void. You can barely make out shapes in the distance. It's hard to breathe, and a sense of dread fills your mind. You must find the Resounding Core before The Void consumes you entirely."
+            )
+        );
     }
 
     @Override
@@ -61,40 +56,24 @@ public final class InGame implements Scene {
         centerOnPlayer(Engine.context());
 
         final Component[] statusList = player.statusEffects().stream()
-            .map(statusEffect -> new Text("- " + statusEffect.displayString()))
+            .map(statusEffect -> new Text("• " + statusEffect.displayString()))
             .toArray(Component[]::new);
 
         final Component[] itemsList = player.inventory().stream()
-            .map(item -> new Text("- " + item.name()))
+            .map(item -> new Text("• " + item.name()))
             .toArray(Component[]::new);
-
-        final Component[] stack;
-        if (dialog != null) {
-            stack = new Component[]{
-                new MapComponent(map, mapOffset, playerEntity.position()),
-                new Align(
-                    Alignment.BOTTOM_CENTER,
-                    new Padding(
-                        EdgeInsets.all(1),
-                        new Border(
-                            new Text(
-                                dialog.trim().replaceAll("\n", " ")
-                            )
-                        )
-                    )
-                )
-            };
-        } else {
-            stack = new Component[]{
-                new MapComponent(map, mapOffset, playerEntity.position()),
-            };
-        }
 
 
         return new Row(
             new Flexible(
-                1,
-                new Stack(stack)
+                new Stack(
+                    // Use a box to fill the background
+                    new ConstrainedBox(
+                        Constraints.expand(),
+                        new Box()
+                    ),
+                    new MapComponent(map, mapOffset, playerEntity.position())
+                )
             ),
             new VerticalDivider(),
             new ConstrainedBox(
@@ -139,13 +118,7 @@ public final class InGame implements Scene {
 
     @Override
     public void onKeyPress(Key key) {
-        if (processingTurn || key.isUnknown()) return;
-
-        if (dialog != null) {
-            System.out.printf("Closing dialog with key: %s%n", key);
-            dialog = null;
-            return;
-        }
+        if (processingTurn) return;
 
         if (key == Key.UP) {
             playerEntity.moveBy(verticalOffset.multiply(-1));
@@ -163,7 +136,7 @@ public final class InGame implements Scene {
     }
 
     private void processTurn() {
-        if (processingTurn || dialog != null) return;
+        if (processingTurn) return;
 
         processingTurn = true;
 

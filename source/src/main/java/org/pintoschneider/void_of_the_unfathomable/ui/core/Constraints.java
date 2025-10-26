@@ -7,12 +7,7 @@ import java.util.Objects;
 /**
  * A class representing layout constraints with minimum and maximum width and height.
  */
-public final class Constraints {
-    private final int minWidth;
-    private final int maxWidth;
-    private final int minHeight;
-    private final int maxHeight;
-
+public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeight) {
     /**
      * Constructs a Constraints object with the specified minimum and maximum width and height.
      * <p>
@@ -92,10 +87,20 @@ public final class Constraints {
     }
 
     /**
+     * Creates a Constraints object that forces expansion in both width and height.
+     *
+     * @return A {@link Constraints} object with expanded constraints.
+     */
+    public static Constraints expand() {
+        return new Constraints(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
+
+    /**
      * The minimum width constraint.
      *
      * @return The minimum width constraint.
      */
+    @Override
     public int minWidth() {
         return minWidth;
     }
@@ -105,6 +110,7 @@ public final class Constraints {
      *
      * @return The maximum width constraint.
      */
+    @Override
     public int maxWidth() {
         return maxWidth;
     }
@@ -114,6 +120,7 @@ public final class Constraints {
      *
      * @return The minimum height constraint.
      */
+    @Override
     public int minHeight() {
         return minHeight;
     }
@@ -123,6 +130,7 @@ public final class Constraints {
      *
      * @return The maximum height constraint.
      */
+    @Override
     public int maxHeight() {
         return maxHeight;
     }
@@ -276,22 +284,6 @@ public final class Constraints {
      */
     public Constraints loosen() {
         return new Constraints(0, maxWidth, 0, maxHeight);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Constraints) obj;
-        return this.minWidth == that.minWidth &&
-            this.maxWidth == that.maxWidth &&
-            this.minHeight == that.minHeight &&
-            this.maxHeight == that.maxHeight;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(minWidth, maxWidth, minHeight, maxHeight);
     }
 
     @Override

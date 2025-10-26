@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class Engine implements AutoCloseable, Context {
+    private static Engine context = null;
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
     private final PrintWriter writer = terminal.writer();
     private final SceneManager sceneManager;
@@ -22,16 +23,6 @@ public final class Engine implements AutoCloseable, Context {
     private final UIThread uiThread;
     private Size terminalSize;
     private boolean running = true;
-
-    static public Context context() {
-        if (context == null) {
-            throw new IllegalStateException("No Engine instance is currently running.");
-        }
-
-        return context;
-    }
-
-    private static Engine context = null;
 
     public Engine(Scene initialScene) throws IOException {
         sceneManager = new SceneManager(Objects.requireNonNull(initialScene));
@@ -63,6 +54,14 @@ public final class Engine implements AutoCloseable, Context {
         context = this;
     }
 
+    static public Context context() {
+        if (context == null) {
+            throw new IllegalStateException("No Engine instance is currently running.");
+        }
+
+        return context;
+    }
+
     void tick() {
         if (sceneManager.hasScene()) {
             refresh();
@@ -85,12 +84,10 @@ public final class Engine implements AutoCloseable, Context {
 
     private void drawScene() {
         terminal.puts(Capability.cursor_address, 0, 0);
-        final Component rootComponent = new DebuggingLine(this,
-            sceneManager.currentScene().build()
-        );
+        final Component rootComponent = new Root(this);
         rootComponent.layout(Constraints.tight(terminalSize.width(), terminalSize.height()));
 
-        final Canvas rootCanvas = new Canvas(rootComponent.size());
+        final Canvas rootCanvas = new Canvas(rootComponent);
         rootComponent.draw(rootCanvas);
         rootCanvas.writeTo(writer);
         terminal.flush();
@@ -155,20 +152,23 @@ public final class Engine implements AutoCloseable, Context {
     }
 }
 
-final class DebuggingLine extends Composent {
+final class Root extends Composent {
     static final Paint boldPaint = new Paint().withBold(true);
     final Engine engine;
-    final Component child;
 
-    DebuggingLine(Engine engine, Component child) {
+    Root(Engine engine) {
         this.engine = engine;
-        this.child = child;
     }
 
     @Override
     public Component build() {
+        final Component[] stackChildren =
+            Engine.context().sceneManager().scenes().stream().map(Scene::build).toList().reversed().toArray(Component[]::new);
+
         return new Column(
-            new Flexible(child),
+            new Flexible(
+                new Stack(stackChildren)
+            ),
             new Row(
                 new IdleSpinner((int) ((System.nanoTime() / 100_000_000) % 6)),
                 new SizedBox(new Size(1, 0), null),

@@ -1,9 +1,5 @@
 package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 
-import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
-import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
-
-import java.util.List;
 import java.util.Objects;
 
 /**

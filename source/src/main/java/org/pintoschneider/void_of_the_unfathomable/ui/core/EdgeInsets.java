@@ -5,27 +5,7 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
  * <p>
  * It is defined by four values: top, right, bottom, and left.
  */
-public final class EdgeInsets {
-    private final int top;
-    private final int right;
-    private final int bottom;
-    private final int left;
-
-    /**
-     * Creates an inset with the given top, right, bottom, and left values.
-     *
-     * @param top    The inset from the top edge.
-     * @param right  The inset from the right edge.
-     * @param bottom The inset from the bottom edge.
-     * @param left   The inset from the left edge.
-     */
-    public EdgeInsets(int top, int right, int bottom, int left) {
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-        this.left = left;
-    }
-
+public record EdgeInsets(int top, int right, int bottom, int left) {
     /**
      * Creates an inset with the given horizontal and vertical values.
      *
@@ -33,7 +13,7 @@ public final class EdgeInsets {
      * @param vertical   The inset from the top and bottom edges.
      */
     public static EdgeInsets symmetric(int horizontal, int vertical) {
-        return new EdgeInsets(horizontal, horizontal, vertical, vertical);
+        return new EdgeInsets(horizontal, vertical, horizontal, vertical);
     }
 
     /**
@@ -50,6 +30,7 @@ public final class EdgeInsets {
      *
      * @return The inset from the top edge.
      */
+    @Override
     public int top() {
         return top;
     }
@@ -59,6 +40,7 @@ public final class EdgeInsets {
      *
      * @return The inset from the right edge.
      */
+    @Override
     public int right() {
         return right;
     }
@@ -68,6 +50,7 @@ public final class EdgeInsets {
      *
      * @return The inset from the bottom edge.
      */
+    @Override
     public int bottom() {
         return bottom;
     }
@@ -77,6 +60,7 @@ public final class EdgeInsets {
      *
      * @return The inset from the left edge.
      */
+    @Override
     public int left() {
         return left;
     }
