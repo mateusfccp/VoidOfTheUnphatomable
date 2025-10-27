@@ -7,7 +7,7 @@ import java.util.Objects;
  * <p>
  * This class serves as a base for specific types of items, such as consumables and equippables.
  */
-public sealed class Item permits Consumable, Equippable {
+public class Item {
     private final String name;
     private final String description;
 

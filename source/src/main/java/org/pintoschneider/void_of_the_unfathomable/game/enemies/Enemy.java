@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public abstract class Enemy {
     private final String name;
-    private final int health;
+    private int health;
     private final int maxHealth;
     private final int attack;
     private final int defense;
@@ -63,6 +63,19 @@ public abstract class Enemy {
      */
     public int defense() {
         return defense;
+    }
+
+    /**
+     * Damages the enemy by the specified amount.
+     *
+     * @param amount The amount of damage to deal to the enemy.
+     */
+    public void damage(int amount) {
+        assert amount >= 0 : "Damage amount must be non-negative";
+
+        final int defendedAmount = Math.max(1, amount - defense);
+
+        health = Math.max(0, health - defendedAmount);
     }
 }
 

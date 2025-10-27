@@ -11,13 +11,16 @@ import java.util.List;
  * A class representing the player character in the game including their attributes, status effects, and inventory.
  */
 public final class Player {
+    private static final int maximumHealth = 100;
+    private static final int baseAttackPower = 5;
+    private static final int baseDefensePower = 1;
+    private static final int baseCreativityPower = 1;
+
     private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
     private final ArrayList<Item> inventory = new ArrayList<>();
-    private int currentHealth = maximumHealth() / 2;
     private final int currentColorPoints = maximumColorPoints();
-    private int attackPower;
-    private int defensePower;
-    private int creativityPower;
+
+    private int currentHealth = maximumHealth() / 2;
     private int neuralToxicity = 0;
     private int fluoxetineDoses = 0;
     private int turnsWithoutFluoxetine = 0;
@@ -37,7 +40,7 @@ public final class Player {
      * @return The maximum health of the player
      */
     public int maximumHealth() {
-        return 100;
+        return maximumHealth;
     }
 
     /**
@@ -45,7 +48,7 @@ public final class Player {
      *
      * @return The current color points of the player.
      */
-    public int getCurrentColorPoints() {
+    public int currentColorPoints() {
         return currentColorPoints;
     }
 
@@ -56,6 +59,33 @@ public final class Player {
      */
     public int maximumColorPoints() {
         return 10;
+    }
+
+    /**
+     * Gets the player's attack power.
+     *
+     * @return The player's attack power.
+     */
+    public int attackPower() {
+        return baseAttackPower;
+    }
+
+    /**
+     * Gets the player's defense power.
+     *
+     * @return The player's defense power.
+     */
+    public int defensePower() {
+        return baseDefensePower;
+    }
+
+    /**
+     * Gets the player's creativity power.
+     *
+     * @return The player's creativity power.
+     */
+    public int creativityPower() {
+        return baseCreativityPower;
     }
 
     /**
@@ -82,7 +112,8 @@ public final class Player {
      * @param damage The amount of damage to inflict
      */
     public void damage(int damage) {
-        setCurrentHealth(currentHealth - damage);
+        final int defendedDamage = Math.max(1, damage - defensePower());
+        setCurrentHealth(currentHealth - defendedDamage);
     }
 
     /**

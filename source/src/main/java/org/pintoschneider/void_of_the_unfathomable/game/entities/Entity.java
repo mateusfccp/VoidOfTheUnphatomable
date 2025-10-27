@@ -1,8 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
-import org.pintoschneider.void_of_the_unfathomable.game.map.MapTile;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 
@@ -59,28 +59,23 @@ public abstract class Entity<T> {
     public boolean moveBy(Offset offset) {
         final Offset targetPosition = position.translate(offset.dx(), offset.dy());
 
-        final Entity<?> entityAtTarget = map.getEntityAt(targetPosition);
-        if (entityAtTarget != null) {
-            entityAtTarget.interact(this);
-        }
+        final boolean didMove;
 
-        if (canMoveTo(targetPosition)) {
+        if (map.walkable(targetPosition)) {
             position = targetPosition;
-            return true;
+            didMove = true;
         } else {
-            return false;
-        }
-    }
-
-    private boolean canMoveTo(Offset targetPosition) {
-        final MapTile tileAtNewPosition = map.getTileAt(targetPosition.dx(), targetPosition.dy());
-
-        if (tileAtNewPosition != null && !tileAtNewPosition.walkable()) {
-            return false;
+            didMove = false;
         }
 
-        final Entity<?> entityAtNewPosition = map.getEntityAt(targetPosition);
-        return entityAtNewPosition == null || entityAtNewPosition.spatialProperty().walkable();
+        final List<Entity<?>> entityAtTarget = map.getEntitiesAt(targetPosition);
+        for (Entity<?> entity : entityAtTarget) {
+            if (entity != this) {
+                entity.interact(this);
+            }
+        }
+
+        return didMove;
     }
 
     /**
@@ -208,13 +203,7 @@ public abstract class Entity<T> {
 
             for (Offset neighbor : neighbors) {
                 // Skip non-walkable tiles
-                if (map.getTileAt(neighbor) == null || !map.getTileAt(neighbor).walkable()) continue;
-
-                // Skip entities unless it's the target position
-                final Entity<?> entity = map.getEntityAt(neighbor);
-                if (entity != null && !neighbor.equals(target)) {
-                    continue;
-                }
+                if (!neighbor.equals(target) && !map.walkable(neighbor)) continue;
 
                 final PathNode<Offset> neighborNode = new PathNode<>(neighbor);
                 neighborNode.gCost = currentNode.gCost + 1;
@@ -226,6 +215,34 @@ public abstract class Entity<T> {
         }
 
         return Collections.emptyList();
+    }
+
+    /**
+     * Drops an item at the entity's current position on the map.
+     *
+     * @param droppedItem The item to drop.
+     */
+    protected void drop(Item droppedItem) {
+        new ItemEntity(position(), droppedItem, map());
+    }
+
+    /**
+     * Drops multiple items at the entity's current position on the map.
+     *
+     * @param droppedItem The item to drop.
+     * @param quantity    The quantity of items to drop.
+     */
+    protected void drop(Item droppedItem, int quantity) {
+        for (int i = 0; i < quantity; i++) {
+            drop(droppedItem);
+        }
+    }
+
+    /**
+     * Destroys the entity, removing it from the map.
+     */
+    public void destroy() {
+        map().removeEntity(this);
     }
 
     /**

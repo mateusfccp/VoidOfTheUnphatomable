@@ -146,21 +146,34 @@ public final class Map {
     }
 
     /**
-     * Gets the entity at the specified position.
-     * <p>
-     * If no entity is found at the given position, null is returned.
+     * Gets a list of all entities at the specified position.
      *
      * @param position The position to check for an entity.
-     * @return The entity at the specified position, or null if none is found.
+     * @return A list of all entities at the specified position.
      */
-    public Entity<?> getEntityAt(Offset position) {
-        for (Entity<?> entity : entities) {
-            if (entity.position().equals(position)) {
-                return entity;
-            }
-        }
+    public List<Entity<?>> getEntitiesAt(Offset position) {
+        return entities.stream()
+            .filter(entity -> entity.position().equals(position))
+            .toList();
+    }
 
-        return null;
+    /**
+     * Checks if the specified position is walkable.
+     * <p>
+     * A position is considered walkable if the tile at that position is walkable and all entities at that position
+     * are also walkable.
+     *
+     * @param position The position to check.
+     * @return True if the position is walkable, false otherwise.
+     */
+    public boolean walkable(Offset position) {
+        final MapTile tile = getTileAt(position);
+
+        if (tile == null || !tile.walkable()) return false;
+
+        final List<Entity<?>> entitiesAtPosition = getEntitiesAt(position);
+        return entitiesAtPosition.isEmpty() ||
+            entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
     }
 
     /**

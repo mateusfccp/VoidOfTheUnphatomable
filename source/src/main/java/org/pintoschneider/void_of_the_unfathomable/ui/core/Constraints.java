@@ -2,12 +2,15 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 
-import java.util.Objects;
-
 /**
  * A class representing layout constraints with minimum and maximum width and height.
  */
-public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeight) {
+public final class Constraints {
+    final private int minWidth;
+    final private int minHeight;
+    final private int maxWidth;
+    final private int maxHeight;
+
     /**
      * Constructs a Constraints object with the specified minimum and maximum width and height.
      * <p>
@@ -100,7 +103,6 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
      *
      * @return The minimum width constraint.
      */
-    @Override
     public int minWidth() {
         return minWidth;
     }
@@ -110,7 +112,6 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
      *
      * @return The maximum width constraint.
      */
-    @Override
     public int maxWidth() {
         return maxWidth;
     }
@@ -120,7 +121,6 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
      *
      * @return The minimum height constraint.
      */
-    @Override
     public int minHeight() {
         return minHeight;
     }
@@ -130,7 +130,6 @@ public record Constraints(int minWidth, int maxWidth, int minHeight, int maxHeig
      *
      * @return The maximum height constraint.
      */
-    @Override
     public int maxHeight() {
         return maxHeight;
     }

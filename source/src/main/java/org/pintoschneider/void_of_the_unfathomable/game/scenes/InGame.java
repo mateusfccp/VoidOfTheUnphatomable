@@ -93,7 +93,7 @@ public final class InGame implements Scene {
                                 new Constraints(null, null, 1, 1),
                                 new Row(
                                     new Text("CP:", boldPaint),
-                                    new Text("%3d/%3d".formatted(player.getCurrentColorPoints(), player.maximumColorPoints()))
+                                    new Text("%3d/%3d".formatted(player.currentColorPoints(), player.maximumColorPoints()))
                                 )
                             ),
                             new SizedBox(new Size(0, 1), null),

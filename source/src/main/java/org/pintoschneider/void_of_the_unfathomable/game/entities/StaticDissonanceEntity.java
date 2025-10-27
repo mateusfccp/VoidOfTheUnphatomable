@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.StaticDissonance;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.DoIfLastStepSucceeds;
@@ -26,6 +27,20 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
     @Override
     public SpatialProperty spatialProperty() {
         return new SpatialProperty(false, false);
+    }
+
+    @Override
+    public void interact(Entity<?> entity) {
+        if (entity instanceof PlayerEntity playerEntity) {
+            final Player player = playerEntity.associatedObject();
+            this.associatedObject().damage(player.attackPower());
+
+            if (this.associatedObject().health() == 0) {
+                final int dropQuantity = 1 + (int) (Math.random() * 2);
+                drop(new FragmentOfNothingness(), dropQuantity);
+                destroy();
+            }
+        }
     }
 
     @Override
