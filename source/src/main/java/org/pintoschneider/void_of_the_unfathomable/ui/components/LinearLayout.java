@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.ui.components;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -31,7 +32,7 @@ public class LinearLayout extends Component {
      */
     public LinearLayout(Orientation orientation, Component... children) {
         this.orientation = Objects.requireNonNull(orientation);
-        this.children = Objects.requireNonNull(children);
+        this.children = Arrays.stream(Objects.requireNonNull(children)).filter(Objects::nonNull).toArray(Component[]::new);
     }
 
     /**
