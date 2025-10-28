@@ -26,6 +26,16 @@ public final class SizedBox extends Component {
     }
 
     /**
+     * Creates a SizedBox with the given width, height and no child.
+     *
+     * @param width  The fixed width of the box.
+     * @param height The fixed height of the box.
+     */
+    public SizedBox(int width, int height) {
+        this(new Size(width, height), null);
+    }
+
+    /**
      * Creates a SizedBox with the given width, height and child.
      *
      * @param width  The fixed width of the box.
@@ -33,8 +43,7 @@ public final class SizedBox extends Component {
      * @param child  The child component to be contained within the box.
      */
     public SizedBox(int width, int height, Component child) {
-        this.child = child;
-        this.boxSize = new Size(width, height);
+        this(new Size(width, height), child);
     }
 
 

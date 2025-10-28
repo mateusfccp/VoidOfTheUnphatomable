@@ -4,6 +4,7 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp.Capability;
 import org.jline.utils.NonBlockingReader;
+import org.pintoschneider.void_of_the_unfathomable.Main;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
@@ -154,6 +155,8 @@ public final class Engine implements AutoCloseable, Context {
 
 final class Root extends Composent {
     static final Paint boldPaint = new Paint().withBold(true);
+    static final Paint dimmedPaint = new Paint().withDim(true);
+
     final Engine engine;
 
     Root(Engine engine) {
@@ -165,16 +168,29 @@ final class Root extends Composent {
         final Component[] stackChildren =
             Engine.context().sceneManager().scenes().stream().map(Scene::build).toList().reversed().toArray(Component[]::new);
 
+        final Component debugLine;
+
+        if (Main.debugMode) {
+            final String sceneInfo = "%s (%d)".formatted(
+                engine.sceneManager().currentScene().getClass().getSimpleName(),
+                engine.sceneManager().scenes().size()
+            );
+            debugLine = new Row(
+                new Text("FPS: ", boldPaint),
+                new Text(String.format("%.2f", 1_000_000_000.0 / engine.deltaTime()), dimmedPaint),
+                new SizedBox(1, 0),
+                new Text("Scene: ", boldPaint),
+                new Text(sceneInfo, dimmedPaint)
+            );
+        } else {
+            debugLine = null;
+        }
+
         return new Column(
             new Flexible(
                 new Stack(stackChildren)
             ),
-            new Row(
-                new IdleSpinner((int) ((System.nanoTime() / 100_000_000) % 6)),
-                new SizedBox(new Size(1, 0), null),
-                new Text("FPS: ", boldPaint),
-                new Text(String.format("%.2f", 1_000_000_000.0 / engine.deltaTime()))
-            )
+            debugLine
         );
     }
 }

@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public final class Main {
-    static void main() throws InterruptedException, IOException {
-        final boolean debugMode = Boolean.parseBoolean(System.getProperty("debug", "false"));
+    public static final boolean debugMode = Boolean.parseBoolean(System.getProperty("debug", "false"));
+
+    static void main() throws IOException {
         if (debugMode) {
             try (final DebugLogger _ = new DebugLogger()) {
                 run();
@@ -25,7 +26,7 @@ public final class Main {
         }
     }
 
-    static void run() throws InterruptedException, IOException {
+    static void run() throws IOException {
         final Scene scene = new MainMenu();
 
         try (final Engine engine = new Engine(scene)) {
