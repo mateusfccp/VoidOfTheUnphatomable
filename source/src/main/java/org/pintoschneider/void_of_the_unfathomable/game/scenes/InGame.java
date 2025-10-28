@@ -43,7 +43,10 @@ public final class InGame implements Scene {
         new StaticDissonanceEntity(new Offset(15, 10), map);
         new ItemEntity(new Offset(6, 6), new FluoxetineBottle(), map);
         new StairEntity(new Offset(4, 2), map);
+    }
 
+    @Override
+    public void onEnter() {
         Engine.context().sceneManager().push(
             new DialogScene(
                 "You have entered The Void. You can barely make out shapes in the distance. It's hard to breathe, and a sense of dread fills your mind. You must find the Resounding Core before The Void consumes you entirely."

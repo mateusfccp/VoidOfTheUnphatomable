@@ -10,6 +10,12 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
  */
 public interface Scene {
     /**
+     * A method called whenever the {@link SceneManager} pushes this scene onto the stack.
+     */
+    default void onEnter() {
+    }
+
+    /**
      * Builds and returns the root UI component for this scene.
      *
      * @return The root {@link Component} of the scene.

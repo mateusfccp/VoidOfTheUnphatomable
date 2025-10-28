@@ -54,6 +54,7 @@ public final class SceneManager {
      */
     public void push(Scene scene) {
         scenes.push(scene);
+        scene.onEnter();
     }
 
     /**
