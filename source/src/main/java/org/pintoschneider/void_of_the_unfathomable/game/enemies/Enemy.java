@@ -7,10 +7,10 @@ import java.util.Objects;
  */
 public abstract class Enemy {
     private final String name;
-    private int health;
     private final int maxHealth;
     private final int attack;
     private final int defense;
+    private int health;
 
     protected Enemy(String name, int maxHealth, int attack, int defense) {
         this.name = Objects.requireNonNull(name);
