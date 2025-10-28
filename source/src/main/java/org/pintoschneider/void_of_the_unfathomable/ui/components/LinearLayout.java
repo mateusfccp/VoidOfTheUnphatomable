@@ -13,13 +13,7 @@ import java.util.Objects;
  * Use {@link Row} or {@link Column} for convenience.
  */
 public class LinearLayout extends Component {
-    /**
-     * The child items to be arranged.
-     */
     protected final Component[] children;
-    /**
-     * The orientation of this layout.
-     */
     protected final Orientation orientation;
     private MainAxisSize mainAxisSize = MainAxisSize.MAX;
     private CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.START;
@@ -27,8 +21,8 @@ public class LinearLayout extends Component {
     /**
      * Constructs a LinearLayout with the specified orientation and items.
      *
-     * @param orientation the orientation (horizontal or vertical)
-     * @param children    the children as Fixed or Flexible items
+     * @param orientation The orientation (horizontal or vertical).
+     * @param children    The children as Fixed or Flexible items.
      */
     public LinearLayout(Orientation orientation, Component... children) {
         this.orientation = Objects.requireNonNull(orientation);
@@ -38,7 +32,7 @@ public class LinearLayout extends Component {
     /**
      * Sets how much space the layout should occupy in the main axis.
      *
-     * @param mainAxisSize the main axis size to set
+     * @param mainAxisSize The main axis size to set.
      */
     public LinearLayout mainAxisSize(MainAxisSize mainAxisSize) {
         this.mainAxisSize = Objects.requireNonNullElse(mainAxisSize, MainAxisSize.MAX);
@@ -48,7 +42,7 @@ public class LinearLayout extends Component {
     /**
      * Sets the cross-axis alignment for this layout.
      *
-     * @param crossAxisAlignment the cross-axis alignment to set
+     * @param crossAxisAlignment The cross-axis alignment to set.
      */
     public LinearLayout crossAxisAlignment(CrossAxisAlignment crossAxisAlignment) {
         this.crossAxisAlignment = Objects.requireNonNullElse(crossAxisAlignment, CrossAxisAlignment.START);
@@ -194,10 +188,20 @@ public class LinearLayout extends Component {
     }
 
     /**
-     * The orientation of the layout: horizontal (row) or vertical (column).
+     * The orientation of the layout.
+     * <p>
+     * Horizontal layouts arrange children in a row, while vertical layouts arrange children in a column.
      */
     public enum Orientation {
-        HORIZONTAL, VERTICAL
+        /**
+         * Horizontal orientation (like a Row).
+         */
+        HORIZONTAL,
+
+        /**
+         * Vertical orientation (like a Column).
+         */
+        VERTICAL
     }
 }
 
