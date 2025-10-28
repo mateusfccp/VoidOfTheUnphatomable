@@ -1,9 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.time.Instant;
 
 /**
@@ -25,8 +22,19 @@ public final class DebugLogger implements AutoCloseable {
      */
     public DebugLogger() throws FileNotFoundException {
         final Instant now = Instant.now();
-        final String filePath = "debug-%s.log".formatted(now.toString().replace(":", "-"));
-        this.fileOutputStream = new FileOutputStream(filePath);
+        final String directoryPath = "logs";
+        final String fileName = "debug-%s.log".formatted(now.toString().replace(":", "-"));
+        final String fullPath = directoryPath + File.separator + fileName;
+
+        final File directory = new File(directoryPath);
+        if (!directory.exists()) {
+            final boolean created = directory.mkdirs();
+            if (!created) {
+                throw new RuntimeException("Failed to create logs directory.");
+            }
+        }
+
+        this.fileOutputStream = new FileOutputStream(fullPath);
         this.printStream = new PrintStream(fileOutputStream, true);
 
         System.setOut(printStream);
