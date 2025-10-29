@@ -1,11 +1,11 @@
 package org.pintoschneider.void_of_the_unfathomable.game;
 
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
+import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * A class representing the player character in the game including their attributes, status effects, and inventory.
@@ -14,13 +14,14 @@ public final class Player {
     private static final int maximumHealth = 100;
     private static final int baseAttackPower = 5;
     private static final int baseDefensePower = 1;
-    private static final int baseCreativityPower = 1;
+    private static final int baseCreativity = 1;
 
     private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
+    private final Map<EquippableSlot, Equippable> equippedItems = new EnumMap<>(EquippableSlot.class);
     private final ArrayList<Item> inventory = new ArrayList<>();
     private final int currentColorPoints = maximumColorPoints();
 
-    private int currentHealth = maximumHealth() / 2;
+    private int currentHealth = maximumHealth();
     private int neuralToxicity = 0;
     private int fluoxetineDoses = 0;
     private int turnsWithoutFluoxetine = 0;
@@ -67,7 +68,9 @@ public final class Player {
      * @return The player's attack power.
      */
     public int attackPower() {
-        return baseAttackPower;
+        return baseAttackPower + equippedItems.values().stream()
+            .mapToInt(Equippable::attackModifier)
+            .sum();
     }
 
     /**
@@ -76,7 +79,9 @@ public final class Player {
      * @return The player's defense power.
      */
     public int defensePower() {
-        return baseDefensePower;
+        return baseDefensePower + equippedItems.values().stream()
+            .mapToInt(Equippable::defenseModifier)
+            .sum();
     }
 
     /**
@@ -84,8 +89,10 @@ public final class Player {
      *
      * @return The player's creativity power.
      */
-    public int creativityPower() {
-        return baseCreativityPower;
+    public int creativity() {
+        return baseCreativity + equippedItems.values().stream()
+            .mapToInt(Equippable::creativityModifier)
+            .sum();
     }
 
     /**
@@ -193,11 +200,13 @@ public final class Player {
 
     /**
      * Gets the player's inventory.
+     * <p>
+     * The returned list is a read-only copy of the inventory.
      *
      * @return A list of items in the player's inventory.
      */
     public List<Item> inventory() {
-        return inventory;
+        return Collections.unmodifiableList(inventory);
     }
 
     /**
@@ -254,5 +263,23 @@ public final class Player {
             item.onConsume(this);
             inventory.remove(item);
         }
+    }
+
+    /**
+     * Equips an equippable item to the player.
+     *
+     * @param item The equippable item to equip.
+     */
+    public void equipItem(Equippable item) {
+        equippedItems.put(item.slot(), item);
+    }
+
+    /**
+     * Unequips an item from the specified slot.
+     *
+     * @param slot The slot from which to unequip the item.
+     */
+    public void unequipItem(EquippableSlot slot) {
+        equippedItems.remove(slot);
     }
 }

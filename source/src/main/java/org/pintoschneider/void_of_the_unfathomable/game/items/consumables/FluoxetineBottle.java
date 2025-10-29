@@ -11,15 +11,15 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
  * <p>
  * When used repeatedly, it may cause negative side effects.
  */
-public final class FluoxetineBottle extends Consumable {
-    /**
-     * Creates a new instance of {@code FluoxetineBottle}.
-     */
-    public FluoxetineBottle() {
-        super(
-            "Frasco de Fluoxetina",
-            "Pequeñas cápsulas que prometen devolver el color al mundo. Pero una vez que el cerebro prueba esta calma artificial, no le gusta que se la quiten"
-        );
+public final class FluoxetineBottle implements Consumable {
+    @Override
+    public String name() {
+        return "Frasco de Fluoxetina";
+    }
+
+    @Override
+    public String description() {
+        return "Pequeñas cápsulas que prometen devolver el color al mundo. Pero una vez que el cerebro prueba esta calma artificial, no le gusta que se la quiten.";
     }
 
     @Override

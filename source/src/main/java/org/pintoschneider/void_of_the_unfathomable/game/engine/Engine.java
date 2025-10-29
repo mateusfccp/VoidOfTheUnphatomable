@@ -154,9 +154,6 @@ public final class Engine implements AutoCloseable, Context {
 }
 
 final class Root extends Composent {
-    static final Paint boldPaint = new Paint().withBold(true);
-    static final Paint dimmedPaint = new Paint().withDim(true);
-
     final Engine engine;
 
     Root(Engine engine) {
@@ -176,11 +173,11 @@ final class Root extends Composent {
                 engine.sceneManager().scenes().size()
             );
             debugLine = new Row(
-                new Text("FPS: ", boldPaint),
-                new Text(String.format("%.2f", 1_000_000_000.0 / engine.deltaTime()), dimmedPaint),
+                new Text("FPS: ", Paint.BOLD),
+                new Text(String.format("%.2f", 1_000_000_000.0 / engine.deltaTime()), Paint.DIM),
                 new SizedBox(1, 0),
-                new Text("Scene: ", boldPaint),
-                new Text(sceneInfo, dimmedPaint)
+                new Text("Scene: ", Paint.BOLD),
+                new Text(sceneInfo, Paint.DIM)
             );
         } else {
             debugLine = null;

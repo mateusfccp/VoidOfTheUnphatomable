@@ -1,7 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Context;
@@ -24,7 +23,6 @@ import java.util.Queue;
  * The in-game scene where the player can explore the map and interact with the game world.
  */
 public final class InGame implements Scene {
-    static final Paint boldPaint = new Paint().withBold(true);
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
@@ -58,15 +56,6 @@ public final class InGame implements Scene {
     public Component build() {
         centerOnPlayer(Engine.context());
 
-        final Component[] statusList = player.statusEffects().stream()
-            .map(statusEffect -> new Text("• " + statusEffect.displayString()))
-            .toArray(Component[]::new);
-
-        final Component[] itemsList = player.inventory().stream()
-            .map(item -> new Text("• " + item.name()))
-            .toArray(Component[]::new);
-
-
         return new Row(
             new Flexible(
                 new Stack(
@@ -88,29 +77,17 @@ public final class InGame implements Scene {
                             new ConstrainedBox(
                                 new Constraints(null, null, 1, 1),
                                 new Row(
-                                    new Text("HP:", boldPaint),
+                                    new Text("SP:", Paint.BOLD),
                                     new Text("%3d/%3d".formatted(player.currentHealth(), player.maximumHealth()))
                                 )
                             ),
                             new ConstrainedBox(
                                 new Constraints(null, null, 1, 1),
                                 new Row(
-                                    new Text("CP:", boldPaint),
+                                    new Text("CP:", Paint.BOLD),
                                     new Text("%3d/%3d".formatted(player.currentColorPoints(), player.maximumColorPoints()))
                                 )
-                            ),
-                            new SizedBox(new Size(0, 1), null),
-                            new Text("Estatus:", boldPaint),
-                            new SizedBox(new Size(0, 1), null),
-                            new Column(statusList)
-                                .mainAxisSize(MainAxisSize.MIN)
-                                .crossAxisAlignment(CrossAxisAlignment.STRETCH),
-                            new SizedBox(new Size(0, 1), null),
-                            new Text("Items:", boldPaint),
-                            new SizedBox(new Size(0, 1), null),
-                            new Column(itemsList)
-                                .mainAxisSize(MainAxisSize.MIN)
-                                .crossAxisAlignment(CrossAxisAlignment.STRETCH)
+                            )
                         ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
                             .mainAxisSize(MainAxisSize.MIN)
                     )
@@ -135,6 +112,8 @@ public final class InGame implements Scene {
         } else if (key == Key.RIGHT) {
             playerEntity.moveBy(horizontalOffset);
             processTurn();
+        } else if (key == Key.I) {
+            Engine.context().sceneManager().push(new Inventory(player));
         }
     }
 

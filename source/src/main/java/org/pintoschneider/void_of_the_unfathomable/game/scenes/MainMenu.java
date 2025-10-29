@@ -33,8 +33,6 @@ public final class MainMenu implements Scene {
     public Component build() {
         frame = (frame + 1) % Integer.MAX_VALUE;
 
-        final Paint selectedTextPaint = new Paint().withInverted(true);
-
         Component[] menuItems = Arrays.stream(MenuOption.values())
             .map(option ->
                 new ConstrainedBox(
@@ -43,7 +41,7 @@ public final class MainMenu implements Scene {
                         Alignment.CENTER,
                         new Text(
                             option.text(),
-                            option == selectedOption ? selectedTextPaint : null
+                            option == selectedOption ? Paint.INVERTED : null
                         )
                     )
                 )

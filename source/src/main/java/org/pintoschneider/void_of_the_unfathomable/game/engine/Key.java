@@ -26,9 +26,13 @@ public final class Key {
      * Key code for the "Enter" key.
      */
     public static final Key ENTER = new Key(new char[]{13}, "↩");
+    /**
+     * Key code for the "i" key.
+     */
+    public static final Key I = new Key(new char[]{105}, "i");
 
     // private list of known keys used by parse()
-    private static final Key[] KNOWN_KEYS = {UP, DOWN, RIGHT, LEFT, ENTER};
+    private static final Key[] KNOWN_KEYS = {UP, DOWN, RIGHT, LEFT, ENTER, I};
 
     final char[] chars;
     final String representation;

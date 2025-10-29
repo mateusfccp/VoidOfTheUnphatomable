@@ -27,6 +27,35 @@ public record Paint(
     Color backgroundColor
 ) {
     /**
+     * A Paint instance with bold text.
+     */
+    public static final Paint BOLD = new Paint().withBold(true);
+    /**
+     * A Paint instance with italic text.
+     */
+    public static final Paint ITALIC = new Paint().withItalic(true);
+    /**
+     * A Paint instance with underlined text.
+     */
+    public static final Paint UNDERLINE = new Paint().withUnderline(true);
+    /**
+     * A Paint instance with strikethrough text.
+     */
+    public static final Paint STRIKETHROUGH = new Paint().withStrikethrough(true);
+    /**
+     * A Paint instance with dimmed text.
+     */
+    public static final Paint DIM = new Paint().withDim(true);
+    /**
+     * A Paint instance with inverted text.
+     */
+    public static final Paint INVERTED = new Paint().withInverted(true);
+    /**
+     * A Paint instance with blinking text.
+     */
+    public static final Paint BLINK = new Paint().withBlink(true);
+
+    /**
      * Constructs a Paint instance with all default values.
      */
     public Paint() {
