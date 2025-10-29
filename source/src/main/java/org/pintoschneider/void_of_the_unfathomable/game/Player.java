@@ -232,7 +232,13 @@ public final class Player {
      * @return The index of where to place the item in the ArrayList.
      */
     private int binarySearch(ArrayList<Item> list, String name) {
-        if (list.isEmpty()) return 0;
+        if (list.isEmpty()) {
+            return 0;
+        } else if (name.compareToIgnoreCase(list.getFirst().name()) < 0) {
+            return 0;
+        } else if (name.compareToIgnoreCase(list.getLast().name()) > 0) {
+            return list.size();
+        }
 
         int low = 0;
         int high = list.size();
