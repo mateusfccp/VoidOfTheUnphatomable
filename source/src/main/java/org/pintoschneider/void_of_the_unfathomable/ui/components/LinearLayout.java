@@ -141,8 +141,7 @@ public class LinearLayout extends Component {
         for (Component child : children) {
             final int crossAxisPosition = switch (crossAxisAlignment) {
                 case START, STRETCH -> 0;
-                case CENTER ->
-                    (crossAxisLength() - getChildCrossAxisLength(child)) / 2 - getChildCrossAxisLength(child) / 2;
+                case CENTER -> crossAxisLength() / 2 - getChildCrossAxisLength(child) / 2;
                 case END -> crossAxisLength() - getChildCrossAxisLength(child);
             };
 
