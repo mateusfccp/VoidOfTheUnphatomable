@@ -10,7 +10,9 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -43,9 +45,11 @@ public class Inventory implements Scene {
                     )
                 );
         } else {
+            final List<ItemGroup> groups = groupedItems();
+
             final Component[] items = IntStream
-                .range(0, player.inventory().size())
-                .mapToObj(this::getItemAtIndex)
+                .range(0, groups.size())
+                .mapToObj(this::getComponentForIndex)
                 .toArray(Component[]::new);
 
             content = new Column(items)
@@ -84,14 +88,13 @@ public class Inventory implements Scene {
             return;
         }
 
-        if (player.inventory().isEmpty()) {
-            return;
-        }
+        final List<ItemGroup> groups = groupedItems();
+        if (groups.isEmpty()) return;
 
         if (key == Key.UP) {
-            currentIndex = (currentIndex - 1 + player.inventory().size()) % player.inventory().size();
+            currentIndex = (currentIndex - 1 + groups.size()) % groups.size();
         } else if (key == Key.DOWN) {
-            currentIndex = (currentIndex + 1) % player.inventory().size();
+            currentIndex = (currentIndex + 1) % groups.size();
         } else if (key == Key.ENTER) {
             final Item selectedItem = getSelectedItem();
 
@@ -106,28 +109,62 @@ public class Inventory implements Scene {
     }
 
     private Item getSelectedItem() {
-        if (player.inventory().isEmpty()) {
+        final List<ItemGroup> groups = groupedItems();
+        if (groups.isEmpty()) {
             return null;
         } else {
-            return player.inventory().get(currentIndex);
+            return groups.get(currentIndex).item;
         }
     }
 
-    private Component getItemAtIndex(int index) {
-        final Item item = player.inventory().get(index);
+    private Component getComponentForIndex(int index) {
+        final List<ItemGroup> groups = groupedItems();
+        final ItemGroup group = groups.get(index);
+        final boolean isCurrent = index == currentIndex;
+        final boolean isKey = !(group.item instanceof Consumable) && !(group.item instanceof Equippable);
+        final Paint paint;
+
+        if (isCurrent) {
+            paint = Paint.INVERTED;
+        } else if (isKey) {
+            paint = Paint.DIM;
+        } else {
+            paint = null;
+        }
+
         return new Text(
-            item.name(),
-            index == currentIndex ? Paint.INVERTED : null
+            "%s x%d".formatted(group.item.name(), group.count),
+            paint
         );
     }
 
-    private Map<Class<? extends Item>, Integer> itemQuantity() {
-        return player.inventory().stream()
-            .collect(
-                java.util.stream.Collectors.groupingBy(
-                    Item::getClass,
-                    java.util.stream.Collectors.summingInt(e -> 1)
-                )
-            );
+    private List<ItemGroup> groupedItems() {
+        final LinkedHashMap<Class<? extends Item>, ItemGroup> map = new LinkedHashMap<>();
+
+        for (Item item : player.inventory()) {
+            final Class<? extends Item> key = item.getClass();
+            final ItemGroup existing = map.get(key);
+            if (existing == null) {
+                map.put(key, new ItemGroup(item));
+            } else {
+                existing.count();
+            }
+        }
+
+        return new ArrayList<>(map.values());
+    }
+
+    private static final class ItemGroup {
+        final Item item;
+        int count;
+
+        ItemGroup(Item item) {
+            this.item = item;
+            this.count = 1;
+        }
+
+        void count() {
+            count = count + 1;
+        }
     }
 }

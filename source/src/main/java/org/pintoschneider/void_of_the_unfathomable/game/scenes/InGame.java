@@ -8,7 +8,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
-import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -39,7 +39,7 @@ public final class InGame implements Scene {
         // Add entity for testing purposes
         new StaticDissonanceEntity(new Offset(14, 9), map);
         new StaticDissonanceEntity(new Offset(15, 10), map);
-        new ItemEntity(new Offset(6, 6), new FluoxetineBottle(), map);
+        new ItemEntity(new Offset(6, 6), new HaloperidolAmpoule(), map);
         new StairEntity(new Offset(4, 2), map);
     }
 
