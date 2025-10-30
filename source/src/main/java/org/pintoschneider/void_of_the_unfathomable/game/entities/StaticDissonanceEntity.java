@@ -33,7 +33,7 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity playerEntity) {
             final Player player = playerEntity.associatedObject();
-            this.associatedObject().damage(player.attackPower());
+            this.associatedObject().damage(player.attack());
 
             if (this.associatedObject().health() == 0) {
                 final int dropQuantity = 1 + (int) (Math.random() * 2);

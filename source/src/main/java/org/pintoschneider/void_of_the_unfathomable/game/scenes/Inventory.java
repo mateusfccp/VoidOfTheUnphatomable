@@ -6,6 +6,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
+import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
@@ -13,6 +14,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -75,6 +77,14 @@ public class Inventory implements Scene {
                                 content
                             )
                         )
+                    ),
+                    new Flexible(new SizedBox(0, 0)),
+                    new ConstrainedBox(
+                        new Constraints(0, null, 8, 8),
+                        new Box(
+                            Border.SINGLE_ROUNDED,
+                            new Text(Objects.requireNonNullElse(getSelectedItem().description(), ""))
+                        )
                     )
                 ).crossAxisAlignment(CrossAxisAlignment.CENTER)
             )
@@ -100,7 +110,13 @@ public class Inventory implements Scene {
 
             switch (selectedItem) {
                 case Consumable item -> player.useItem(item);
-                case Equippable equippable -> player.equipItem(equippable);
+                case Equippable equippable -> {
+                    if (player.equippedItem(equippable.slot()) == equippable) {
+                        player.unequipItem(equippable.slot());
+                    } else {
+                        player.equipItem(equippable);
+                    }
+                }
                 case null, default -> {
                     // Do nothing
                 }
@@ -132,10 +148,27 @@ public class Inventory implements Scene {
             paint = null;
         }
 
+        String displayName = group.item.name();
+        if (isGroupEquipped(group)) {
+            displayName += " (E)";
+        }
+
         return new Text(
-            "%s x%d".formatted(group.item.name(), group.count),
+            "%s x%d".formatted(displayName, group.count),
             paint
         );
+    }
+
+    private boolean isGroupEquipped(ItemGroup group) {
+        if (!(group.item instanceof Equippable)) return false;
+
+        for (EquippableSlot slot : EquippableSlot.values()) {
+            final Equippable equipped = player.equippedItem(slot);
+            if (equipped != null && equipped.getClass().equals(group.item.getClass())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<ItemGroup> groupedItems() {

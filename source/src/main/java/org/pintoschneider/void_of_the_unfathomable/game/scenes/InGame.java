@@ -8,7 +8,10 @@ import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.Stickool;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -36,6 +39,10 @@ public final class InGame implements Scene {
      * Creates a new in-game scene.
      */
     InGame() {
+        final Equippable initialWeapon = new Stickool();
+        player.addItemToInventory(initialWeapon);
+        player.equipItem(initialWeapon);
+
         // Add entity for testing purposes
         new StaticDissonanceEntity(new Offset(14, 9), map);
         new StaticDissonanceEntity(new Offset(15, 10), map);

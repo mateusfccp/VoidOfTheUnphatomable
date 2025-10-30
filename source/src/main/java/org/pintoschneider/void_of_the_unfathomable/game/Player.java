@@ -12,8 +12,8 @@ import java.util.*;
  */
 public final class Player {
     private static final int maximumHealth = 100;
-    private static final int baseAttackPower = 5;
-    private static final int baseDefensePower = 1;
+    private static final int baseAttack = 5;
+    private static final int baseDefense = 0;
     private static final int baseCreativity = 1;
 
     private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
@@ -67,8 +67,8 @@ public final class Player {
      *
      * @return The player's attack power.
      */
-    public int attackPower() {
-        return baseAttackPower + equippedItems.values().stream()
+    public int attack() {
+        return baseAttack + equippedItems.values().stream()
             .mapToInt(Equippable::attackModifier)
             .sum();
     }
@@ -78,8 +78,8 @@ public final class Player {
      *
      * @return The player's defense power.
      */
-    public int defensePower() {
-        return baseDefensePower + equippedItems.values().stream()
+    public int defense() {
+        return baseDefense + equippedItems.values().stream()
             .mapToInt(Equippable::defenseModifier)
             .sum();
     }
@@ -119,7 +119,7 @@ public final class Player {
      * @param damage The amount of damage to inflict
      */
     public void damage(int damage) {
-        final int defendedDamage = Math.max(1, damage - defensePower());
+        final int defendedDamage = Math.max(1, damage - defense());
         setCurrentHealth(currentHealth - defendedDamage);
     }
 
@@ -278,6 +278,16 @@ public final class Player {
      */
     public void equipItem(Equippable item) {
         equippedItems.put(item.slot(), item);
+    }
+
+    /**
+     * Gets the equipped item in the specified slot.
+     *
+     * @param slot The slot to check for an equipped item.
+     * @return The equipped item in the specified slot, or null if no item is equipped.
+     */
+    public Equippable equippedItem(EquippableSlot slot) {
+        return equippedItems.get(slot);
     }
 
     /**
