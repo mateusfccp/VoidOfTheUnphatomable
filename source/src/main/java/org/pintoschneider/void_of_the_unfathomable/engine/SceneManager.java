@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.game.engine;
+package org.pintoschneider.void_of_the_unfathomable.engine;
 
 import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
@@ -98,5 +98,11 @@ public final class SceneManager {
             stack.add(execution.scene());
         }
         return stack;
+    }
+}
+
+record SceneExecution(Scene scene, CompletableFuture<Object> future) {
+    SceneExecution(Scene scene) {
+        this(scene, new CompletableFuture<>());
     }
 }

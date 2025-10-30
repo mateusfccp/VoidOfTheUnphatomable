@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.game.engine;
+package org.pintoschneider.void_of_the_unfathomable.engine;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;

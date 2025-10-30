@@ -1,8 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
+import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
+import org.pintoschneider.void_of_the_unfathomable.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;

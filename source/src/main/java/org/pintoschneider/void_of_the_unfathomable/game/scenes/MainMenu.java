@@ -1,6 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
+import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Align;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.ConstrainedBox;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;

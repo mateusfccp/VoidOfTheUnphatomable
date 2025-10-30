@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
+import org.pintoschneider.void_of_the_unfathomable.engine.Key;
+import org.pintoschneider.void_of_the_unfathomable.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Box;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Column;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Padding;
