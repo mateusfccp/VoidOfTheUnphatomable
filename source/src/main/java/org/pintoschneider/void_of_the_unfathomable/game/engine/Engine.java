@@ -14,11 +14,13 @@ import java.io.PrintWriter;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class Engine implements AutoCloseable, Context {
     private static Engine context = null;
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
     private final PrintWriter writer = terminal.writer();
+    private final AtomicReference<Key> lastKey = new AtomicReference<>(null);
     private final SceneManager sceneManager;
     private final InputThread inputThread;
     private final UIThread uiThread;
@@ -65,6 +67,8 @@ public final class Engine implements AutoCloseable, Context {
 
     void tick() {
         if (sceneManager.hasScene()) {
+            sceneManager.currentScene().onUpdate(uiThread.deltaTime());
+            handleInput();
             refresh();
 
             synchronized (this) {
@@ -75,8 +79,16 @@ public final class Engine implements AutoCloseable, Context {
         }
     }
 
-    void processKey(Key key) {
-        sceneManager.currentScene().onKeyPress(key);
+    AtomicReference<Key> lastKey() {
+        return lastKey;
+    }
+
+    private void handleInput() {
+        final Key keyToProcess = lastKey.getAndSet(null);
+
+        if (keyToProcess != null) {
+            sceneManager.currentScene().onKeyPress(keyToProcess);
+        }
     }
 
     private void refresh() {
@@ -132,18 +144,6 @@ public final class Engine implements AutoCloseable, Context {
     @Override
     public Size size() {
         return terminalSize;
-    }
-
-    @Override
-    public long waitTick() throws InterruptedException {
-        final long observed = uiThread.tickCount();
-        synchronized (this) {
-            while (uiThread.tickCount() == observed) {
-                this.wait();
-            }
-        }
-
-        return uiThread.deltaTime();
     }
 
     @Override
@@ -225,7 +225,7 @@ final class InputThread extends Thread {
                         if (result > 0) {
                             // CSI sequence
                             final Key key = Key.parse(buffer.array());
-                            engine.processKey(key);
+                            engine.lastKey().set(key);
                             buffer.clear();
                             continue;
                         }
@@ -235,7 +235,7 @@ final class InputThread extends Thread {
                 for (char ch : buffer.array()) {
                     if (ch != 0) {
                         final Key key = Key.parse(new char[]{ch});
-                        engine.processKey(key);
+                        engine.lastKey().set(key);
                     }
                 }
 

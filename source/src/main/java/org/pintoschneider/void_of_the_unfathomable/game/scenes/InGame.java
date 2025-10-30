@@ -17,7 +17,6 @@ import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
@@ -28,12 +27,17 @@ import java.util.concurrent.CompletableFuture;
 public final class InGame implements Scene {
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
-    static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
     private final Map map = new Map();
     private final Player player = new Player();
     private final Entity<Player> playerEntity = new PlayerEntity(new Offset(4, 4), player, map);
-    boolean processingTurn = false;
     private Offset mapOffset = Offset.ZERO;
+
+    // Turn-related variables
+    static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
+    private boolean processingTurn = false;
+    private long timeSinceLastTurnStep = 0;
+    private Boolean lastStepResult = null;
+    final Queue<TurnStep> turnSteps = new ArrayDeque<>();
 
     /**
      * Creates a new in-game scene.
@@ -109,66 +113,56 @@ public final class InGame implements Scene {
 
         if (key == Key.UP) {
             playerEntity.moveBy(verticalOffset.multiply(-1));
-            processTurn();
+            startTurnProcessing();
         } else if (key == Key.DOWN) {
             playerEntity.moveBy(verticalOffset);
-            processTurn();
+            startTurnProcessing();
         } else if (key == Key.LEFT) {
             playerEntity.moveBy(horizontalOffset.multiply(-1));
-            processTurn();
+            startTurnProcessing();
         } else if (key == Key.RIGHT) {
             playerEntity.moveBy(horizontalOffset);
-            processTurn();
+            startTurnProcessing();
         } else if (key == Key.I) {
             final CompletableFuture<Boolean> didConsumeItem = Engine.context().sceneManager().push(new Inventory(player));
             didConsumeItem.thenAccept(consumed -> {
                 if (consumed) {
-                    processTurn();
+                    startTurnProcessing();
                 }
             });
         }
     }
 
-    private void processTurn() {
+    @Override
+    public void onUpdate(long deltaTime) {
+        if (!processingTurn) return;
+
+        if (turnSteps.isEmpty()) {
+            processingTurn = false;
+            return;
+        }
+
+        timeSinceLastTurnStep = timeSinceLastTurnStep + deltaTime;
+
+        if (timeSinceLastTurnStep > turnStepInterval) { // 1 second
+            timeSinceLastTurnStep = timeSinceLastTurnStep - turnStepInterval;
+
+            final TurnStep step = turnSteps.poll();
+
+            assert step != null;
+            lastStepResult = step.execute(lastStepResult);
+        }
+    }
+
+    private void startTurnProcessing() {
         if (processingTurn) return;
 
         processingTurn = true;
-
-        // We first have to generate a list of all steps to process
-        final Queue<TurnStep> steps = new ArrayDeque<>();
+        timeSinceLastTurnStep = 0;
 
         for (final Entity<?> entity : map.entities()) {
             final List<TurnStep> enemyTurnSteps = entity.processTurn();
-            steps.addAll(enemyTurnSteps);
-        }
-
-        // For visual purposes, each turn step is processed in a fixed time interval
-        long time = 0;
-        Boolean lastStepResult = null;
-        try {
-            while (!steps.isEmpty()) {
-                final long deltaTime;
-                deltaTime = Engine.context().waitTick();
-
-                time = time + deltaTime;
-
-                if (time > turnStepInterval) { // 1 second
-                    time = time - turnStepInterval;
-
-                    final TurnStep step = steps.poll();
-
-                    assert step != null;
-                    lastStepResult = step.execute(lastStepResult);
-                }
-            }
-        } catch (InterruptedException exception) {
-            System.err.printf(
-                "Turn processing interrupted:%s%n%s%n",
-                exception.getMessage(),
-                Arrays.toString(exception.getStackTrace())
-            );
-        } finally {
-            processingTurn = false;
+            turnSteps.addAll(enemyTurnSteps);
         }
     }
 

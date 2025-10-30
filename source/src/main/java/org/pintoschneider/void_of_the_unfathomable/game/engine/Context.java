@@ -33,11 +33,4 @@ public interface Context {
      * @return The size of the game window.
      */
     Size size();
-
-    /**
-     * Waits for the next engine tick and returns the delta time waited in nanoseconds.
-     *
-     * @return The delta time waited in nanoseconds.
-     */
-    long waitTick() throws InterruptedException;
 }
