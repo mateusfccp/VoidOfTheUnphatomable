@@ -3,7 +3,6 @@ package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.engine.Key;
-import org.pintoschneider.void_of_the_unfathomable.game.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
@@ -21,9 +20,8 @@ import java.util.stream.IntStream;
 /**
  * A scene representing the player's inventory, allowing them to view and interact with their items.
  */
-public class Inventory implements Scene {
+public class Inventory extends SelectionScene {
     private final Player player;
-    private int currentIndex = 0;
 
     /**
      * Constructs an Inventory scene for the given player.
@@ -32,6 +30,16 @@ public class Inventory implements Scene {
      */
     public Inventory(Player player) {
         this.player = player;
+    }
+
+    @Override
+    List<Option> options() {
+        final List<ItemGroup> groups = groupedItems();
+
+        return IntStream
+            .range(0, groups.size())
+            .mapToObj(this::getOptionForIndex)
+            .toList();
     }
 
     @Override
@@ -48,15 +56,7 @@ public class Inventory implements Scene {
                     )
                 );
         } else {
-            final List<ItemGroup> groups = groupedItems();
-
-            final Component[] items = IntStream
-                .range(0, groups.size())
-                .mapToObj(this::getComponentForIndex)
-                .toArray(Component[]::new);
-
-            content = new Column(items)
-                .mainAxisSize(MainAxisSize.MIN);
+            content = super.build();
         }
 
         return new Padding(
@@ -72,13 +72,7 @@ public class Inventory implements Scene {
                     new Row(
                         new ConstrainedBox(
                             new Constraints(40, null, 20, null),
-                            new Box(
-                                Border.SINGLE_ROUNDED,
-                                new Padding(
-                                    EdgeInsets.all(1),
-                                    content
-                                )
-                            )
+                            content
                         ),
                         new ConstrainedBox(
                             new Constraints(16, null, 20, null),
@@ -136,36 +130,9 @@ public class Inventory implements Scene {
     public void onKeyPress(Key key) {
         if (key == Key.I || key == Key.ENTER && player.inventory().isEmpty()) {
             Engine.context().sceneManager().pop(false);
-            return;
         }
 
-        final List<ItemGroup> groups = groupedItems();
-        if (groups.isEmpty()) return;
-
-        if (key == Key.UP) {
-            currentIndex = (currentIndex - 1 + groups.size()) % groups.size();
-        } else if (key == Key.DOWN) {
-            currentIndex = (currentIndex + 1) % groups.size();
-        } else if (key == Key.ENTER) {
-            final Item selectedItem = getSelectedItem();
-
-            switch (selectedItem) {
-                case Consumable item -> {
-                    player.useItem(item);
-                    Engine.context().sceneManager().pop(true);
-                }
-                case Equippable equippable -> {
-                    if (player.equippedItem(equippable.slot()) == equippable) {
-                        player.unequipItem(equippable.slot());
-                    } else {
-                        player.equipItem(equippable);
-                    }
-                }
-                case null, default -> {
-                    // Do nothing
-                }
-            }
-        }
+        super.onKeyPress(key);
     }
 
     private Item getSelectedItem() {
@@ -173,34 +140,41 @@ public class Inventory implements Scene {
         if (groups.isEmpty()) {
             return null;
         } else {
-            return groups.get(currentIndex).item;
+            return groups.get(currentIndex()).item;
         }
     }
 
-    private Component getComponentForIndex(int index) {
+    private SelectionScene.Option getOptionForIndex(int index) {
         final List<ItemGroup> groups = groupedItems();
         final ItemGroup group = groups.get(index);
-        final boolean isCurrent = index == currentIndex;
         final boolean isKey = !(group.item instanceof Consumable) && !(group.item instanceof Equippable);
-        final Paint paint;
-
-        if (isCurrent) {
-            paint = Paint.INVERTED;
-        } else if (isKey) {
-            paint = Paint.DIM;
-        } else {
-            paint = null;
-        }
-
-        String displayName = group.item.name();
-        if (isGroupEquipped(group)) {
-            displayName += " (E)";
-        }
-
-        return new Text(
-            "%s x%d".formatted(displayName, group.count),
-            paint
+        final String suffix = isGroupEquipped(group) ? "(E)" : "   ";
+        return new Option(
+            "%s %s x%d".formatted(group.item.name(), suffix, group.count),
+            this::processSelectedItem,
+            !isKey
         );
+    }
+
+    private void processSelectedItem() {
+        final Item selectedItem = getSelectedItem();
+
+        switch (selectedItem) {
+            case Consumable item -> {
+                player.useItem(item);
+                Engine.context().sceneManager().pop(true);
+            }
+            case Equippable equippable -> {
+                if (player.equippedItem(equippable.slot()) == equippable) {
+                    player.unequipItem(equippable.slot());
+                } else {
+                    player.equipItem(equippable);
+                }
+            }
+            case null, default -> {
+                // Do nothing
+            }
+        }
     }
 
     private boolean isGroupEquipped(ItemGroup group) {
