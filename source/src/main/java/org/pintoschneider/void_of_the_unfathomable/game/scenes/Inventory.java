@@ -287,7 +287,7 @@ class EquippableDifference extends Composent {
 
         return new Row(
             new Text("%d".formatted(originalValue), oldValuePaint),
-            new Text(" -> ", Paint.DIM),
+            new Text(" → ", Paint.DIM),
             new Text("%d".formatted(newValue), newValuePaint)
         );
     }
