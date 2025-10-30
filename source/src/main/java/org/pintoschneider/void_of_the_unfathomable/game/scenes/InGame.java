@@ -20,6 +20,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The in-game scene where the player can explore the map and interact with the game world.
@@ -119,7 +120,12 @@ public final class InGame implements Scene {
             playerEntity.moveBy(horizontalOffset);
             processTurn();
         } else if (key == Key.I) {
-            Engine.context().sceneManager().push(new Inventory(player));
+            final CompletableFuture<Boolean> didConsumeItem = Engine.context().sceneManager().push(new Inventory(player));
+            didConsumeItem.thenAccept(consumed -> {
+                if (consumed) {
+                    processTurn();
+                }
+            });
         }
     }
 

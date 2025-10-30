@@ -135,7 +135,7 @@ public class Inventory implements Scene {
     @Override
     public void onKeyPress(Key key) {
         if (key == Key.I || key == Key.ENTER && player.inventory().isEmpty()) {
-            Engine.context().sceneManager().pop();
+            Engine.context().sceneManager().pop(false);
             return;
         }
 
@@ -150,7 +150,10 @@ public class Inventory implements Scene {
             final Item selectedItem = getSelectedItem();
 
             switch (selectedItem) {
-                case Consumable item -> player.useItem(item);
+                case Consumable item -> {
+                    player.useItem(item);
+                    Engine.context().sceneManager().pop(true);
+                }
                 case Equippable equippable -> {
                     if (player.equippedItem(equippable.slot()) == equippable) {
                         player.unequipItem(equippable.slot());
