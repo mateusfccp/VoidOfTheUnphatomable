@@ -12,7 +12,7 @@ public final class Main {
 
     static void main() throws IOException {
         if (debugMode) {
-            try (final DebugLogger _ = new DebugLogger()) {
+            try (final DebugLogger ignored = new DebugLogger()) {
                 run();
             } catch (IOException exception) {
                 System.err.printf(

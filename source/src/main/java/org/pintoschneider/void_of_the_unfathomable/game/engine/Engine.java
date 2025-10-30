@@ -30,7 +30,7 @@ public final class Engine implements AutoCloseable, Context {
         terminal.enterRawMode();
 
         // Register a signal handler for window resize events
-        terminal.handle(Terminal.Signal.WINCH, _ -> updateTerminalSize());
+        terminal.handle(Terminal.Signal.WINCH, signal -> updateTerminalSize());
 
         terminal.puts(Capability.cursor_invisible);
 

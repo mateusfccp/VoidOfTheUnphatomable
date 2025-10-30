@@ -22,8 +22,6 @@ public class OverflowException extends UIException {
      * @param offset    The offset at which the overflow occurred.
      */
     public OverflowException(Component component, Offset offset) {
-        this.component = Objects.requireNonNull(component);
-        this.offset = Objects.requireNonNull(offset);
         super(
             "Component %s overflowed at offset %s. Expected to be within %s".formatted(
                 component,
@@ -31,6 +29,8 @@ public class OverflowException extends UIException {
                 component.size()
             )
         );
+        this.component = Objects.requireNonNull(component);
+        this.offset = Objects.requireNonNull(offset);
     }
 
     /**

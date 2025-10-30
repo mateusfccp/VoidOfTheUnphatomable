@@ -1,6 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.engine;
 
 import java.util.Stack;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -12,7 +13,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * When the last scene is popped, the engine should terminate.
  */
 public final class SceneManager {
-    private final ConcurrentLinkedDeque<Scene> scenes;
+    private final ConcurrentLinkedDeque<SceneExecution> scenes;
 
     /**
      * Creates a new SceneManager with the specified initial scene.
@@ -21,7 +22,8 @@ public final class SceneManager {
      */
     public SceneManager(Scene initialScene) {
         scenes = new ConcurrentLinkedDeque<>();
-        scenes.push(initialScene);
+        final SceneExecution execution = new SceneExecution(initialScene);
+        scenes.push(execution);
     }
 
     /**
@@ -32,7 +34,7 @@ public final class SceneManager {
      * @return The current active scene.
      */
     public Scene currentScene() {
-        return scenes.peek();
+        return scenes.peek().scene();
     }
 
     /**
@@ -51,10 +53,14 @@ public final class SceneManager {
      * Pushes a new scene onto the stack, making it the current active scene.
      *
      * @param scene The scene to be pushed onto the stack.
+     * @return a {@link CompletableFuture} that will be completed when the scene is popped.
      */
-    public void push(Scene scene) {
-        scenes.push(scene);
+    @SuppressWarnings("unchecked")
+    public <T> CompletableFuture<T> push(Scene scene) {
+        final SceneExecution execution = new SceneExecution(scene);
+        scenes.push(execution);
         scene.onEnter();
+        return (CompletableFuture<T>) execution.future();
     }
 
     /**
@@ -64,8 +70,21 @@ public final class SceneManager {
      * scene.
      */
     public void pop() {
-        final Scene currentScene = scenes.pop();
-        currentScene.dispose();
+        pop(null);
+    }
+
+    /**
+     * Pops the current active scene from the stack.
+     * <p>
+     * The popped scene is disposed of to free up resources, and the next scene in the stack becomes the current active
+     * scene.
+     *
+     * @param result The result to be passed to the waiting call-site.
+     */
+    public void pop(Object result) {
+        final SceneExecution execution = scenes.pop();
+        execution.scene().dispose();
+        execution.future().complete(result);
     }
 
     /**
@@ -75,7 +94,9 @@ public final class SceneManager {
      */
     public Stack<Scene> scenes() {
         final Stack<Scene> stack = new Stack<>();
-        stack.addAll(scenes);
+        for (SceneExecution execution : scenes) {
+            stack.add(execution.scene());
+        }
         return stack;
     }
 }

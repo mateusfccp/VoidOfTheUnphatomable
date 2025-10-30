@@ -27,7 +27,7 @@ public final class StairEntity extends Entity<Void> {
             Engine.context().sceneManager().push(
                 new DialogScene(
                     "You still don't have the Resounding Core, but you still decides to flee The Void for now. You feel a brief moment of relief as you ascend back to the surface, but you know that any hope for the world is now lost. The Void will continue to spread, consuming everything in its path. COWARD.",
-                    _ -> Engine.context().sceneManager().pop()
+                    c -> Engine.context().sceneManager().pop()
                 )
             );
         }

@@ -27,11 +27,11 @@ public class Flexible extends DataComponent {
      * @param child The child component to be made flexible.
      */
     public Flexible(int flex, Component child) {
-        assert flex > 0 : "Flexible requires a positive flex value.";
-
         super(
             new FlexibleData(flex),
             Objects.requireNonNull(child, "Flexible requires a non-null child.")
         );
+
+        assert flex > 0 : "Flexible requires a positive flex value.";
     }
 }

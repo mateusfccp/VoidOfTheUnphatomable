@@ -7,6 +7,11 @@ application {
     mainClass.set("org.pintoschneider.void_of_the_unfathomable.Main")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 group = "org.pintoschneider.void_of_the_unfathomable"
 version = "1.0-SNAPSHOT"
 
