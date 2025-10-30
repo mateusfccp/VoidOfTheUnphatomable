@@ -5,5 +5,4 @@ package org.pintoschneider.void_of_the_unfathomable.ui.components;
  *
  * @param flex The flex factor.
  */
-public record FlexibleData(int flex) {
-}
+public record FlexibleData(int flex) {}
