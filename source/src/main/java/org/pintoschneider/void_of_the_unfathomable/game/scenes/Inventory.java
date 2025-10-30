@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /**
@@ -68,13 +69,53 @@ public class Inventory implements Scene {
                         new Text("Inventario")
                     ),
                     new SizedBox(0, 1),
-                    new ConstrainedBox(
-                        new Constraints(40, null, 20, null),
-                        new Box(
-                            Border.SINGLE_ROUNDED,
-                            new Padding(
-                                EdgeInsets.all(1),
-                                content
+                    new Row(
+                        new ConstrainedBox(
+                            new Constraints(40, null, 20, null),
+                            new Box(
+                                Border.SINGLE_ROUNDED,
+                                new Padding(
+                                    EdgeInsets.all(1),
+                                    content
+                                )
+                            )
+                        ),
+                        new ConstrainedBox(
+                            new Constraints(16, null, 20, null),
+                            new Box(
+                                Border.SINGLE_ROUNDED,
+                                new Padding(
+                                    EdgeInsets.all(1),
+                                    new Column(
+                                        new Text("Atk:", Paint.BOLD),
+                                        new SizedBox(0, 1),
+                                        new EquippableDifference(
+                                            player,
+                                            Player::attack,
+                                            getSelectedItem(),
+                                            Equippable::attackModifier
+                                        ),
+                                        new SizedBox(0, 2),
+                                        new Text("Def:", Paint.BOLD),
+                                        new SizedBox(0, 1),
+                                        new EquippableDifference(
+                                            player,
+                                            Player::defense,
+                                            getSelectedItem(),
+                                            Equippable::defenseModifier
+                                        ),
+                                        new SizedBox(0, 2),
+                                        new Text("Crt:", Paint.BOLD),
+                                        new SizedBox(0, 1),
+                                        new EquippableDifference(
+                                            player,
+                                            Player::creativity,
+                                            getSelectedItem(),
+                                            Equippable::creativityModifier
+                                        )
+                                    ).
+                                        mainAxisSize(MainAxisSize.MIN)
+                                )
                             )
                         )
                     ),
@@ -199,5 +240,55 @@ public class Inventory implements Scene {
         void count() {
             count = count + 1;
         }
+    }
+}
+
+class EquippableDifference extends Composent {
+    final Player player;
+    final Function<Player, Integer> playerAttributeGetter;
+    final Item item;
+    final Function<Equippable, Integer> equippableModifierGetter;
+
+    EquippableDifference(
+        Player player,
+        Function<Player, Integer> playerAttributeGetter,
+        Item item,
+        Function<Equippable, Integer> equippableModifierGetter
+    ) {
+        this.player = player;
+        this.item = item;
+        this.equippableModifierGetter = equippableModifierGetter;
+        this.playerAttributeGetter = playerAttributeGetter;
+    }
+
+    @Override
+    public Component build() {
+        final int originalValue = playerAttributeGetter.apply(player);
+
+        if (!(item instanceof Equippable equippable)) {
+            return new Text("%d".formatted(originalValue), Paint.DIM);
+        }
+
+        final boolean isEquipped = player.equippedItem(equippable.slot()) == equippable;
+
+        final int newValue = originalValue + equippableModifierGetter.apply(equippable) * (isEquipped ? -1 : 1);
+
+        final boolean hasDifference = originalValue != newValue;
+        final Paint oldValuePaint = hasDifference ? null : Paint.DIM;
+        final Paint newValuePaint;
+
+        if (newValue > originalValue) {
+            newValuePaint = new Paint().withForegroundColor(Color.GREEN);
+        } else if (newValue < originalValue) {
+            newValuePaint = new Paint().withForegroundColor(Color.RED);
+        } else {
+            newValuePaint = Paint.DIM;
+        }
+
+        return new Row(
+            new Text("%d".formatted(originalValue), oldValuePaint),
+            new Text(" -> ", Paint.DIM),
+            new Text("%d".formatted(newValue), newValuePaint)
+        );
     }
 }

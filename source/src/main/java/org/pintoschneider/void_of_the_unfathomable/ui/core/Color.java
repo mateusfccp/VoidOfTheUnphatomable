@@ -9,7 +9,8 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
  */
 public record Color(short red, short green, short blue) {
 
-    static final Color RED = new Color((short) 255, (short) 0, (short) 0);
+    public static final Color RED = new Color((short) 255, (short) 0, (short) 0);
+    public static final Color GREEN = new Color((short) 0, (short) 255, (short) 0);
 
     /**
      * Creates a new Color with the specified red component.
