@@ -49,7 +49,7 @@ public final class SizedBox extends Component {
 
     @Override
     public void layout(Constraints constraints) {
-        size = constraints.enforce(Constraints.tight(boxSize)).biggest();
+        size = constraints.constrain(boxSize);
 
         if (child != null) {
             final Constraints childConstraints = Constraints.loose(boxSize.width(), boxSize.height());
