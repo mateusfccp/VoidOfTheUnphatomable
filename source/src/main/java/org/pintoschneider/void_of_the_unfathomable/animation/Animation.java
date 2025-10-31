@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.core;
+package org.pintoschneider.void_of_the_unfathomable.animation;
 
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.engine.Ticker;

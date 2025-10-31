@@ -239,13 +239,13 @@ public final class Map {
      * @param <T>  The type of the associated object of the entities.
      * @return A list of all entities of the specified type on the map.
      */
-    public <T> List<Entity<T>> entitiesOfType(Class<T> type) {
-        final List<Entity<T>> result = new ArrayList<>();
+    public <T extends Entity<?>> List<T> entitiesOfType(Class<T> type) {
+        final List<T> result = new ArrayList<>();
 
         for (Entity<?> entity : entities) {
-            if (type.isInstance(entity.associatedObject())) {
+            if (type.isInstance(entity)) {
                 //noinspection unchecked
-                result.add((Entity<T>) entity);
+                result.add((T) entity);
             }
         }
 

@@ -1,6 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
-import org.pintoschneider.void_of_the_unfathomable.core.Animation;
+import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
@@ -12,6 +12,7 @@ import java.time.Duration;
 
 public final class PlayerEntity extends Entity<Player> {
     final Animation animation = new Animation(Duration.ofMillis(200));
+    private static final Color damageColor = new Color(237, 119, 90);
 
     public PlayerEntity(Offset position, Player associatedObject, Map map) {
         super(position, associatedObject, map);
@@ -24,12 +25,7 @@ public final class PlayerEntity extends Entity<Player> {
 
     @Override
     public Paint paint() {
-        // Color based on animation progress
-        final double progress = animation.progress();
-        final short r = 255;
-        final short g = (short) (255 * progress);
-        final short b = (short) (255 * progress);
-        final Color color = new Color(r, g, b);
+        final Color color = animation.playing() ? Color.lerp(damageColor, Color.WHITE, animation.progress()) : Color.WHITE;
         return new Paint().withForegroundColor(color);
     }
 

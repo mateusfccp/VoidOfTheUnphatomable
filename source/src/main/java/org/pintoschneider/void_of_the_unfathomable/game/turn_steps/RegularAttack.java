@@ -24,16 +24,14 @@ public final class RegularAttack<T extends Enemy> implements TurnStep {
 
     @Override
     public boolean execute(Boolean lastTurnResult) {
-        final Entity<Player> playerEntity = entity.map().entitiesOfType(Player.class).getFirst();
+        final PlayerEntity playerEntity = entity.map().entitiesOfType(PlayerEntity.class).getFirst();
 
         assert entity.distanceTo(playerEntity) == 1 : "Entity must be adjacent to the player to perform a regular attack.";
 
         final Player player = playerEntity.associatedObject();
         final Enemy enemy = entity.associatedObject();
         player.damage(enemy.attack());
-        ((PlayerEntity) playerEntity).playDamageAnimation();
-
-        System.out.printf("%s attacks the player for %d damage.%n", enemy.name(), enemy.attack());
+        playerEntity.playDamageAnimation();
 
         return true;
     }
