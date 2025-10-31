@@ -189,15 +189,6 @@ public final class Map {
             }
         }
 
-        for (Entity<?> entity : entities) {
-            final int ex = entity.position().dx();
-            final int ey = entity.position().dy();
-
-            if (ex >= 0 && ex < width && ey >= 0 && ey < height) {
-                charArray[ex][ey] = entity.representation();
-            }
-        }
-
         return charArray;
     }
 

@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.turn_steps;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.Enemy;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
+import org.pintoschneider.void_of_the_unfathomable.game.entities.PlayerEntity;
 
 /**
  * A {@link TurnStep} that performs a regular attack by an entity on the player.
@@ -29,7 +30,8 @@ public final class RegularAttack<T extends Enemy> implements TurnStep {
 
         final Player player = playerEntity.associatedObject();
         final Enemy enemy = entity.associatedObject();
-        player.damage(enemy.attack()); // TODO(mateusfccp): Consider player defense
+        player.damage(enemy.attack());
+        ((PlayerEntity) playerEntity).playDamageAnimation();
 
         System.out.printf("%s attacks the player for %d damage.%n", enemy.name(), enemy.attack());
 

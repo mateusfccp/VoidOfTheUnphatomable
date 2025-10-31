@@ -1,12 +1,12 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.game.Player;
-import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.engine.Context;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.engine.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;

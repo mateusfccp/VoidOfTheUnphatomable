@@ -12,9 +12,13 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.CharBuffer;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 public final class Engine implements AutoCloseable, Context {
     private static Engine context = null;
@@ -24,6 +28,7 @@ public final class Engine implements AutoCloseable, Context {
     private final SceneManager sceneManager;
     private final InputThread inputThread;
     private final UIThread uiThread;
+    private final List<_EngineTicker> tickers = new ArrayList<>();
     private Size terminalSize;
     private boolean running = true;
 
@@ -67,6 +72,12 @@ public final class Engine implements AutoCloseable, Context {
 
     void tick() {
         if (sceneManager.hasScene()) {
+            for (_EngineTicker ticker : new ArrayList<>(tickers)) {
+                if (ticker.active) {
+                    ticker.onTick.accept(Duration.ofNanos(uiThread.deltaTime()));
+                }
+            }
+
             sceneManager.currentScene().onUpdate(uiThread.deltaTime());
             handleInput();
             refresh();
@@ -147,9 +158,30 @@ public final class Engine implements AutoCloseable, Context {
     }
 
     @Override
+    public Ticker createTicker(Consumer<Duration> onTick) {
+        return new _EngineTicker(onTick);
+    }
+
+    @Override
     public void close() throws IOException {
         inputThread.interrupt();
         terminal.close();
+    }
+
+    final class _EngineTicker implements Ticker {
+        private final Consumer<Duration> onTick;
+        private boolean active = true;
+
+        _EngineTicker(Consumer<Duration> onTick) {
+            this.onTick = onTick;
+            tickers.add(this);
+        }
+
+        @Override
+        public void dispose() {
+            tickers.remove(this);
+            active = false;
+        }
     }
 }
 

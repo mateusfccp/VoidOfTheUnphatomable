@@ -5,6 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.*;
 
@@ -40,6 +41,15 @@ public abstract class Entity<T> {
      * @return The character representation of the entity.
      */
     public abstract char representation();
+
+    /**
+     * Gets the paint used to render the entity.
+     *
+     * @return The paint used to render the entity.
+     */
+    public Paint paint() {
+        return null;
+    }
 
     /**
      * Gets the spatial property of the entity.

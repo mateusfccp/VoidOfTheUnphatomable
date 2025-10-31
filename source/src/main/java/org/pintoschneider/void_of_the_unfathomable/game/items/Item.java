@@ -11,13 +11,13 @@ public interface Item {
      *
      * @return The name of the item
      */
-    public String name();
+    String name();
 
     /**
      * Gets the description of the item.
      *
      * @return The description of the item
      */
-    public String description();
+    String description();
 }
 
