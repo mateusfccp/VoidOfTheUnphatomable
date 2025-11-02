@@ -20,15 +20,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
+    private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(1600));
     private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
 
     public StaticDissonanceEntity(Offset position, Map map) {
         super(position, new StaticDissonance(), map);
+        representationAnimation.play();
     }
 
     @Override
     public char representation() {
-        return '*';
+        final int frame = (int) (representationAnimation.progress() * 4);
+        return switch (frame) {
+            case 1, 3 -> '*';
+            case 2 -> '☼';
+            default -> '•';
+        };
     }
 
     @Override
@@ -89,5 +96,11 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
             drop(new FragmentOfNothingness(), dropQuantity);
             destroy();
         }
+    }
+
+    @Override
+    protected void dispose() {
+        damageAnimation.dispose();
+        representationAnimation.dispose();
     }
 }

@@ -253,7 +253,13 @@ public abstract class Entity<T> {
      */
     public void destroy() {
         map().removeEntity(this);
+        dispose();
     }
+
+    /**
+     * Disposes the entity and releases any resources associated with it.
+     */
+    protected void dispose() {}
 
     /**
      * A node used in the A* pathfinding algorithm.

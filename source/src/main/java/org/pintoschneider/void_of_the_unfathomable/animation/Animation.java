@@ -11,7 +11,7 @@ import java.time.Duration;
  * The animation tracks its progress from 0.0 to 1.0, where 0.0 means the animation has not started, and 1.0 means the
  * animation has completed.
  */
-public final class Animation {
+public class Animation {
     final private Ticker ticker;
     private final Duration duration;
     private boolean playing;
@@ -29,6 +29,10 @@ public final class Animation {
         progress = 0;
     }
 
+    public static Animation repeating(Duration duration) {
+        return new _RepeatingAnimation(duration);
+    }
+
     /**
      * Plays the animation from the beginning.
      */
@@ -38,7 +42,7 @@ public final class Animation {
         progress = 0;
     }
 
-    private void update(Duration duration) {
+    protected void update(Duration duration) {
         if (playing) {
             elapsedTime = elapsedTime.plus(duration);
             progress = (double) elapsedTime.toNanos() / this.duration.toNanos();
@@ -84,5 +88,19 @@ public final class Animation {
      */
     public void dispose() {
         ticker.dispose();
+    }
+}
+
+final class _RepeatingAnimation extends Animation {
+    public _RepeatingAnimation(Duration duration) {
+        super(duration);
+    }
+
+    @Override
+    protected void update(Duration duration) {
+        super.update(duration);
+        if (progress() >= 1.0) {
+            play();
+        }
     }
 }

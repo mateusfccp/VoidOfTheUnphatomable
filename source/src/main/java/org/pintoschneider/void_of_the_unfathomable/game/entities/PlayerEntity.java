@@ -39,4 +39,9 @@ public final class PlayerEntity extends Entity<Player> {
     public SpatialProperty spatialProperty() {
         return new SpatialProperty(false, false);
     }
+
+    @Override
+    protected void dispose() {
+        damageAnimation.dispose();
+    }
 }
