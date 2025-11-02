@@ -46,7 +46,7 @@ public final class Engine implements AutoCloseable, Context {
         // Start input thread using a dedicated class
         final NonBlockingReader reader = terminal.reader();
 
-        inputThread = new InputThread(this, reader);
+        inputThread = new InputThread(reader, lastKey);
         inputThread.setDaemon(true);
         inputThread.start();
 
@@ -88,10 +88,6 @@ public final class Engine implements AutoCloseable, Context {
         } else {
             stop();
         }
-    }
-
-    AtomicReference<Key> lastKey() {
-        return lastKey;
     }
 
     private void handleInput() {
@@ -224,119 +220,3 @@ final class Root extends Composent {
     }
 }
 
-/**
- * Reads input from the NonBlockingReader and puts key codes into a queue.
- */
-final class InputThread extends Thread {
-    private final NonBlockingReader reader;
-    private final Engine engine;
-
-    /**
-     * Creates an InputThread.
-     *
-     * @param engine The game engine to send input to.
-     * @param reader The NonBlockingReader to read input from.
-     */
-    InputThread(Engine engine, NonBlockingReader reader) {
-        this.engine = Objects.requireNonNull(engine);
-        this.reader = Objects.requireNonNull(reader);
-    }
-
-    @Override
-    public void run() {
-        try {
-            final CharBuffer buffer = CharBuffer.allocate(3);
-            while (!Thread.currentThread().isInterrupted()) {
-                int result = reader.read(buffer);
-                if (result > 0 && buffer.get(0) == 27) {
-                    // Possible start of an escape sequence
-                    result = reader.read(buffer);
-                    if (result > 0 && buffer.get(1) == 91) {
-                        result = reader.read(buffer);
-
-                        if (result > 0) {
-                            // CSI sequence
-                            final Key key = Key.parse(buffer.array());
-                            engine.lastKey().set(key);
-                            buffer.clear();
-                            continue;
-                        }
-                    }
-                }
-
-                for (char ch : buffer.array()) {
-                    if (ch != 0) {
-                        final Key key = Key.parse(new char[]{ch});
-                        engine.lastKey().set(key);
-                    }
-                }
-
-                buffer.clear();
-            }
-        } catch (IOException exception) {
-            System.err.printf(
-                "Exception caught in InputThread:%n%s%n%s%n",
-                exception.getMessage(),
-                Arrays.toString(exception.getStackTrace())
-            );
-        }
-    }
-}
-
-/**
- * A thread that runs the game UI, updating the engine at a fixed frames per second (FPS).
- */
-final class UIThread extends Thread {
-    private final Engine engine;
-    private final int fps;
-    private long lastNanoTime;
-    private volatile long tickCount = 0;
-    private volatile long deltaTime = 0;
-
-    /**
-     * Creates a UIThread.
-     *
-     * @param engine The game engine to update.
-     * @param fps    The target frames per second.
-     */
-    UIThread(Engine engine, int fps) {
-        this.engine = Objects.requireNonNull(engine);
-        this.fps = fps;
-    }
-
-    /**
-     * Returns the number of ticks that have occurred since the thread started.
-     *
-     * @return The tick count.
-     */
-    public long tickCount() {
-        return tickCount;
-    }
-
-    /**
-     * Returns the time in nanoseconds since the last tick.
-     *
-     * @return The delta time in nanoseconds.
-     */
-    public long deltaTime() {
-        return deltaTime;
-    }
-
-    @Override
-    public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            final long nanoSeconds = System.nanoTime();
-
-            if (nanoSeconds - lastNanoTime >= 1_000_000_000L / fps) {
-                deltaTime = nanoSeconds - lastNanoTime;
-                lastNanoTime = nanoSeconds;
-
-                synchronized (this) {
-                    tickCount++;
-                }
-
-                engine.tick();
-            }
-        }
-    }
-}
