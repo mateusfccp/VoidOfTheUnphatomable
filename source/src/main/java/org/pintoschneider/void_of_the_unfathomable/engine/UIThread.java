@@ -1,6 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.engine;
 
-import java.util.Objects; /**
+import java.util.Objects;
+
+/**
  * A thread that runs the game UI, updating the engine at a fixed frames per second (FPS).
  */
 public final class UIThread extends Thread {

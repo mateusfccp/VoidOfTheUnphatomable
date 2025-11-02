@@ -42,6 +42,21 @@ public record Color(short red, short green, short blue) {
     }
 
     /**
+     * Linearly interpolates between two colors.
+     *
+     * @param start The starting color.
+     * @param end   The ending color.
+     * @param t     The interpolation factor (0.0 to 1.0).
+     * @return The interpolated color.
+     */
+    public static Color lerp(Color start, Color end, double t) {
+        short r = (short) (start.red * (1.0 - t) + end.red * t);
+        short g = (short) (start.green * (1.0 - t) + end.green * t);
+        short b = (short) (start.blue * (1.0 - t) + end.blue * t);
+        return new Color(r, g, b);
+    }
+
+    /**
      * Creates a new Color with the specified red component.
      *
      * @param red The green component of the new color.
@@ -78,20 +93,5 @@ public record Color(short red, short green, short blue) {
      */
     int toInt() {
         return ((red & 0xFF) << 16) | ((green & 0xFF) << 8) | (blue & 0xFF);
-    }
-
-    /**
-     * Linearly interpolates between two colors.
-     *
-     * @param start The starting color.
-     * @param end   The ending color.
-     * @param t     The interpolation factor (0.0 to 1.0).
-     * @return The interpolated color.
-     */
-    public static Color lerp(Color start, Color end, double t) {
-        short r = (short) (start.red * (1.0 - t) + end.red * t);
-        short g = (short) (start.green * (1.0 - t) + end.green * t);
-        short b = (short) (start.blue * (1.0 - t) + end.blue * t);
-        return new Color(r, g, b);
     }
 }

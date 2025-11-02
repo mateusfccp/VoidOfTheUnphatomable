@@ -14,12 +14,12 @@ import java.util.concurrent.atomic.AtomicReference;
  * This version uses a state machine to correctly parse escape sequences.
  */
 final class InputThread extends Thread {
+    private static final int ESCAPE_CHAR = 27;
+    private static final int BRACKET_CHAR = 91;
     private final NonBlockingReader reader;
     private final AtomicReference<Key> lastKey;
     private final ArrayList<Character> sequenceBuffer = new ArrayList<>(3);
     private State currentState = State.NORMAL;
-    private static final int ESCAPE_CHAR = 27;
-    private static final int BRACKET_CHAR = 91;
 
     /**
      * Creates an InputThread.
