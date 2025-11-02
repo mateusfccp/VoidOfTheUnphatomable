@@ -31,7 +31,7 @@ public final class Engine implements AutoCloseable, Context {
     private boolean running = true;
 
     public Engine(Scene initialScene) throws IOException {
-        sceneManager = new SceneManager(Objects.requireNonNull(initialScene));
+        sceneManager = new SceneManager(Objects.requireNonNull(initialScene), this::stop);
         terminal.enterRawMode();
 
         // Register a signal handler for window resize events
@@ -69,22 +69,18 @@ public final class Engine implements AutoCloseable, Context {
     }
 
     void tick() {
-        if (sceneManager.hasScene()) {
-            for (_EngineTicker ticker : new ArrayList<>(tickers)) {
-                if (ticker.active) {
-                    ticker.onTick.accept(Duration.ofNanos(uiThread.deltaTime()));
-                }
+        for (_EngineTicker ticker : new ArrayList<>(tickers)) {
+            if (ticker.active) {
+                ticker.onTick.accept(Duration.ofNanos(uiThread.deltaTime()));
             }
+        }
 
-            sceneManager.currentScene().onUpdate(uiThread.deltaTime());
-            handleInput();
-            refresh();
+        sceneManager.currentScene().onUpdate(uiThread.deltaTime());
+        handleInput();
+        refresh();
 
-            synchronized (this) {
-                notifyAll();
-            }
-        } else {
-            stop();
+        synchronized (this) {
+            notifyAll();
         }
     }
 

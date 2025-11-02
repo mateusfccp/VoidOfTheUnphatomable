@@ -1,5 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.engine;
 
+import java.util.Deque;
 import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -13,17 +14,19 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * When the last scene is popped, the engine should terminate.
  */
 public final class SceneManager {
-    private final ConcurrentLinkedDeque<SceneExecution> scenes;
+    private final Runnable onDone;
+    private final Deque<SceneExecution> scenes = new ConcurrentLinkedDeque<>();
 
     /**
      * Creates a new SceneManager with the specified initial scene.
      *
      * @param initialScene The initial scene to be added to the manager.
      */
-    public SceneManager(Scene initialScene) {
-        scenes = new ConcurrentLinkedDeque<>();
+    public SceneManager(Scene initialScene, Runnable onDone) {
         final SceneExecution execution = new SceneExecution(initialScene);
         scenes.push(execution);
+
+        this.onDone = onDone;
     }
 
     /**
@@ -34,6 +37,7 @@ public final class SceneManager {
      * @return The current active scene.
      */
     public Scene currentScene() {
+        assert scenes.peek() != null;
         return scenes.peek().scene();
     }
 
@@ -85,6 +89,10 @@ public final class SceneManager {
         final SceneExecution execution = scenes.pop();
         execution.scene().dispose();
         execution.future().complete(result);
+
+        if (scenes.isEmpty()) {
+            onDone.run();
+        }
     }
 
     /**
