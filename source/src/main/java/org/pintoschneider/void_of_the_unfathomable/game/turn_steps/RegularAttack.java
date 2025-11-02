@@ -28,10 +28,8 @@ public final class RegularAttack<T extends Enemy> implements TurnStep {
 
         assert entity.distanceTo(playerEntity) == 1 : "Entity must be adjacent to the player to perform a regular attack.";
 
-        final Player player = playerEntity.associatedObject();
         final Enemy enemy = entity.associatedObject();
-        player.damage(enemy.attack());
-        playerEntity.playDamageAnimation();
+        playerEntity.damage(enemy.attack());
 
         return true;
     }

@@ -1,6 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
+import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.Colors;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.StaticDissonance;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
@@ -10,11 +12,16 @@ import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.DoIfLastStepS
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.MoveTowardsPlayer;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.RegularAttack;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Color;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
+    private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
+
     public StaticDissonanceEntity(Offset position, Map map) {
         super(position, new StaticDissonance(), map);
     }
@@ -22,6 +29,12 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
     @Override
     public char representation() {
         return '*';
+    }
+
+    @Override
+    public Paint paint() {
+        final Color color = damageAnimation.playing() ? Color.lerp(Colors.DAMAGE, Color.WHITE, damageAnimation.progress()) : Color.WHITE;
+        return new Paint().withForegroundColor(color);
     }
 
     @Override
@@ -33,13 +46,7 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity playerEntity) {
             final Player player = playerEntity.associatedObject();
-            this.associatedObject().damage(player.attack());
-
-            if (this.associatedObject().health() == 0) {
-                final int dropQuantity = 1 + (int) (Math.random() * 2);
-                drop(new FragmentOfNothingness(), dropQuantity);
-                destroy();
-            }
+            damage(player.attack());
         }
     }
 
@@ -71,5 +78,16 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
         }
 
         return steps;
+    }
+
+    private void damage(int amount) {
+        this.associatedObject().damage(amount);
+        damageAnimation.play();
+
+        if (this.associatedObject().health() == 0) {
+            final int dropQuantity = 1 + (int) (Math.random() * 2);
+            drop(new FragmentOfNothingness(), dropQuantity);
+            destroy();
+        }
     }
 }
