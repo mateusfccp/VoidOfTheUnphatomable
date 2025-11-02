@@ -11,6 +11,6 @@ package org.pintoschneider.void_of_the_unfathomable.game.enemies;
  */
 public final class StaticDissonance extends Enemy {
     public StaticDissonance() {
-        super("Disonancia Estática", 10, 1, 1);
+        super("Disonancia Estática", 10, 2, 1);
     }
 }
