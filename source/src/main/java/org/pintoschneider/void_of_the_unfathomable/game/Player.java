@@ -272,6 +272,22 @@ public final class Player {
     }
 
     /**
+     * Checks if the player has an item of the specified type in their inventory.
+     *
+     * @param itemType The class type of the item to check for.
+     * @return True if the player has an item of the specified type, false otherwise.
+     */
+    public boolean hasItemOfType(Class<? extends Item> itemType) {
+        for (Item item : inventory) {
+            if (itemType.isInstance(item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Equips an equippable item to the player.
      *
      * @param item The equippable item to equip.

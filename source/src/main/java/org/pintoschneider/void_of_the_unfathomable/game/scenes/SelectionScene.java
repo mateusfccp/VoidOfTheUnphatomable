@@ -49,31 +49,12 @@ public abstract class SelectionScene implements Scene {
 
         final Component[] items = IntStream
             .range(0, options.size())
-            .mapToObj(this::buildOption)
+            .mapToObj(i -> options.get(i).toComponent(i == currentIndex))
             .toArray(Component[]::new);
 
         return new Column(items)
             .crossAxisAlignment(alignment())
             .mainAxisSize(MainAxisSize.MIN);
-    }
-
-    private Component buildOption(int index) {
-        final Option option = options().get(index);
-        final boolean isCurrent = index == currentIndex;
-        final Paint paint;
-
-        if (isCurrent) {
-            paint = Paint.INVERTED;
-        } else if (!option.enabled()) {
-            paint = Paint.DIM;
-        } else {
-            paint = null;
-        }
-
-        return new Text(
-            option.label(),
-            paint
-        );
     }
 
     @Override
@@ -123,7 +104,7 @@ public abstract class SelectionScene implements Scene {
          *
          * @param label The label of the option.
          */
-        Option(String label) {
+        public Option(String label) {
             this(label, () -> {}, false);
         }
 
@@ -133,8 +114,22 @@ public abstract class SelectionScene implements Scene {
          * @param label    The label of the option.
          * @param onSelect The action to perform when the option is selected.
          */
-        Option(String label, Runnable onSelect) {
+        public Option(String label, Runnable onSelect) {
             this(label, onSelect, true);
+        }
+
+        private Component toComponent(boolean isCurrent) {
+            final Paint paint;
+
+            if (isCurrent) {
+                paint = Paint.INVERTED;
+            } else if (!enabled) {
+                paint = Paint.DIM;
+            } else {
+                paint = null;
+            }
+
+            return new Text(label, paint);
         }
     }
 }
