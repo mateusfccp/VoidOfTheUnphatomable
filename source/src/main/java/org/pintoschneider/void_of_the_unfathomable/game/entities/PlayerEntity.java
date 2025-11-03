@@ -2,7 +2,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.game.Colors;
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
@@ -25,7 +25,7 @@ public final class PlayerEntity extends Entity<Player> {
 
     @Override
     public Paint paint() {
-        final Color color = damageAnimation.playing() ? Color.lerp(Colors.DAMAGE, Color.WHITE, damageAnimation.progress()) : Color.WHITE;
+        final Color color = damageAnimation.playing() ? Color.lerp(ColorPalette.VERMILION, ColorPalette.IVORY, damageAnimation.progress()) : ColorPalette.IVORY;
         return new Paint().withForegroundColor(color);
     }
 

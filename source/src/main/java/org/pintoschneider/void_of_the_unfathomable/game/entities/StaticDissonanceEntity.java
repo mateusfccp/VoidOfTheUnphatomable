@@ -2,7 +2,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.game.Colors;
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.StaticDissonance;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
@@ -40,7 +40,7 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
 
     @Override
     public Paint paint() {
-        final Color color = damageAnimation.playing() ? Color.lerp(Colors.DAMAGE, Color.WHITE, damageAnimation.progress()) : Color.WHITE;
+        final Color color = damageAnimation.playing() ? Color.lerp(ColorPalette.VERMILION, ColorPalette.WHITE, damageAnimation.progress()) : null;
         return new Paint().withForegroundColor(color);
     }
 

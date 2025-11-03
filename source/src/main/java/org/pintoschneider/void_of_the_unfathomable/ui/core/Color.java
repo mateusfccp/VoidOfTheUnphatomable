@@ -8,28 +8,6 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
  * @param blue  The blue component of the color.
  */
 public record Color(short red, short green, short blue) {
-
-    /**
-     * The green color constant.
-     * <p>
-     * Represents the color green with RGB values (0, 255, 0).
-     */
-    public static final Color GREEN = new Color(0, 255, 0);
-
-    /**
-     * THe red color constant.
-     * <p>
-     * Represents the color red with RGB values (255, 0, 0).
-     */
-    public static final Color RED = new Color(255, 0, 0);
-
-    /**
-     * The white color constant.
-     * <p>
-     * Represents the color white with RGB values (255, 255, 255).
-     */
-    public static final Color WHITE = new Color(255, 255, 255);
-
     /**
      * Creates a new Color with the specified RGB components.
      *

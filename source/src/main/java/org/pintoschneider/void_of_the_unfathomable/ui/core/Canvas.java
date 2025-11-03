@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.exceptions.OverflowException;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.exceptions.UIException;
 
@@ -116,7 +117,7 @@ public final class Canvas {
         try {
             component.draw(canvas);
         } catch (OverflowException e) {
-            final Paint paint = new Paint().withBackgroundColor(Color.RED);
+            final Paint paint = new Paint().withBackgroundColor(ColorPalette.VERMILION);
             canvas.draw('‼', e.component().size().width() - 1, e.component().size().height() - 1, paint);
         }
 

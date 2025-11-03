@@ -1,5 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
+
 /**
  * A record representing text paint styles for the terminal.
  * <p>

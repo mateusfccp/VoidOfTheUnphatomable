@@ -2,6 +2,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.engine.Key;
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
@@ -255,9 +256,9 @@ class EquippableDifference extends Composent {
         final Paint newValuePaint;
 
         if (newValue > originalValue) {
-            newValuePaint = new Paint().withForegroundColor(Color.GREEN);
+            newValuePaint = new Paint().withForegroundColor(ColorPalette.EMERALD);
         } else if (newValue < originalValue) {
-            newValuePaint = new Paint().withForegroundColor(Color.RED);
+            newValuePaint = new Paint().withForegroundColor(ColorPalette.VERMILION);
         } else {
             newValuePaint = Paint.DIM;
         }
