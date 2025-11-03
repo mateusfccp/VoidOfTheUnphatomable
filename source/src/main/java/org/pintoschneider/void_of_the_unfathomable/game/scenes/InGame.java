@@ -58,7 +58,7 @@ public final class InGame implements Scene {
     public void onEnter() {
         Engine.context().sceneManager().push(
             new DialogScene(
-                "You have entered The Void. You can barely make out shapes in the distance. It's hard to breathe, and a sense of dread fills your mind. You must find the Resounding Core before The Void consumes you entirely."
+                "Finalmente entraste en El Vacío. Apenas puedes distinguir formas en la distancia. Te cuesta respirar, y una sensación de temor llena tu mente. Debés encontrar el Núcleo Resonante antes de que El Vacío te consuma por completo."
             )
         );
     }
