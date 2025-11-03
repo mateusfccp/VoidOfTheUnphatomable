@@ -24,7 +24,7 @@ public final class ItemEntity extends Entity<Item> {
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity playerEntity) {
             playerEntity.associatedObject().addItemToInventory(associatedObject());
-            map().removeEntity(this);
+            destroy();
         }
     }
 }

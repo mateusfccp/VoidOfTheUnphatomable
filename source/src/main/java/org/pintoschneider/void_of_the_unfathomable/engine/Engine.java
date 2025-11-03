@@ -77,7 +77,7 @@ public final class Engine implements AutoCloseable, Context {
 
         sceneManager.currentScene().onUpdate(uiThread.deltaTime());
         handleInput();
-        refresh();
+        refreshUI();
 
         synchronized (this) {
             notifyAll();
@@ -92,11 +92,7 @@ public final class Engine implements AutoCloseable, Context {
         }
     }
 
-    private void refresh() {
-        drawScene();
-    }
-
-    private void drawScene() {
+    private void refreshUI() {
         terminal.puts(Capability.cursor_address, 0, 0);
         final Component rootComponent = new Root(this);
         rootComponent.layout(Constraints.tight(terminalSize.width(), terminalSize.height()));
@@ -154,6 +150,7 @@ public final class Engine implements AutoCloseable, Context {
 
     @Override
     public void close() throws IOException {
+        uiThread.interrupt();
         inputThread.interrupt();
         terminal.close();
     }

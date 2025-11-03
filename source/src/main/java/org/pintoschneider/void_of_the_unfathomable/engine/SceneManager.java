@@ -42,18 +42,6 @@ public final class SceneManager {
     }
 
     /**
-     * Checks if there are any scenes in the manager.
-     * <p>
-     * There should be at least one scene; if there are none, the manager is considered done and the engine should
-     * terminate.
-     *
-     * @return True if there are scenes in the manager, false otherwise.
-     */
-    public boolean hasScene() {
-        return !scenes.isEmpty();
-    }
-
-    /**
      * Pushes a new scene onto the stack, making it the current active scene.
      *
      * @param scene The scene to be pushed onto the stack.

@@ -1,6 +1,5 @@
 package org.pintoschneider.void_of_the_unfathomable.game.turn_steps;
 
-import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.Enemy;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.PlayerEntity;

@@ -29,7 +29,6 @@ public final class PlayerEntity extends Entity<Player> {
         return new Paint().withForegroundColor(color);
     }
 
-    // TODO(mateusfccp): Refactor this
     public void damage(int amount) {
         associatedObject().damage(amount);
         damageAnimation.play();

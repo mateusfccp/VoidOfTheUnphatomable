@@ -117,7 +117,7 @@ public abstract class Entity<T> {
      *
      * @return The map this entity belongs to.
      */
-    public org.pintoschneider.void_of_the_unfathomable.game.map.Map map() {
+    public Map map() {
         return map;
     }
 
