@@ -17,6 +17,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
@@ -29,15 +30,9 @@ public final class InGame implements Scene {
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final Player player = new Player();
-    private final Entity<Player> playerEntity = new PlayerEntity(new Offset(4, 4), player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(new Offset(4, 4), player, map);
+    private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
-
-    // Turn-related variables
-    static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
-    private boolean processingTurn = false;
-    private long timeSinceLastTurnStep = 0;
-    private Boolean lastStepResult = null;
-    final Queue<TurnStep> turnSteps = new ArrayDeque<>();
 
     /**
      * Creates a new in-game scene.
@@ -109,25 +104,25 @@ public final class InGame implements Scene {
 
     @Override
     public void onKeyPress(Key key) {
-        if (processingTurn) return;
+        if (turnManager.isTurnInProgress()) return;
 
         if (key == Key.UP) {
             playerEntity.moveBy(verticalOffset.multiply(-1));
-            startTurnProcessing();
+            turnManager.startNewTurn();
         } else if (key == Key.DOWN) {
             playerEntity.moveBy(verticalOffset);
-            startTurnProcessing();
+            turnManager.startNewTurn();
         } else if (key == Key.LEFT) {
             playerEntity.moveBy(horizontalOffset.multiply(-1));
-            startTurnProcessing();
+            turnManager.startNewTurn();
         } else if (key == Key.RIGHT) {
             playerEntity.moveBy(horizontalOffset);
-            startTurnProcessing();
+            turnManager.startNewTurn();
         } else if (key == Key.I) {
             final CompletableFuture<Boolean> didConsumeItem = Engine.context().sceneManager().push(new Inventory(player));
             didConsumeItem.thenAccept(consumed -> {
                 if (consumed) {
-                    startTurnProcessing();
+                    turnManager.startNewTurn();
                 }
             });
         }
@@ -135,35 +130,7 @@ public final class InGame implements Scene {
 
     @Override
     public void onUpdate(long deltaTime) {
-        if (!processingTurn) return;
-
-        if (turnSteps.isEmpty()) {
-            processingTurn = false;
-            return;
-        }
-
-        timeSinceLastTurnStep = timeSinceLastTurnStep + deltaTime;
-
-        if (timeSinceLastTurnStep > turnStepInterval) { // 1 second
-            timeSinceLastTurnStep = timeSinceLastTurnStep - turnStepInterval;
-
-            final TurnStep step = turnSteps.poll();
-
-            assert step != null;
-            lastStepResult = step.execute(lastStepResult);
-        }
-    }
-
-    private void startTurnProcessing() {
-        if (processingTurn) return;
-
-        processingTurn = true;
-        timeSinceLastTurnStep = 0;
-
-        for (final Entity<?> entity : map.entities()) {
-            final List<TurnStep> enemyTurnSteps = entity.processTurn();
-            turnSteps.addAll(enemyTurnSteps);
-        }
+        turnManager.update(deltaTime);
     }
 
     private void centerOnPlayer(Context context) {
@@ -172,4 +139,85 @@ public final class InGame implements Scene {
             playerEntity.position().dy() - context.size().height() / 2
         );
     }
+}
+
+final class TurnManager {
+    static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
+    private final PlayerEntity playerEntity;
+    private final Map map;
+    private final Queue<Step> currentTurnSteps = new ArrayDeque<>();
+    private boolean isProcessingTurn = false;
+    private boolean isProcessingStep = false;
+    private long timeSinceLastTurnStep = 0;
+    private Boolean lastStepResult = null;
+
+    TurnManager(PlayerEntity playerEntity, Map map) {
+        this.playerEntity = playerEntity;
+        this.map = map;
+    }
+
+    /**
+     * Checks if a turn is currently being processed.
+     *
+     * @return True if a turn is in progress, false otherwise.
+     */
+    public boolean isTurnInProgress() {
+        return isProcessingTurn;
+    }
+
+    /**
+     * Starts a new turn and prepares the steps for all entities.
+     */
+    public void startNewTurn() {
+        if (isProcessingTurn) return;
+
+        isProcessingTurn = true;
+        timeSinceLastTurnStep = 0;
+
+        for (final Entity<?> entity : map.entities()) {
+            final boolean isInstant = !entity.canSee(playerEntity);
+            final List<TurnStep> enemyTurnSteps = entity.processTurn();
+            for (final TurnStep step : enemyTurnSteps) {
+                currentTurnSteps.add(new Step(step, isInstant));
+            }
+        }
+    }
+
+    public void update(long deltaTime) {
+        if (!isProcessingTurn) return;
+
+        if (!isProcessingStep) {
+            final List<Step> stepsThisIteration = new ArrayList<>();
+
+            Step currentStep;
+            while ((currentStep = currentTurnSteps.poll()) != null && currentStep.isInstant) {
+                stepsThisIteration.add(currentStep);
+            }
+
+            if (currentStep != null) {
+                stepsThisIteration.add(currentStep);
+            }
+
+            if (!stepsThisIteration.isEmpty()) {
+                isProcessingStep = true;
+                timeSinceLastTurnStep = 0;
+            }
+
+            for (final Step step : stepsThisIteration) {
+                lastStepResult = step.step.execute(lastStepResult);
+            }
+        }
+
+        timeSinceLastTurnStep = timeSinceLastTurnStep + deltaTime;
+        if (timeSinceLastTurnStep > turnStepInterval) {
+            isProcessingStep = false;
+        }
+
+        if (currentTurnSteps.isEmpty() && !isProcessingStep) {
+            isProcessingTurn = false;
+            lastStepResult = null;
+        }
+    }
+
+    private record Step(TurnStep step, boolean isInstant) {}
 }
