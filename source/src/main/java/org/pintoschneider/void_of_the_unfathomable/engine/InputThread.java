@@ -113,6 +113,7 @@ final class InputThread extends Thread {
         }
 
         lastKey.set(Key.parse(finalSequence));
+        IO.println("Key: " + lastKey.get());
         sequenceBuffer.clear();
     }
 
