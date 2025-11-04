@@ -1,5 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
+import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
@@ -8,6 +9,8 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.exceptions.OverflowEx
 import org.pintoschneider.void_of_the_unfathomable.ui.core.exceptions.UIException;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The {@code Canvas} class represents a 2D grid of characters and optional style objects,
@@ -197,30 +200,34 @@ public final class Canvas {
     }
 
     /**
-     * Writes the contents of this canvas to the given {@link PrintWriter}.
+     * Builds and returns a list of {@link AttributedString} objects representing the canvas content.
      * <p>
      * Each row is written in order, with null cells rendered as spaces.
-     *
-     * @param writer The writer to output to.
      */
-    public void writeTo(PrintWriter writer) {
-        for (int y = 0; y < tiles[0].length; y++) {
-            for (int x = 0; x < tiles.length; x++) {
+    public List<AttributedString> toAttributedStrings() {
+        final List<AttributedString> lines = new ArrayList<>(this.height);
+
+        for (int y = 0; y < height; y++) {
+            final AttributedStringBuilder lineBuilder = new AttributedStringBuilder();
+
+            for (int x = 0; x < width; x++) {
                 final Character tile = tiles[x][y];
                 final Paint paint = paints[x][y];
 
-                final Character c = tile == null ? ' ' : tile;
+                final char ch = tile == null ? ' ' : tile;
 
-                if (paint != null) {
-                    final AttributedStyle style = getStyle(paint);
-                    final AttributedStringBuilder builder = new AttributedStringBuilder();
-                    builder.style(style);
-                    builder.append(c);
-                    writer.print(builder.toAnsi());
+                if (paint == null) {
+                    lineBuilder.style(AttributedStyle.DEFAULT).append(ch);
                 } else {
-                    writer.print(c);
+                    final AttributedStyle style = getStyle(paint);
+                    lineBuilder.style(style).append(ch);
                 }
+
             }
+
+            lines.add(lineBuilder.toAttributedString());
         }
+
+        return lines;
     }
 }

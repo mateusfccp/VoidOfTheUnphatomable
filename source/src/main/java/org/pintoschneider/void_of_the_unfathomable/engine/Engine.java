@@ -2,6 +2,8 @@ package org.pintoschneider.void_of_the_unfathomable.engine;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.AttributedString;
+import org.jline.utils.Display;
 import org.jline.utils.InfoCmp.Capability;
 import org.jline.utils.NonBlockingReader;
 import org.pintoschneider.void_of_the_unfathomable.Main;
@@ -10,7 +12,6 @@ import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +22,19 @@ import java.util.function.Consumer;
 public final class Engine implements AutoCloseable, Context {
     private static Engine context = null;
     private final Terminal terminal = TerminalBuilder.builder().system(true).build();
-    private final PrintWriter writer = terminal.writer();
+    private final Display display;
     private final AtomicReference<Key> lastKey = new AtomicReference<>(null);
     private final SceneManager sceneManager;
     private final InputThread inputThread;
     private final UIThread uiThread;
     private final List<_EngineTicker> tickers = new ArrayList<>();
-    private Size terminalSize;
     private boolean running = true;
 
     public Engine(Scene initialScene) throws IOException {
         sceneManager = new SceneManager(Objects.requireNonNull(initialScene), this::stop);
         terminal.enterRawMode();
+
+        display = new Display(terminal, true);
 
         // Register a signal handler for window resize events
         terminal.handle(Terminal.Signal.WINCH, signal -> updateTerminalSize());
@@ -93,18 +95,19 @@ public final class Engine implements AutoCloseable, Context {
     }
 
     private void refreshUI() {
-        terminal.puts(Capability.cursor_address, 0, 0);
         final Component rootComponent = new Root(this);
-        rootComponent.layout(Constraints.tight(terminalSize.width(), terminalSize.height()));
+        rootComponent.layout(Constraints.tight(terminal.getWidth(), terminal.getHeight()));
 
         final Canvas rootCanvas = new Canvas(rootComponent);
         rootComponent.draw(rootCanvas);
-        rootCanvas.writeTo(writer);
-        terminal.flush();
+
+        final List<AttributedString> lines = rootCanvas.toAttributedStrings();
+        display.update(lines, 0);
     }
 
     private void updateTerminalSize() {
-        terminalSize = new Size(terminal.getWidth(), terminal.getHeight());
+        display.resize(terminal.getHeight(), terminal.getWidth());
+        display.clear();
     }
 
     /**
@@ -140,7 +143,10 @@ public final class Engine implements AutoCloseable, Context {
 
     @Override
     public Size size() {
-        return terminalSize;
+        return new Size(
+            terminal.getWidth(),
+            terminal.getHeight()
+        );
     }
 
     @Override
