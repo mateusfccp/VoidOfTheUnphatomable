@@ -53,9 +53,9 @@ public class ColourPicker {
   int getColourID() {
     return colourID;
   }
-  
-  
-    boolean getFill() {
+
+
+  boolean getFill() {
     return fill;
   }
 }

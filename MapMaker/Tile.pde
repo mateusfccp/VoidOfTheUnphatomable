@@ -25,8 +25,8 @@ public class Tile {
     case 2: // Floor
       fill(255, 0, 0);
       break;
-      
-          case 3: // nigga
+
+    case 3:
       fill(255, 0, 255);
       break;
     }
@@ -76,10 +76,10 @@ public class Tile {
 public class Coords {
   private int x = 0;
   private int y = 0;
-  
+
   Coords(int x, int y) {
-  this.x = x;
-  this.y = y;
+    this.x = x;
+    this.y = y;
   }
 
   int getX() {
@@ -93,8 +93,8 @@ public class Coords {
   void setX(int number) {
     this.x = number;
   }
-  
-    void setY(int number) {
+
+  void setY(int number) {
     this.y = number;
   }
 }
