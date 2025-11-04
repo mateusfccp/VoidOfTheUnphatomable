@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicReference;
 final class InputThread extends Thread {
     private static final int ESCAPE_CHAR = 27;
     private static final int BRACKET_CHAR = 91;
+    private static final int O_CHAR = 79;
+
     private final NonBlockingReader reader;
     private final AtomicReference<Key> lastKey;
     private final ArrayList<Character> sequenceBuffer = new ArrayList<>(3);
@@ -58,8 +60,8 @@ final class InputThread extends Thread {
                                 break;
 
                             case ESCAPE:
-                                if (ch == BRACKET_CHAR) {
-                                    sequenceBuffer.add(ch);
+                                if (ch == BRACKET_CHAR || ch == O_CHAR) {
+                                    sequenceBuffer.add((char) BRACKET_CHAR);
                                     currentState = State.BRACKET;
                                 } else {
                                     // Not a CSI sequence. Send the buffered ESC key.
