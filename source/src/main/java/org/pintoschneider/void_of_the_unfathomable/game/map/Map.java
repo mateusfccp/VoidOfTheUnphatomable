@@ -28,77 +28,20 @@ public final class Map {
 
     /**
      * Creates a new map.
-     * <p>
-     * Currently, this constructor creates a temporary hardcoded map for testing purposes.
      */
     public Map() {
-
-        /*
-        // Temporary map
-        final int[][] map = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 0},
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0},
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-            {0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 1, 2, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 1, 2, 1, 0},
-            {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0},
-            {0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-            {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
-
-         */
-
-        final int[][] map = loadMap();
-
-        this.width = map.length;
-        this.height = map[0].length;
-        tiles = new MapTile[width][height];
-
-        for (int y = 0; y < width; y++) {
-            for (int x = 0; x < height; x++) {
-                if (map[y][x] == 0) {
-                    tiles[x][y] = MapTile.VOID;
-                } else if (map[y][x] == 1) {
-                    tiles[x][y] = MapTile.WALL;
-                } else if (map[y][x] == 2) {
-                    tiles[x][y] = MapTile.FLOOR;
-                }
-            }
-        }
-
-        //visibility = new AdamMillazosVisibility(this);
-        visibility = new AlwaysVisible(this);
-
-
+        tiles = loadMap();
+        this.width = tiles.length;
+        this.height = tiles[0].length;
+        visibility = new AdamMillazosVisibility(this);
     }
 
-
-    public int[][] loadMap() {
+    /**
+     * Loads and reads the map from the Map.txt file.
+     *
+     * @return the matrix of mapTiles
+     */
+    private MapTile[][] loadMap() {
         try {
             String filePath = "../MapMaker/Map.txt";
             ArrayList<char[]> charMatrix = new ArrayList<>();
@@ -121,9 +64,8 @@ public final class Map {
                 dynamicIntMatrix.add(dynamicIntMatrixRow);
             }
 
-
             if (dynamicIntMatrix.isEmpty()) {
-                return new int[0][0]; // empty map
+                return new MapTile[0][0];
             }
 
             int rows = dynamicIntMatrix.size();
@@ -135,12 +77,26 @@ public final class Map {
                     map[i][j] = dynamicIntMatrix.get(i).get(j);
                 }
             }
-            return map;
+
+            MapTile[][] tiles = new MapTile[rows][cols];
+
+            for (int y = 0; y < cols; y++) {
+                for (int x = 0; x < rows; x++) {
+                    if (map[y][x] == 0) {
+                        tiles[x][y] = MapTile.VOID;
+                    } else if (map[y][x] == 1) {
+                        tiles[x][y] = MapTile.WALL;
+                    } else if (map[y][x] == 2) {
+                        tiles[x][y] = MapTile.FLOOR;
+                    }
+                }
+            }
+
+            return tiles;
         } catch (IOException e) {
             e.printStackTrace();
-            return new int[0][0]; // empty map
+            return new MapTile[0][0];
         }
-
     }
 
 
@@ -213,9 +169,7 @@ public final class Map {
      * @return A list of all entities at the specified position.
      */
     public List<Entity<?>> getEntitiesAt(Offset position) {
-        return entities.stream()
-                .filter(entity -> entity.position().equals(position))
-                .toList();
+        return entities.stream().filter(entity -> entity.position().equals(position)).toList();
     }
 
     /**
@@ -233,8 +187,7 @@ public final class Map {
         if (tile == null || !tile.walkable()) return false;
 
         final List<Entity<?>> entitiesAtPosition = getEntitiesAt(position);
-        return entitiesAtPosition.isEmpty() ||
-                entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
+        return entitiesAtPosition.isEmpty() || entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
     }
 
     /**
@@ -325,11 +278,11 @@ public final class Map {
 
         if (entity.map() != null) {
             throw new IllegalStateException(
-                    """
-                            Entity is already associated with another map.%n
-                            This means this method was called directly instead of using MapEntity.setMap(Map).%n
-                            Current map: %s%n
-                            """.formatted(entity.map())
+                """
+                        Entity is already associated with another map.%n
+                        This means this method was called directly instead of using MapEntity.setMap(Map).%n
+                        Current map: %s%n
+                        """.formatted(entity.map())
             );
         }
 
