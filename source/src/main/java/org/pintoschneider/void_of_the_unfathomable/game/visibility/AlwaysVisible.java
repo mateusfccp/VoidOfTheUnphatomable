@@ -15,7 +15,7 @@ public final class AlwaysVisible extends Visibility {
      *
      * @param map The map to apply the visibility rule to.
      */
-    AlwaysVisible(Map map) {
+    public AlwaysVisible(Map map) {
         super(map);
     }
 

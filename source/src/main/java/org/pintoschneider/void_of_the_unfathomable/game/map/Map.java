@@ -3,9 +3,14 @@ package org.pintoschneider.void_of_the_unfathomable.game.map;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.AlwaysVisible;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
 import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.io.IOException;
 
 /**
  * A class representing a 2D map composed of tiles and entities.
@@ -27,10 +32,8 @@ public final class Map {
      * Currently, this constructor creates a temporary hardcoded map for testing purposes.
      */
     public Map() {
-        this.width = 31;
-        this.height = 33;
-        tiles = new MapTile[31][33];
 
+        /*
         // Temporary map
         final int[][] map = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -68,8 +71,16 @@ public final class Map {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
 
-        for (int y = 0; y < map.length; y++) {
-            for (int x = 0; x < map[x].length; x++) {
+         */
+
+        final int[][] map = loadMap();
+
+        this.width = map.length;
+        this.height = map[0].length;
+        tiles = new MapTile[width][height];
+
+        for (int y = 0; y < width; y++) {
+            for (int x = 0; x < height; x++) {
                 if (map[y][x] == 0) {
                     tiles[x][y] = MapTile.VOID;
                 } else if (map[y][x] == 1) {
@@ -80,8 +91,58 @@ public final class Map {
             }
         }
 
-        visibility = new AdamMillazosVisibility(this);
+        //visibility = new AdamMillazosVisibility(this);
+        visibility = new AlwaysVisible(this);
+
+
     }
+
+
+    public int[][] loadMap() {
+        try {
+            String filePath = "../MapMaker/Map.txt";
+            ArrayList<char[]> charMatrix = new ArrayList<>();
+            ArrayList<ArrayList<Integer>> dynamicIntMatrix = new ArrayList<>();
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+
+            for (String line : lines) {
+                char[] characters = line.toCharArray();
+                charMatrix.add(characters);
+            }
+
+            for (char[] matrix : charMatrix) {
+                ArrayList<Integer> dynamicIntMatrixRow = new ArrayList<>();
+                for (char c : matrix) {
+                    if (c >= '0' && c <= '9') {
+                        dynamicIntMatrixRow.add(Character.getNumericValue(c));
+                    }
+
+                }
+                dynamicIntMatrix.add(dynamicIntMatrixRow);
+            }
+
+
+            if (dynamicIntMatrix.isEmpty()) {
+                return new int[0][0]; // empty map
+            }
+
+            int rows = dynamicIntMatrix.size();
+            int cols = dynamicIntMatrix.getFirst().size();
+
+            int[][] map = new int[rows][cols];
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    map[i][j] = dynamicIntMatrix.get(i).get(j);
+                }
+            }
+            return map;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new int[0][0]; // empty map
+        }
+
+    }
+
 
     /**
      * Gets the width of the map in tiles.
@@ -153,8 +214,8 @@ public final class Map {
      */
     public List<Entity<?>> getEntitiesAt(Offset position) {
         return entities.stream()
-            .filter(entity -> entity.position().equals(position))
-            .toList();
+                .filter(entity -> entity.position().equals(position))
+                .toList();
     }
 
     /**
@@ -173,7 +234,7 @@ public final class Map {
 
         final List<Entity<?>> entitiesAtPosition = getEntitiesAt(position);
         return entitiesAtPosition.isEmpty() ||
-            entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
+                entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
     }
 
     /**
@@ -264,11 +325,11 @@ public final class Map {
 
         if (entity.map() != null) {
             throw new IllegalStateException(
-                """
-                    Entity is already associated with another map.%n
-                    This means this method was called directly instead of using MapEntity.setMap(Map).%n
-                    Current map: %s%n
-                    """.formatted(entity.map())
+                    """
+                            Entity is already associated with another map.%n
+                            This means this method was called directly instead of using MapEntity.setMap(Map).%n
+                            Current map: %s%n
+                            """.formatted(entity.map())
             );
         }
 

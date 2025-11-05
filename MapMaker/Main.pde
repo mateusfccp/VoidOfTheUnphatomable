@@ -160,7 +160,7 @@ void saveMap(Tile[][] matrix) {
         output.print(matrix[j][i].getTileType());
       } else output.print(matrix[j][i].getTileType() + ", ");
     }
-    output.println("//");
+    output.println();
   }
   output.flush();
   output.close();
@@ -173,6 +173,6 @@ void printMap(Tile[][] matrix) {
         print(matrix[j][i].getTileType());
       } else print(matrix[j][i].getTileType() + ", ");
     }
-    println("//");
+    println();
   }
 }
