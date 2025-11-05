@@ -5,7 +5,6 @@ import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.AttributedString;
 import org.jline.utils.Display;
 import org.jline.utils.InfoCmp.Capability;
-import org.jline.utils.NonBlockingReader;
 import org.pintoschneider.void_of_the_unfathomable.Main;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -21,7 +20,7 @@ import java.util.function.Consumer;
 
 public final class Engine implements AutoCloseable, Context {
     private static Engine context = null;
-    private final Terminal terminal = TerminalBuilder.builder().system(true).build();
+    private final Terminal terminal = TerminalBuilder.builder().build();
     private final Display display;
     private final AtomicReference<Key> lastKey = new AtomicReference<>(null);
     private final SceneManager sceneManager;
@@ -48,14 +47,10 @@ public final class Engine implements AutoCloseable, Context {
 
         updateTerminalSize();
 
-        // Start input thread using a dedicated class
-        final NonBlockingReader reader = terminal.reader();
-
-        inputThread = new InputThread(reader, lastKey);
+        inputThread = new InputThread(terminal, lastKey);
         inputThread.setDaemon(true);
         inputThread.start();
 
-        // Start the UI thread using a dedicated class
         uiThread = new UIThread(this, 60);
         uiThread.setDaemon(true);
         uiThread.start();

@@ -1,91 +1,55 @@
 package org.pintoschneider.void_of_the_unfathomable.engine;
 
-import java.util.Arrays;
+import org.jline.keymap.KeyMap;
+import org.jline.terminal.Terminal;
+import org.jline.utils.InfoCmp.Capability;
+
+import static org.jline.utils.InfoCmp.Capability.*;
 
 /**
  * A utility class that holds key code constants for common keyboard keys.
  */
-public final class Key {
-    /**
-     * Key code for the "Up" arrow key.
-     */
-    public static final Key UP = new Key(new char[]{27, 91, 65}, "↑");
-    /**
-     * Key code for the "Down" arrow key.
-     */
-    public static final Key DOWN = new Key(new char[]{27, 91, 66}, "↓");
-    /**
-     * Key code for the "Right" arrow key.
-     */
-    public static final Key RIGHT = new Key(new char[]{27, 91, 67}, "→");
-    /**
-     * Key code for the "Left" arrow key.
-     */
-    public static final Key LEFT = new Key(new char[]{27, 91, 68}, "←");
-    /**
-     * Key code for the "Enter" key.
-     */
-    public static final Key ENTER = new Key(new char[]{13}, "↩");
-    /**
-     * Key code for the "i" key.
-     */
-    public static final Key I = new Key(new char[]{105}, "i");
+public enum Key {
+    UP(key_up),
+    DOWN(key_down),
+    LEFT(key_left),
+    RIGHT(key_right),
+    ENTER(new Capability[]{key_enter}, new CharSequence[]{"\r", "\n"}),
+    I("i");
 
-    // private list of known keys used by parse()
-    private static final Key[] KNOWN_KEYS = {UP, DOWN, RIGHT, LEFT, ENTER, I};
+    final Capability[] capabilities;
+    final CharSequence[] sequences;
 
-    final char[] chars;
-    final String representation;
-
-    private Key(char[] chars, String representation) {
-        this.chars = chars;
-        this.representation = representation;
+    Key(Capability capability) {
+        capabilities = new Capability[]{capability};
+        sequences = new CharSequence[0];
     }
 
-    /**
-     * Factory for UNKNOWN keys that can carry any char[].
-     */
-    private static Key UNKNOWN(char[] chars) {
-        return new Key(chars == null ? new char[]{} : chars, "UNKNOWN");
+    Key(CharSequence code) {
+        capabilities = new Capability[0];
+        sequences = new CharSequence[]{code};
     }
 
-    /**
-     * Parses a sequence of key codes and returns the corresponding Key value.
-     *
-     * @param keyCodes The sequence of key codes to parse.
-     * @return The corresponding Key value, or an UNKNOWN Key carrying the provided chars if no match is found.
-     */
-    public static Key parse(char[] keyCodes) {
-        if (keyCodes == null) {
-            return UNKNOWN(new char[]{});
-        }
+    Key(Capability[] capabilities, CharSequence[] codes) {
+        this.capabilities = capabilities;
+        this.sequences = codes;
+    }
 
-        for (Key key : KNOWN_KEYS) {
-            if (Arrays.equals(key.chars, keyCodes)) {
-                return key;
+
+    static KeyMap<Key> createKeyMap(Terminal terminal) {
+        final KeyMap<Key> keyMap = new KeyMap<>();
+
+        for (Key key : values()) {
+            for (Capability capability : key.capabilities) {
+                final CharSequence code = KeyMap.key(terminal, capability);
+                keyMap.bind(key, code);
+            }
+
+            for (CharSequence sequence : key.sequences) {
+                keyMap.bind(key, sequence);
             }
         }
 
-        return UNKNOWN(keyCodes);
-    }
-
-    /**
-     * Checks if this Key is UNKNOWN.
-     *
-     * @return True if this Key is UNKNOWN, false otherwise.
-     */
-    public boolean isUnknown() {
-        return "UNKNOWN".equals(representation);
-    }
-
-    @Override
-    public String toString() {
-        final int[] codes = new int[chars.length];
-
-        for (int i = 0; i < chars.length; i++) {
-            codes[i] = chars[i];
-        }
-
-        return "%s (%s)".formatted(representation, Arrays.toString(codes));
+        return keyMap;
     }
 }
