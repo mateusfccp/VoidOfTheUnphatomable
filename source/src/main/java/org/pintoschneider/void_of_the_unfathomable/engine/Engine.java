@@ -37,9 +37,14 @@ public final class Engine implements AutoCloseable, Context {
         display = new Display(terminal, true);
 
         // Register a signal handler for window resize events
-        terminal.handle(Terminal.Signal.WINCH, signal -> updateTerminalSize());
+        terminal.handle(Terminal.Signal.WINCH, _ -> updateTerminalSize());
+
+        // Register a signal handler for Ctrl+C (SIGINT)
+        terminal.handle(Terminal.Signal.INT, _ -> stop());
 
         terminal.puts(Capability.cursor_invisible);
+        terminal.puts(Capability.enter_ca_mode);
+        terminal.puts(Capability.keypad_xmit);
 
         updateTerminalSize();
 
@@ -156,8 +161,13 @@ public final class Engine implements AutoCloseable, Context {
 
     @Override
     public void close() throws IOException {
+        terminal.puts(Capability.keypad_local);
+        terminal.puts(Capability.exit_ca_mode);
+        terminal.puts(Capability.cursor_visible);
         uiThread.interrupt();
         inputThread.interrupt();
+        display.clear();
+        terminal.flush();
         terminal.close();
     }
 
