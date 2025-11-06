@@ -2,7 +2,6 @@ package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
-import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AlwaysVisible;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
@@ -19,7 +18,7 @@ import java.io.IOException;
  * items.
  */
 public final class Map {
-    private final ArrayList<ArrayList<MapTile>> tiles;
+    private final MapTile[][] tiles;
     private final Set<Entity<?>> entities = new HashSet<>();
 
     private final int width;
@@ -30,55 +29,54 @@ public final class Map {
      * Creates a new map.
      */
     public Map() {
-        tiles = loadMap();
-        this.width = tiles.size();
-        this.height = tiles.getFirst().size();
-        visibility = new AdamMillazosVisibility(this);
+        tiles = loadMap("tempMap.txt");
+        this.width = tiles.length;
+        this.height = tiles[0].length;
+
+
+//      visibility = new AdamMillazosVisibility(this);
+        visibility = new AlwaysVisible(this);
     }
 
     /**
      * Loads and reads the map from the Map.txt file.
      *
-     * @return the matrix of mapTiles
+     * @param fileName The filename of the map
+     * @return The matrix of mapTiles
      */
-    private ArrayList<ArrayList<MapTile>> loadMap() {
+    private MapTile[][] loadMap(String fileName) {
         try {
-            String filePath = "../MapMaker/Map.txt";
-            ArrayList<ArrayList<MapTile>> map = new ArrayList<>();
+            String filePath = "../MapMaker/" + fileName;
             List<String> lines = Files.readAllLines(Paths.get(filePath));
+            int width = Integer.parseInt(lines.get(0));
+            int height = Integer.parseInt(lines.get(1));
+            MapTile[][] map = new MapTile[width][height];
 
-            for (String line : lines) {
-                ArrayList<MapTile> tileRow = new ArrayList<>();
-                for (char c : line.toCharArray()) {
+            for (int j = 2; j < lines.size(); j++) {
+                int i = 0;
+                if (j-2 >= height) break;
+                for (char c : lines.get(j).toCharArray()) {
                     if (c >= '0' && c <= '9') {
+                        if (i >= width) break;
                         switch (c) {
-                            case '0':
-                                tileRow.add(MapTile.VOID);
-                                break;
                             case '1':
-                                tileRow.add(MapTile.WALL);
+                                map[i][j-2] = MapTile.WALL;
                                 break;
                             case '2':
-                                tileRow.add(MapTile.FLOOR);
+                                map[i][j-2] = MapTile.FLOOR;
                                 break;
+                            default:
+                                map[i][j-2] = MapTile.VOID;
                         }
-                    } else  {
-                        tileRow.add(MapTile.VOID);
+                        i++;
                     }
                 }
-                if (!tileRow.isEmpty()) {
-                    map.add(tileRow);
-                }
             }
-
-            if (map.isEmpty()) {
-                return new ArrayList<>();
-            }
-
             return map;
+
         } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return new MapTile[0][0];
         }
     }
 
@@ -114,7 +112,7 @@ public final class Map {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return null;
         } else {
-            return tiles.get(x).get(y);
+            return tiles[x][y];
         }
     }
 
@@ -141,7 +139,7 @@ public final class Map {
      */
     public void setTileAt(int x, int y, MapTile tile) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            tiles.get(x).set(y,tile);
+            tiles[x][y] = tile;
         }
     }
 
@@ -190,7 +188,7 @@ public final class Map {
     }
 
     private Character getTileCharacterAt(int x, int y) {
-        final MapTile tile = tiles.get(x).get(y);
+        final MapTile tile = tiles[x][y];
         if (!tile.autoTile) {
             return tile.getCharacter(0);
         }
@@ -198,22 +196,22 @@ public final class Map {
         int bitmask = 0;
 
         // Check left
-        if (x > 0 && tiles.get(x - 1).get(y) == tile) {
+        if (x > 0 && tiles[x - 1][y] == tile) {
             bitmask |= 0b0001;
         }
 
         // Check right
-        if (x < width - 1 && tiles.get(x + 1).get(y) == tile) {
+        if (x < width - 1 && tiles[x + 1][y] == tile) {
             bitmask |= 0b0010;
         }
 
         // Check top
-        if (y > 0 && tiles.get(x).get(y - 1) == tile) {
+        if (y > 0 && tiles[x][y - 1] == tile) {
             bitmask |= 0b0100;
         }
 
         // Check bottom
-        if (y < height - 1 && tiles.get(x).get(y + 1) == tile) {
+        if (y < height - 1 && tiles[x][y + 1] == tile) {
             bitmask |= 0b1000;
         }
 
