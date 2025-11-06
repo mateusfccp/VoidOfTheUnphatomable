@@ -30,7 +30,6 @@ public final class Engine implements AutoCloseable, Context {
     private boolean running = true;
 
     public Engine(Scene initialScene) throws IOException {
-        sceneManager = new SceneManager(Objects.requireNonNull(initialScene), this::stop);
         terminal.enterRawMode();
 
         display = new Display(terminal, true);
@@ -47,6 +46,13 @@ public final class Engine implements AutoCloseable, Context {
 
         updateTerminalSize();
 
+        if (context != null) {
+            throw new IllegalStateException("There can only be one Engine instance at a time.");
+        }
+
+        context = this;
+        sceneManager = new SceneManager(Objects.requireNonNull(initialScene), this::stop);
+
         inputThread = new InputThread(terminal, lastKey);
         inputThread.setDaemon(true);
         inputThread.start();
@@ -55,11 +61,6 @@ public final class Engine implements AutoCloseable, Context {
         uiThread.setDaemon(true);
         uiThread.start();
 
-        if (context != null) {
-            throw new IllegalStateException("There can only be one Engine instance at a time.");
-        }
-
-        context = this;
     }
 
     static public Context context() {

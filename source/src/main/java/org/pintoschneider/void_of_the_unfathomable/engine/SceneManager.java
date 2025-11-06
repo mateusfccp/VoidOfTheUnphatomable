@@ -23,8 +23,7 @@ public final class SceneManager {
      * @param initialScene The initial scene to be added to the manager.
      */
     public SceneManager(Scene initialScene, Runnable onDone) {
-        final SceneExecution execution = new SceneExecution(initialScene);
-        scenes.push(execution);
+        push(initialScene);
 
         this.onDone = onDone;
     }
