@@ -19,7 +19,7 @@ import java.io.IOException;
  * items.
  */
 public final class Map {
-    private final MapTile[][] tiles;
+    private final ArrayList<ArrayList<MapTile>> tiles;
     private final Set<Entity<?>> entities = new HashSet<>();
 
     private final int width;
@@ -31,8 +31,8 @@ public final class Map {
      */
     public Map() {
         tiles = loadMap();
-        this.width = tiles.length;
-        this.height = tiles[0].length;
+        this.width = tiles.size();
+        this.height = tiles.getFirst().size();
         visibility = new AdamMillazosVisibility(this);
     }
 
@@ -41,61 +41,43 @@ public final class Map {
      *
      * @return the matrix of mapTiles
      */
-    private MapTile[][] loadMap() {
+    private ArrayList<ArrayList<MapTile>> loadMap() {
         try {
             String filePath = "../MapMaker/Map.txt";
-            ArrayList<char[]> charMatrix = new ArrayList<>();
-            ArrayList<ArrayList<Integer>> dynamicIntMatrix = new ArrayList<>();
+            ArrayList<ArrayList<MapTile>> map = new ArrayList<>();
             List<String> lines = Files.readAllLines(Paths.get(filePath));
 
             for (String line : lines) {
-                char[] characters = line.toCharArray();
-                charMatrix.add(characters);
-            }
-
-            for (char[] matrix : charMatrix) {
-                ArrayList<Integer> dynamicIntMatrixRow = new ArrayList<>();
-                for (char c : matrix) {
+                ArrayList<MapTile> tileRow = new ArrayList<>();
+                for (char c : line.toCharArray()) {
                     if (c >= '0' && c <= '9') {
-                        dynamicIntMatrixRow.add(Character.getNumericValue(c));
-                    }
-
-                }
-                dynamicIntMatrix.add(dynamicIntMatrixRow);
-            }
-
-            if (dynamicIntMatrix.isEmpty()) {
-                return new MapTile[0][0];
-            }
-
-            int rows = dynamicIntMatrix.size();
-            int cols = dynamicIntMatrix.getFirst().size();
-
-            int[][] map = new int[rows][cols];
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    map[i][j] = dynamicIntMatrix.get(i).get(j);
-                }
-            }
-
-            MapTile[][] tiles = new MapTile[rows][cols];
-
-            for (int y = 0; y < cols; y++) {
-                for (int x = 0; x < rows; x++) {
-                    if (map[y][x] == 0) {
-                        tiles[x][y] = MapTile.VOID;
-                    } else if (map[y][x] == 1) {
-                        tiles[x][y] = MapTile.WALL;
-                    } else if (map[y][x] == 2) {
-                        tiles[x][y] = MapTile.FLOOR;
+                        int num = Character.getNumericValue(c);
+                        switch (num) {
+                            case 0:
+                                tileRow.add(MapTile.VOID);
+                                break;
+                            case 1:
+                                tileRow.add(MapTile.WALL);
+                                break;
+                            case 2:
+                                tileRow.add(MapTile.FLOOR);
+                                break;
+                        }
                     }
                 }
+                if (!tileRow.isEmpty()) {
+                    map.add(tileRow);
+                }
             }
 
-            return tiles;
+            if (map.isEmpty()) {
+                return new ArrayList<>();
+            }
+
+            return map;
         } catch (IOException e) {
             e.printStackTrace();
-            return new MapTile[0][0];
+            return new ArrayList<>();
         }
     }
 
@@ -131,14 +113,14 @@ public final class Map {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return null;
         } else {
-            return tiles[x][y];
+            return tiles.get(x).get(y);
         }
     }
 
     /**
      * Gets the tile at the specified position.
      * <p>
-     * If the given positoin is out of bounds, null is returned.
+     * If the given position is out of bounds, null is returned.
      *
      * @param position The position of the tile.
      * @return The tile at the specified position, or null if out of bounds.
@@ -158,7 +140,7 @@ public final class Map {
      */
     public void setTileAt(int x, int y, MapTile tile) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            tiles[x][y] = tile;
+            tiles.get(x).set(y,tile);
         }
     }
 
@@ -207,7 +189,7 @@ public final class Map {
     }
 
     private Character getTileCharacterAt(int x, int y) {
-        final MapTile tile = tiles[x][y];
+        final MapTile tile = tiles.get(x).get(y);
         if (!tile.autoTile) {
             return tile.getCharacter(0);
         }
@@ -215,22 +197,22 @@ public final class Map {
         int bitmask = 0;
 
         // Check left
-        if (x > 0 && tiles[x - 1][y] == tile) {
+        if (x > 0 && tiles.get(x - 1).get(y) == tile) {
             bitmask |= 0b0001;
         }
 
         // Check right
-        if (x < width - 1 && tiles[x + 1][y] == tile) {
+        if (x < width - 1 && tiles.get(x + 1).get(y) == tile) {
             bitmask |= 0b0010;
         }
 
         // Check top
-        if (y > 0 && tiles[x][y - 1] == tile) {
+        if (y > 0 && tiles.get(x).get(y - 1) == tile) {
             bitmask |= 0b0100;
         }
 
         // Check bottom
-        if (y < height - 1 && tiles[x][y + 1] == tile) {
+        if (y < height - 1 && tiles.get(x).get(y + 1) == tile) {
             bitmask |= 0b1000;
         }
 
