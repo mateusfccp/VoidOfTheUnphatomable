@@ -176,6 +176,21 @@ public final class Canvas {
     }
 
     /**
+     * Sets the paint style at the specified position.
+     *
+     * @param x     The x-coordinate.
+     * @param y     The y-coordinate.
+     * @param paint The paint style to set.
+     */
+    public void setPaintAt(int x, int y, Paint paint) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            throw new OverflowException(component, new Offset(x, y));
+        }
+
+        paints[x][y] = paint;
+    }
+
+    /**
      * Merges another canvas into this canvas at the specified offset.
      * <p>
      * Only non-null characters and styles from the other canvas are copied.
