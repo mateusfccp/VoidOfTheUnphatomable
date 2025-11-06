@@ -2,7 +2,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
-import org.pintoschneider.void_of_the_unfathomable.game.visibility.AlwaysVisible;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
 import java.util.*;
@@ -34,8 +34,7 @@ public final class Map {
         this.height = tiles[0].length;
 
 
-//      visibility = new AdamMillazosVisibility(this);
-        visibility = new AlwaysVisible(this);
+      visibility = new AdamMillazosVisibility(this);
     }
 
     /**
@@ -54,7 +53,6 @@ public final class Map {
 
             for (int j = 2; j < lines.size(); j++) {
                 int i = 0;
-                if (j-2 >= height) break;
                 for (char c : lines.get(j).toCharArray()) {
                     if (c >= '0' && c <= '9') {
                         if (i >= width) break;
