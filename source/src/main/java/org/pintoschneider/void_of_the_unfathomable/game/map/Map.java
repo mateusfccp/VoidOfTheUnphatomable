@@ -51,15 +51,14 @@ public final class Map {
                 ArrayList<MapTile> tileRow = new ArrayList<>();
                 for (char c : line.toCharArray()) {
                     if (c >= '0' && c <= '9') {
-                        int num = Character.getNumericValue(c);
-                        switch (num) {
-                            case 0:
+                        switch (c) {
+                            case '0':
                                 tileRow.add(MapTile.VOID);
                                 break;
-                            case 1:
+                            case '1':
                                 tileRow.add(MapTile.WALL);
                                 break;
-                            case 2:
+                            case '2':
                                 tileRow.add(MapTile.FLOOR);
                                 break;
                         }
