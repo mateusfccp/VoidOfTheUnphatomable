@@ -1,3 +1,8 @@
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.io.IOException;
+
 
 int scroll = 0;
 boolean leftClick = false, rightClick = false;
@@ -5,9 +10,12 @@ boolean leftClick = false, rightClick = false;
 
 boolean reset = true;
 boolean s, p, f;
+boolean loadMap = true;
 
 Grid grid;
-ArrayList<Integer> GridSize = new ArrayList();
+ArrayList<Integer> GridSizeX = new ArrayList();
+ArrayList<Integer> GridSizeY = new ArrayList();
+long gridWidth, gridHeight;
 
 int state = 1;
 
@@ -20,6 +28,16 @@ public void setup() {
 
 
 public void draw() {
+  if (state == 1 || state == 2) {
+    if (mousePressed && mouseButton == LEFT && mouseX > width/2-150 && mouseX < width/2+150 && mouseY > height-75 && mouseY < height+75) {
+      loadMap = true;
+      //grid.gridMatrix = loadMap("Map.txt");
+    }
+  }
+
+
+
+
   if (state == 0) {
     background(0);
     scroll = constrain(scroll, -100, 12);
@@ -59,40 +77,90 @@ public void draw() {
     textAlign(CENTER, CENTER);
     text("MAP EDITOR", width/2, height/2-250);
 
-    textSize(30);
-    textAlign(LEFT, CENTER);
-    text("Insert grid size:", width/2-250, height/2-70);
-
     textSize(50);
     textAlign(LEFT, CENTER);
     text("-------------------------------------------------", 0, height/2-20);
-    textSize(30);
-    textAlign(LEFT, CENTER);
-    text("Insert grid size:", width/2-250, height/2-70);
-    long resultLong = 0;
-    for (int element : GridSize) {
+
+    gridWidth = 0;
+    for (int element : GridSizeX) {
       String elementString = String.valueOf(element);
       int elementLength = elementString.length();
-      resultLong *= Math.pow(10, elementLength);
-      resultLong += element;
+      gridWidth *= pow(10, elementLength);
+      gridWidth += element;
     }
-    textSize(30);
-    text(String.valueOf(resultLong), width/2-50, height/2-70);
 
+    textSize(30);
+    textAlign(LEFT, CENTER);
+    text("Insert grid width: " + String.valueOf(gridWidth), width/2-270, height/2-70);
 
     textSize(50);
     textAlign(LEFT, CENTER);
     text("-------------------------------------------------", 0, height/2-120);
-
 
     textSize(50);
     textAlign(CENTER, CENTER);
     text("HOTKEYS", width/2, height/2+40);
     textSize(30);
     textAlign(LEFT, CENTER);
-    text("R - Reset Pan", width/2-250, height/2+110);
-    text("S - Save and Export Map", width/2-250, height/2+150);
-    text("P - Print Map in Console", width/2-250, height/2+190);
+    text("R - Reset Pan                                      Left Click - Draw", width/2-300, height/2+110);
+    text("S - Save and Export Map               Right Click - Pan", width/2-300, height/2+150);
+    text("P - Print Map in Console               Scroll - Zoom", width/2-300, height/2+190);
+
+    rectMode(CENTER);
+    fill(255);
+    rect(width/2, height-50, 300, 50);
+    fill(0);
+    textSize(40);
+    textAlign(CENTER, CENTER);
+    text("Load Map", width/2, height-50);
+  }
+
+  if (state == 2) {
+    background(0);
+    fill(255);
+    textSize(70);
+    textAlign(CENTER, CENTER);
+    text("MAP EDITOR", width/2, height/2-250);
+
+    textSize(50);
+    textAlign(LEFT, CENTER);
+    text("-------------------------------------------------", 0, height/2-20);
+
+    gridHeight = 0;
+    for (int element : GridSizeY) {
+      String elementString = String.valueOf(element);
+      int elementLength = elementString.length();
+      gridHeight *= pow(10, elementLength);
+      gridHeight += element;
+    }
+
+    textSize(30);
+    textAlign(LEFT, CENTER);
+    text("Insert grid height: " + String.valueOf(gridHeight), width/2-270, height/2-70);
+
+    textSize(50);
+    textAlign(LEFT, CENTER);
+    text("-------------------------------------------------", 0, height/2-120);
+
+    textSize(50);
+    textAlign(CENTER, CENTER);
+    text("HOTKEYS", width/2, height/2+40);
+    textSize(30);
+    textAlign(LEFT, CENTER);
+    text("R - Reset Pan                                      Left Click - Draw", width/2-300, height/2+110);
+    text("S - Save and Export Map               Right Click - Pan", width/2-300, height/2+150);
+    text("P - Print Map in Console               Scroll - Zoom", width/2-300, height/2+190);
+
+    rectMode(CENTER);
+    fill(255);
+    rect(width/2, height-50, 300, 50);
+    fill(0);
+    textSize(40);
+    textAlign(CENTER, CENTER);
+    text("Load Map", width/2, height-50);
+
+
+    // TODO implement back button
   }
 }
 
@@ -131,19 +199,24 @@ void keyPressed() {
     if (key == 's') s = true;
   } else if (state == 1) {
     if (key >= '0' && key <= '9') {
-      GridSize.add(key - '0');
-    } else if (key == BACKSPACE && GridSize.size() > 0) {
-      GridSize.remove(GridSize.size() - 1);
+      GridSizeX.add(key - '0');
+    } else if (key == BACKSPACE && GridSizeX.size() > 0) {
+      GridSizeX.remove(GridSizeX.size() - 1);
     } else if (key == ENTER || key == RETURN) {
-      long finalSize = 0;
-      for (int element : GridSize) {
-        String elementString = String.valueOf(element);
-        int elementLength = elementString.length();
-        finalSize *= Math.pow(10, elementLength);
-        finalSize += element;
+      if (gridWidth > 0) {
+        state = 2;
       }
-      if (finalSize > 0) {
-        grid = new Grid((int)finalSize);
+    }
+  } else if (state == 2) {
+    if (key >= '0' && key <= '9') {
+      GridSizeY.add(key - '0');
+    } else if (key == BACKSPACE) {
+      if (GridSizeY.size() > 0) {
+        GridSizeY.remove(GridSizeX.size() - 1);
+      } else state = 1;
+    } else if (key == ENTER || key == RETURN) {
+      if (gridHeight > 0) {
+        grid = new Grid((int)gridHeight, (int)gridWidth);
         state = 0;
       }
     }
@@ -151,14 +224,17 @@ void keyPressed() {
 }
 
 
-
 void saveMap(Tile[][] matrix) {
   PrintWriter output = createWriter("Map.txt");
-  for (int i = 0; i < matrix.length; i++) {
-    for (int j = 0; j < matrix.length; j++) {
+  int rows = matrix[0].length;
+  int cols = matrix.length;
+  output.println(cols);
+  output.println(rows);
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
       if (j == matrix.length-1) {
         output.print(matrix[j][i].getTileType());
-      } else output.print(matrix[j][i].getTileType() + ", ");
+      } else output.print(matrix[j][i].getTileType() + ",");
     }
     output.println();
   }
@@ -174,5 +250,44 @@ void printMap(Tile[][] matrix) {
       } else print(matrix[j][i].getTileType() + ", ");
     }
     println();
+  }
+}
+
+public int[][] loadMap(String fileName) {
+  try {
+    String filePath = "../MapMaker/" + fileName;
+    ArrayList<ArrayList<Integer>> map = new ArrayList<>();
+    List<String> lines = Files.readAllLines(Paths.get(filePath));
+
+    for (String line : lines) {
+      ArrayList<Integer> tileRow = new ArrayList<>();
+      for (char c : line.toCharArray()) {
+        if (c >= '0' && c <= '9') {
+          tileRow.add(Character.getNumericValue(c));
+        }
+      }
+      if (!tileRow.isEmpty()) {
+        map.add(tileRow);
+      }
+    }
+
+    if (map.isEmpty()) {
+      return new int[0][0];
+    }
+
+    int rows = map.size();
+    int cols = map.get(0).size();
+    int[][] staticMap = new int[rows][cols];
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        staticMap[i][j] = map.get(i).get(j);
+      }
+    }
+
+    return staticMap;
+  }
+  catch (IOException e) {
+    e.printStackTrace();
+    return new int[0][0];
   }
 }

@@ -1,6 +1,7 @@
 public class Grid { //<>//
   int tileSize = 20;
-  int gridSize = 32;
+  int gridSizeX = 32;
+  int gridSizeY = 32;
   int startX, startY;
   int offsetX, offsetY;
   boolean wallDetected = false;
@@ -9,13 +10,15 @@ public class Grid { //<>//
 
   ColourPicker colourPicker = new ColourPicker();
 
-  Tile[][] gridMatrix;
+  public Tile[][] gridMatrix;
 
-  public Grid(int gridSize) {
-    this.gridSize = gridSize;
-    gridMatrix = new Tile[gridSize][gridSize];
-    for (int i = 0; i < gridSize; i++) {
-      for (int j = 0; j < gridSize; j++) {
+  public Grid(int gridSizeX, int gridSizeY) {
+    this.gridSizeX = gridSizeX;
+    this.gridSizeY = gridSizeY;
+
+    gridMatrix = new Tile[gridSizeY][gridSizeX];
+    for (int i = 0; i < gridSizeY; i++) {
+      for (int j = 0; j < gridSizeX; j++) {
         gridMatrix[i][j] = new Tile(0, 0, tileSize, tileSize);
       }
     }
@@ -27,13 +30,12 @@ public class Grid { //<>//
       offsetY = mouseY - startY;
     }
 
-
-    for (int i = 0; i < gridSize; i++) {
-      for (int j = 0; j < gridSize; j++) {
+    for (int i = 0; i < gridSizeY; i++) {
+      for (int j = 0; j < gridSizeX; j++) {
         Tile tile = gridMatrix[i][j];
         int currentTileSize = tileSize - scroll;
-        int x = (i)*currentTileSize+offsetX+gridSize/2*scroll-tileSize*(gridSize-32)/2;
-        int y = (j)*currentTileSize+offsetY+gridSize/2*scroll-tileSize*(gridSize-32)/2;
+        int x = (i)*currentTileSize+offsetX+gridSizeX/2*scroll-tileSize*(gridSizeX-32)/2;
+        int y = (j)*currentTileSize+offsetY+gridSizeY/2*scroll-tileSize*(gridSizeY-32)/2;
 
         // Set values in gridMatrix
         tile.x = x;
@@ -56,65 +58,25 @@ public class Grid { //<>//
     }
   }
 
-
   void drawColourPicker() {
     colourPicker.drawColourPicker();
   }
-
 
   public Tile[][] getGrid() {
     return gridMatrix;
   }
 
-
-  void setGridSize(int number) {
-    this.gridSize = number;
+  void setGridSizeX(int number) {
+    this.gridSizeX = number;
   }
 
+  void setGridSizeY(int number) {
+    this.gridSizeY = number;
+  }
 
-  // UNUSED BUGGY FILL METHOD
-
-  //void fillGrid(Tile[][] matrix) {
-
-  //  boolean wallDetected = false;
-  //  for (int i = 0; i <  matrix.length; i++) {
-  //    for (int j = 0; j <  matrix.length; j++) {
-
-
-  //      int aux = -1;
-
-  //      for (int x =  matrix.length - 1; x > -1; x--) {
-  //        if (matrix[x][i].getTileType() == 1) {
-  //          aux = x;
-  //          break;
-  //        }
-  //      }
-
-  //      if (aux == -1) {
-  //        continue;
-  //      }
-
-  //      if (matrix[j][i].equals(matrix[aux][i])) {
-  //        wallDetected = false;
-  //        continue;
-  //      }
-
-  //      if (j <  matrix.length - 1 && matrix[j + 1][i].getTileType() == 1) {
-  //        if (wallDetected && matrix[j][i].getTileType() != 1) {
-  //          matrix[j][i].setTileType(2);
-  //        }
-  //        continue;
-  //      }
-
-  //      if (j > 0 && matrix[j][i].getTileType() == 1) {
-  //        wallDetected = !wallDetected;
-  //      } else if (wallDetected && matrix[j][i].getTileType() != 1) {
-  //        matrix[j][i].setTileType(2);
-  //      }
-  //    }
-  //    wallDetected = false;
-  //  }
-  //}
+  void setGridMatrix(Tile[][] matrix) {
+    this.gridMatrix = matrix;
+  }
 
   public void fillGrid(Tile[][] matrix, int i, int j, int originalColourID, int newColourID) {
     ArrayList<Coords> coordinates = new ArrayList<>();
@@ -145,7 +107,6 @@ public class Grid { //<>//
     if (matrix[x][y].getTileType() == newColourID) {
       return false;
     }
-    // Set Colour
     matrix[x][y].setTileType(newColourID);
     return true;
   }
