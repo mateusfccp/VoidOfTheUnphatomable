@@ -22,6 +22,7 @@ public class Text extends Component {
     private final String content;
     private final Paint paint;
     private final ArrayList<String> lines = new ArrayList<>();
+    private int maximumLineWidth = 0;
 
     /**
      * Constructs a {@link Text} component with the given content.
@@ -46,10 +47,10 @@ public class Text extends Component {
 
     @Override
     public void layout(Constraints constraints) {
-        final Size maximumSize = constraints.biggest();
-        computeLines(content, maximumSize.width());
-        final int width = Math.min(content.length(), maximumSize.width());
-        size = new Size(width, Math.min(lines.size(), maximumSize.height()));
+        computeLines(content, constraints.maxWidth());
+        size = constraints.constrain(
+            new Size(maximumLineWidth, lines.size())
+        );
     }
 
     private void computeLines(String content, int maxWidth) {
@@ -72,13 +73,13 @@ public class Text extends Component {
                 } else if (currentWord.length() > maxWidth) {
                     // The word is too long to fit in a single line, so we use a line for the entire word and truncate it.
                     // Maybe we could hyphenate it instead?
-                    addLine(currentLine);
+                    addLineIfNotEmpty(currentLine);
                     currentLine.append(currentWord, 0, maxWidth - 1).append('…');
 
-                    addLine(currentLine);
+                    addLineIfNotEmpty(currentLine);
                 } else {
                     // Move to the next line
-                    addLine(currentLine);
+                    addLineIfNotEmpty(currentLine);
                     currentLine.append(currentWord);
                 }
 
@@ -87,8 +88,7 @@ public class Text extends Component {
                 if (c == ' ' && currentLine.length() < maxWidth) {
                     currentLine.append(c);
                 } else if (c == '\n') {
-                    lines.add(currentLine.toString());
-                    currentLine.setLength(0);
+                    addLine(currentLine);
                 }
                 if (c == CharacterIterator.DONE) {
                     break;
@@ -99,20 +99,25 @@ public class Text extends Component {
 
                 if (currentLine.length() + currentWord.length() > maxWidth) {
                     // Move current word to next line
-                    addLine(currentLine);
+                    addLineIfNotEmpty(currentLine);
                 }
             }
 
             iterator.next();
         }
 
-        lines.add(currentLine.toString());
+        addLine(currentLine);
     }
 
-    void addLine(StringBuilder currentLine) {
+    private void addLine(StringBuilder currentLine) {
+        lines.add(currentLine.toString());
+        maximumLineWidth = Math.max(maximumLineWidth, currentLine.length());
+        currentLine.setLength(0);
+    }
+
+    private void addLineIfNotEmpty(StringBuilder currentLine) {
         if (!currentLine.toString().trim().isEmpty()) {
-            lines.add(currentLine.toString());
-            currentLine.setLength(0);
+            addLine(currentLine);
         }
     }
 
