@@ -62,6 +62,8 @@ public final class Map {
                                 tileRow.add(MapTile.FLOOR);
                                 break;
                         }
+                    } else  {
+                        tileRow.add(MapTile.VOID);
                     }
                 }
                 if (!tileRow.isEmpty()) {
