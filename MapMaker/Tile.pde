@@ -26,7 +26,7 @@ public class Tile {
       fill(255, 0, 0);
       break;
 
-    case 3:
+    case 3: // Button that does button things
       fill(255, 0, 255);
       break;
     }

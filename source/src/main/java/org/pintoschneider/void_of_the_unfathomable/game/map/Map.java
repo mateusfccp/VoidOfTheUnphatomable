@@ -6,6 +6,10 @@ import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosV
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
 import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.io.IOException;
 
 /**
  * A class representing a 2D map composed of tiles and entities.
@@ -23,65 +27,57 @@ public final class Map {
 
     /**
      * Creates a new map.
-     * <p>
-     * Currently, this constructor creates a temporary hardcoded map for testing purposes.
      */
     public Map() {
-        this.width = 31;
-        this.height = 33;
-        tiles = new MapTile[31][33];
+        tiles = loadMap("tempMap.txt");
+        this.width = tiles.length;
+        this.height = tiles[0].length;
 
-        // Temporary map
-        final int[][] map = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 0},
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0},
-            {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-            {0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 1, 0},
-            {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 1, 2, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 1, 2, 1, 0},
-            {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0},
-            {0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0},
-            {0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0},
-            {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
 
-        for (int y = 0; y < map.length; y++) {
-            for (int x = 0; x < map[x].length; x++) {
-                if (map[y][x] == 0) {
-                    tiles[x][y] = MapTile.VOID;
-                } else if (map[y][x] == 1) {
-                    tiles[x][y] = MapTile.WALL;
-                } else if (map[y][x] == 2) {
-                    tiles[x][y] = MapTile.FLOOR;
+      visibility = new AdamMillazosVisibility(this);
+    }
+
+    /**
+     * Loads and reads the map from the Map.txt file.
+     *
+     * @param fileName The filename of the map
+     * @return The matrix of mapTiles
+     */
+    private MapTile[][] loadMap(String fileName) {
+        try {
+            String filePath = "../MapMaker/" + fileName;
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            int width = Integer.parseInt(lines.get(0));
+            int height = Integer.parseInt(lines.get(1));
+            MapTile[][] map = new MapTile[width][height];
+
+            for (int j = 2; j < lines.size(); j++) {
+                int i = 0;
+                for (char c : lines.get(j).toCharArray()) {
+                    if (c >= '0' && c <= '9') {
+                        if (i >= width) break;
+                        switch (c) {
+                            case '1':
+                                map[i][j-2] = MapTile.WALL;
+                                break;
+                            case '2':
+                                map[i][j-2] = MapTile.FLOOR;
+                                break;
+                            default:
+                                map[i][j-2] = MapTile.VOID;
+                        }
+                        i++;
+                    }
                 }
             }
-        }
+            return map;
 
-        visibility = new AdamMillazosVisibility(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new MapTile[0][0];
+        }
     }
+
 
     /**
      * Gets the width of the map in tiles.
@@ -121,7 +117,7 @@ public final class Map {
     /**
      * Gets the tile at the specified position.
      * <p>
-     * If the given positoin is out of bounds, null is returned.
+     * If the given position is out of bounds, null is returned.
      *
      * @param position The position of the tile.
      * @return The tile at the specified position, or null if out of bounds.
@@ -152,9 +148,7 @@ public final class Map {
      * @return A list of all entities at the specified position.
      */
     public List<Entity<?>> getEntitiesAt(Offset position) {
-        return entities.stream()
-            .filter(entity -> entity.position().equals(position))
-            .toList();
+        return entities.stream().filter(entity -> entity.position().equals(position)).toList();
     }
 
     /**
@@ -172,8 +166,7 @@ public final class Map {
         if (tile == null || !tile.walkable()) return false;
 
         final List<Entity<?>> entitiesAtPosition = getEntitiesAt(position);
-        return entitiesAtPosition.isEmpty() ||
-            entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
+        return entitiesAtPosition.isEmpty() || entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
     }
 
     /**
@@ -265,10 +258,10 @@ public final class Map {
         if (entity.map() != null) {
             throw new IllegalStateException(
                 """
-                    Entity is already associated with another map.%n
-                    This means this method was called directly instead of using MapEntity.setMap(Map).%n
-                    Current map: %s%n
-                    """.formatted(entity.map())
+                        Entity is already associated with another map.%n
+                        This means this method was called directly instead of using MapEntity.setMap(Map).%n
+                        Current map: %s%n
+                        """.formatted(entity.map())
             );
         }
 
