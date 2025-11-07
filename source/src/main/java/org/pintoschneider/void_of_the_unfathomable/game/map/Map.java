@@ -5,11 +5,11 @@ import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
-import java.util.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
 
 /**
  * A class representing a 2D map composed of tiles and entities.
@@ -29,51 +29,67 @@ public final class Map {
      * Creates a new map.
      */
     public Map() {
-        tiles = loadMap("tempMap.txt");
+        tiles = loadMap("map");
         this.width = tiles.length;
         this.height = tiles[0].length;
 
 
-      visibility = new AdamMillazosVisibility(this);
+        visibility = new AdamMillazosVisibility(this);
     }
 
     /**
      * Loads and reads the map from the Map.txt file.
      *
-     * @param fileName The filename of the map
+     * @param mapName The name of the map within the maps' folder. For instance, if the map file is "map.schneidermap",
+     *                the map name is "map".
      * @return The matrix of mapTiles
      */
-    private MapTile[][] loadMap(String fileName) {
-        try {
-            String filePath = "../MapMaker/" + fileName;
-            List<String> lines = Files.readAllLines(Paths.get(filePath));
-            int width = Integer.parseInt(lines.get(0));
-            int height = Integer.parseInt(lines.get(1));
-            MapTile[][] map = new MapTile[width][height];
-
-            for (int j = 2; j < lines.size(); j++) {
-                int i = 0;
-                for (char c : lines.get(j).toCharArray()) {
-                    if (c >= '0' && c <= '9') {
-                        if (i >= width) break;
-                        switch (c) {
-                            case '1':
-                                map[i][j-2] = MapTile.WALL;
-                                break;
-                            case '2':
-                                map[i][j-2] = MapTile.FLOOR;
-                                break;
-                            default:
-                                map[i][j-2] = MapTile.VOID;
-                        }
-                        i++;
-                    }
-                }
+    private MapTile[][] loadMap(String mapName) {
+        final String resourcePath = "/%s.schneidermap".formatted(mapName);
+        try (final InputStream inputStream = getClass().getResourceAsStream(resourcePath)) {
+            if (inputStream == null) {
+                System.err.println("Cannot find resource: " + resourcePath);
+                return new MapTile[0][0];
             }
-            return map;
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            try (final InputStreamReader streamReader = new InputStreamReader(inputStream);
+                 final BufferedReader reader = new BufferedReader(streamReader)) {
+
+                final int width = Integer.parseInt(reader.readLine());
+                final int height = Integer.parseInt(reader.readLine());
+                final MapTile[][] map = new MapTile[width][height];
+
+                int x = 0;
+                int y = 0;
+                int ch;
+                while ((ch = reader.read()) != -1) {
+                    if (x >= width) {
+                        x = 0;
+                        y = y + 1;
+                        if (y >= height) break;
+                    }
+
+                    switch (ch) {
+                        case '0':
+                            map[x][y] = MapTile.VOID;
+                            break;
+                        case '1':
+                            map[x][y] = MapTile.WALL;
+                            break;
+                        case '2':
+                            map[x][y] = MapTile.FLOOR;
+                            break;
+                        default:
+                            continue;
+                    }
+
+                    x = x + 1;
+                }
+
+                return map;
+            }
+        } catch (IOException exception) {
+            System.err.printf("Error reading resource: %s%nException: %s", resourcePath, exception);
             return new MapTile[0][0];
         }
     }
@@ -258,10 +274,10 @@ public final class Map {
         if (entity.map() != null) {
             throw new IllegalStateException(
                 """
-                        Entity is already associated with another map.%n
-                        This means this method was called directly instead of using MapEntity.setMap(Map).%n
-                        Current map: %s%n
-                        """.formatted(entity.map())
+                    Entity is already associated with another map.%n
+                    This means this method was called directly instead of using MapEntity.setMap(Map).%n
+                    Current map: %s%n
+                    """.formatted(entity.map())
             );
         }
 

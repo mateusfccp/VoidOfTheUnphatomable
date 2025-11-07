@@ -37,7 +37,7 @@ public final class InGame implements Scene {
     /**
      * Creates a new in-game scene.
      */
-    InGame() {
+    public InGame() {
         final Equippable initialWeapon = new Stickool();
         player.addItemToInventory(initialWeapon);
         player.equipItem(initialWeapon);

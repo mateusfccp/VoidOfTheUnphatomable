@@ -30,12 +30,10 @@ public void setup() {
 public void draw() {
   if (state == 1 || state == 2) {
     if (mousePressed && mouseButton == LEFT && mouseX > width/2-150 && mouseX < width/2+150 && mouseY > height-75 && mouseY < height+75) {
-      loadMap = true;
-      //grid.gridMatrix = loadMap("Map.txt");
+      grid = loadMap("map");
+      state = 0;
     }
   }
-
-
 
 
   if (state == 0) {
@@ -45,7 +43,7 @@ public void draw() {
     grid.drawColourPicker();
 
     if (s) {
-      saveMap(grid.getGrid());
+      saveMap(grid.getGrid(), "map");
       s = false;
     }
 
@@ -224,8 +222,13 @@ void keyPressed() {
 }
 
 
-void saveMap(Tile[][] matrix) {
-  PrintWriter output = createWriter("Map.txt");
+String getMapPath(String mapName) {
+  return "../source/src/main/resources/" + mapName + ".schneidermap";
+}
+
+void saveMap(Tile[][] matrix, String mapName) {
+  String filePath = getMapPath(mapName);
+  PrintWriter output = createWriter(filePath);
   int rows = matrix[0].length;
   int cols = matrix.length;
   output.println(cols);
@@ -253,41 +256,39 @@ void printMap(Tile[][] matrix) {
   }
 }
 
-public int[][] loadMap(String fileName) {
+public Grid loadMap(String mapName) {
   try {
-    String filePath = "../MapMaker/" + fileName;
-    ArrayList<ArrayList<Integer>> map = new ArrayList<>();
-    List<String> lines = Files.readAllLines(Paths.get(filePath));
+    String filePath = getMapPath(mapName);
+    BufferedReader input = createReader(filePath);
 
-    for (String line : lines) {
-      ArrayList<Integer> tileRow = new ArrayList<>();
+    int width = int(input.readLine());
+    int height = int(input.readLine());
+
+    grid = new Grid(height, width);
+
+    int y = 0;
+    String line;
+    while ((line = input.readLine()) != null) {
+      int x = 0;
       for (char c : line.toCharArray()) {
         if (c >= '0' && c <= '9') {
-          tileRow.add(Character.getNumericValue(c));
+          grid.gridMatrix[x][y] = tileFromNumber(c - '0');
+          x++;
         }
       }
-      if (!tileRow.isEmpty()) {
-        map.add(tileRow);
-      }
+      y++;
     }
 
-    if (map.isEmpty()) {
-      return new int[0][0];
-    }
-
-    int rows = map.size();
-    int cols = map.get(0).size();
-    int[][] staticMap = new int[rows][cols];
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        staticMap[i][j] = map.get(i).get(j);
-      }
-    }
-
-    return staticMap;
+    return grid;
   }
   catch (IOException e) {
     e.printStackTrace();
-    return new int[0][0];
+    return new Grid(0, 0);
   }
+}
+
+Tile tileFromNumber(int number) {
+  final Tile tile = new Tile(0, 0, grid.tileSize, grid.tileSize);
+  tile.tileType = number;
+  return tile;
 }
