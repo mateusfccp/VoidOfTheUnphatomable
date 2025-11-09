@@ -1,4 +1,4 @@
-package org.pintoschneider.void_of_the_unfathomable.game.items.equippables;
+package org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons;
 
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;

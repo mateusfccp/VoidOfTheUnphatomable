@@ -9,7 +9,8 @@ import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
-import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.Stickool;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.ResoundingCore;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
@@ -40,6 +41,7 @@ public final class InGame implements Scene {
     public InGame() {
         final Equippable initialWeapon = new Stickool();
         player.addItemToInventory(initialWeapon);
+        player.addItemToInventory(new Blue());
         player.equipItem(initialWeapon);
 
         // Add entity for testing purposes

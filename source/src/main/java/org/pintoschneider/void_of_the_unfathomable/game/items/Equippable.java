@@ -1,5 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.game.items;
 
+import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
+
 /**
  * A class representing equippable items that can be worn or used by the player.
  */
@@ -25,7 +28,7 @@ public interface Equippable extends Item {
      *
      * @return The defense modifier.
      */
-    default int defenseModifier() {
+    default int defenseModifier(Player player) {
         return 0;
     }
 
@@ -36,6 +39,16 @@ public interface Equippable extends Item {
      */
     default int creativityModifier() {
         return 0;
+    }
+
+    /**
+     * Modifies the player's paint when this equippable item is worn.
+     *
+     * @param paint The original paint.
+     * @return The modified paint.
+     */
+    default Paint playerPaint(Paint paint) {
+        return paint;
     }
 }
 

@@ -11,7 +11,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.time.Duration;
 
-public final class PlayerEntity extends Entity<Player> {
+public final class PlayerEntity extends Entity<Player> implements DamageableEntity {
     private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
 
     public PlayerEntity(Offset position, Player associatedObject, Map map) {
@@ -25,10 +25,24 @@ public final class PlayerEntity extends Entity<Player> {
 
     @Override
     public Paint paint() {
-        final Color color = damageAnimation.playing() ? Color.lerp(ColorPalette.VERMILION, ColorPalette.IVORY, damageAnimation.progress()) : ColorPalette.IVORY;
+        final Paint basePaint = new Paint().withForegroundColor(ColorPalette.WHITE);
+        final Paint equippedPaint = associatedObject().equippedPaint(basePaint);
+
+        final Color color;
+        if (damageAnimation.playing()) {
+            color = Color.lerp(
+                ColorPalette.VERMILION,
+                equippedPaint.foregroundColor(),
+                damageAnimation.progress()
+            );
+        } else {
+            color = equippedPaint.foregroundColor();
+        }
+
         return new Paint().withForegroundColor(color);
     }
 
+    @Override
     public void damage(int amount) {
         associatedObject().damage(amount);
         damageAnimation.play();

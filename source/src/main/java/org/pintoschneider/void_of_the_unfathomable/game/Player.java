@@ -4,6 +4,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.*;
 
@@ -80,7 +81,7 @@ public final class Player {
      */
     public int defense() {
         return baseDefense + equippedItems.values().stream()
-            .mapToInt(Equippable::defenseModifier)
+            .mapToInt(e -> e.defenseModifier(this))
             .sum();
     }
 
@@ -313,5 +314,20 @@ public final class Player {
      */
     public void unequipItem(EquippableSlot slot) {
         equippedItems.remove(slot);
+    }
+
+    /**
+     * Gets the player's paint modified by the equipped armor.
+     *
+     * @param basePaint The base paint of the player.
+     * @return The modified paint of the player.
+     */
+    public Paint equippedPaint(Paint basePaint) {
+        final Equippable armor = equippedItem(EquippableSlot.ARMOR);
+        if (armor == null) {
+            return basePaint;
+        } else {
+            return armor.playerPaint(basePaint);
+        }
     }
 }

@@ -97,7 +97,7 @@ public class Inventory extends SelectionScene {
                                             player,
                                             Player::defense,
                                             getSelectedItem(),
-                                            Equippable::defenseModifier
+                                            e -> e.defenseModifier(player)
                                         ),
                                         new SizedBox(0, 2),
                                         new Text("Crt:", Paint.BOLD),
