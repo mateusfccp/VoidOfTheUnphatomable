@@ -8,11 +8,11 @@ public class ColourPicker {
 
   public ColourPicker() {
     for (int i = 0; i < 4; i++) {
-      colours.add(new Button(640*(i+1)/5-i*30-70, 700-30, 30, 30, i));
+      colours.add(new Button(32 + i * 64, height - 30, 30, 30, i));
     }
 
-    txt.add(new Button(640/2+190, 700-30, 40, 20, false));
-    txt.add(new Button(640/2+270, 700-30, 40, 20, true));
+    txt.add(new Button(width/2+190, height-30, 40, 20, false));
+    txt.add(new Button(width/2+270, height-30, 40, 20, true));
   }
 
   public void drawColourPicker() {

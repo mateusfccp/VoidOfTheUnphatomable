@@ -21,6 +21,7 @@ int state = 1;
 
 public void setup() {
   size(640, 700);
+  surface.setResizable(true);
   background(0);
   frameRate(60);
 }
@@ -65,6 +66,11 @@ public void draw() {
       }
       f = false;
     }
+
+    textSize(32);
+    textAlign(LEFT);
+    fill(0);
+    text("X: " + grid.currentTilex + " Y:" + grid.currentTiley, 64, 32);
   }
 
 
