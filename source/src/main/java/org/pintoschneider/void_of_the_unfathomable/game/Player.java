@@ -171,6 +171,10 @@ public final class Player {
             statusEffects.add(StatusEffect.DISCONTINUATION_SYNDROME);
         }
 
+        for (final Equippable equippable : equippedItems.values()) {
+            equippable.transformStatusEffects(statusEffects);
+        }
+
         return statusEffects;
     }
 
