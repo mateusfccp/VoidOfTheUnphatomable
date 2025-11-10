@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.map;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.AdamMillazosVisibility;
+import org.pintoschneider.void_of_the_unfathomable.game.visibility.AlwaysVisible;
 import org.pintoschneider.void_of_the_unfathomable.game.visibility.Visibility;
 
 import java.io.BufferedReader;
@@ -33,8 +34,8 @@ public final class Map {
         this.width = tiles.length;
         this.height = tiles[0].length;
 
-
-        visibility = new AdamMillazosVisibility(this);
+        visibility = new AlwaysVisible(this);
+        //visibility = new AdamMillazosVisibility(this);
     }
 
     /**
@@ -71,6 +72,13 @@ public final class Map {
 
                     switch (ch) {
                         case '0':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
+                        case '8':
+                        case '9':
                             map[x][y] = MapTile.VOID;
                             break;
                         case '1':

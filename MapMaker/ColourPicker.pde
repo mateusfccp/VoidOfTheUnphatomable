@@ -7,7 +7,7 @@ public class ColourPicker {
   boolean fill = false;
 
   public ColourPicker() {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 10; i++) {
       colours.add(new Button(32 + i * 64, height - 30, 30, 30, i));
     }
 

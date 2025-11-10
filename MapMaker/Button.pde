@@ -25,20 +25,44 @@ public class Button {
 
   public void drawColourButton() {
     switch(colourID) {
-    case 0:
+     case 0: // Void
       fill(255);
       break;
 
-    case 1:
+    case 1: // Wall
       fill(0, 0, 255);
       break;
 
-    case 2:
+    case 2: // Floor
+      fill(190);
+      break;
+
+    case 3: // Remove vision
+      fill(255, 0, 255);
+      break;
+
+    case 4: // Breakable/Special Wall
+      fill(123, 73, 23);
+      break;
+
+    case 5: // Player Entity
+      fill(255, 255, 0);
+      break;
+
+    case 6: // Enemy Entity
+      fill(2, 166, 37);
+      break;
+
+    case 7: // Item Entity
+      fill(250, 100, 152);
+      break;
+
+    case 8: // Key Entity
       fill(255, 0, 0);
       break;
 
-    case 3:
-      fill(255, 0, 255);
+    case 9: // Merchant
+      fill(235, 146, 77);
       break;
     }
 
