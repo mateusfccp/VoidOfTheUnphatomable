@@ -4,6 +4,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.*;
@@ -19,12 +20,11 @@ public final class Player {
 
     private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
     private final Map<EquippableSlot, Equippable> equippedItems = new EnumMap<>(EquippableSlot.class);
-    private final ArrayList<Item> inventory = new ArrayList<>();
+    private final List<Item> inventory = new ArrayList<>();
     private final int currentColorPoints = maximumColorPoints();
 
     private int currentHealth = maximumHealth();
     private int neuralToxicity = 0;
-    private int fluoxetineDoses = 0;
     private int turnsWithoutFluoxetine = 0;
 
     /**
@@ -137,7 +137,6 @@ public final class Player {
      * Increases the player's fluoxetine doses and resets the turns without fluoxetine counter.
      */
     public void takeFluoxetineDose() {
-        fluoxetineDoses = fluoxetineDoses + 1;
         turnsWithoutFluoxetine = 0;
     }
 
@@ -146,7 +145,7 @@ public final class Player {
      *
      * @return An {@link EnumSet} of {@link StatusEffect} representing the player's current status effects
      */
-    public EnumSet<StatusEffect> statusEffects() {
+    public Set<StatusEffect> statusEffects() {
         final EnumSet<StatusEffect> statusEffects = this.statusEffects.clone();
 
         if (currentHealth == 0) {
@@ -157,13 +156,13 @@ public final class Player {
             statusEffects.add(StatusEffect.INSANITY);
         }
 
-        if (neuralToxicity >= 5) {
+        if (neuralToxicity >= 2) {
             statusEffects.add(StatusEffect.TARDIVE_DYSKINESIA);
-        } else if (neuralToxicity >= 3) {
+        } else if (neuralToxicity == 1) {
             statusEffects.add(StatusEffect.DYSKINESIA);
         }
 
-        if (fluoxetineDoses > 0) {
+        if (Consumable.getUseCount(FluoxetineBottle.class) > 0) {
             statusEffects.add(StatusEffect.DEPENDENCY);
         }
 
@@ -236,7 +235,7 @@ public final class Player {
      * @param name The name of the item to be added.
      * @return The index of where to place the item in the ArrayList.
      */
-    private int binarySearch(ArrayList<Item> list, String name) {
+    private int binarySearch(List<Item> list, String name) {
         if (list.isEmpty()) {
             return 0;
         } else if (name.compareToIgnoreCase(list.getFirst().name()) < 0) {

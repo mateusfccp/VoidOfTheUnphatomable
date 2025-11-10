@@ -60,7 +60,7 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
     @Override
     public List<TurnStep> processTurn() {
         // If the entity can see the player, it moves towards them
-        final Entity<Player> playerEntity = map().entitiesOfType(PlayerEntity.class).getFirst();
+        final Entity<Player> playerEntity = map().getEntitiesOfType(PlayerEntity.class).getFirst();
 
         List<TurnStep> steps = new ArrayList<>();
 

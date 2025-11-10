@@ -11,7 +11,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
  * <p>
  * When used repeatedly, it may cause negative side effects.
  */
-public final class FluoxetineBottle implements Consumable {
+public final class FluoxetineBottle extends Consumable {
     @Override
     public String name() {
         return "Frasco de Fluoxetina";
@@ -24,6 +24,7 @@ public final class FluoxetineBottle implements Consumable {
 
     @Override
     public void onConsume(Player player) {
+        super.onConsume(player);
         player.removeStatusEffect(StatusEffect.DEPRESSION);
         player.takeFluoxetineDose();
     }

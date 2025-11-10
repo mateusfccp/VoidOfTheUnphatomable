@@ -167,12 +167,45 @@ public abstract class Entity<T> {
         return this.position.manhattanDistanceTo(other.position);
     }
 
+    public List<Entity<?>> getEntitiesInRange(int range) {
+        final List<Entity<?>> entitiesInRange = new ArrayList<>();
+
+        for (Entity<?> entity : map().entities()) {
+            if (entity != this && this.distanceTo(entity) <= range) {
+                entitiesInRange.add(entity);
+            }
+        }
+
+        return entitiesInRange;
+    }
+
+    public <U> List<Entity<U>> getEntitiesInRange(int range, Class<? extends Entity<U>> type) {
+        final List<Entity<U>> entitiesInRange = new ArrayList<>();
+
+        for (Entity<?> entity : map().entities()) {
+            if (type.isInstance(entity) && entity != this && this.distanceTo(entity) <= range) {
+                entitiesInRange.add(type.cast(entity));
+            }
+        }
+
+        return entitiesInRange;
+    }
+
+    /**
+     * Processes the entity's turn and returns a list of turn steps to be executed.
+     *
+     * @return A list of turn steps for the entity's turn.
+     */
     public List<TurnStep> processTurn() {
         return List.of();
     }
 
-    public void interact(Entity<?> entity) {
-    }
+    /**
+     * Interacts with another entity.
+     *
+     * @param entity The entity to interact with.
+     */
+    public void interact(Entity<?> entity) {}
 
     // We can optimize it if necessary by caching paths for unchanged maps
     private List<Offset> getPathTo(Offset target) {

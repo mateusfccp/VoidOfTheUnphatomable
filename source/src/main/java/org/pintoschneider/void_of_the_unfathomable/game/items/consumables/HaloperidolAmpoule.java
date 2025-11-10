@@ -8,7 +8,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
  * <p>
  * When consumed, it heals the player and increases neural toxicity.
  */
-public final class HaloperidolAmpoule implements Consumable {
+public final class HaloperidolAmpoule extends Consumable {
     @Override
     public String name() {
         return "Ampolla de Haloperidol";
@@ -21,6 +21,7 @@ public final class HaloperidolAmpoule implements Consumable {
 
     @Override
     public void onConsume(Player player) {
+        super.onConsume(player);
         player.heal(20);
         player.increaseNeuralToxicityBy(1);
     }

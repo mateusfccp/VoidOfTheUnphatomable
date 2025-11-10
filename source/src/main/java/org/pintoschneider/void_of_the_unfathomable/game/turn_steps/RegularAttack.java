@@ -23,7 +23,7 @@ public final class RegularAttack<T extends Enemy> implements TurnStep {
 
     @Override
     public boolean execute(Boolean lastTurnResult) {
-        final PlayerEntity playerEntity = entity.map().entitiesOfType(PlayerEntity.class).getFirst();
+        final PlayerEntity playerEntity = entity.map().getEntitiesOfType(PlayerEntity.class).getFirst();
 
         assert entity.distanceTo(playerEntity) == 1 : "Entity must be adjacent to the player to perform a regular attack.";
 

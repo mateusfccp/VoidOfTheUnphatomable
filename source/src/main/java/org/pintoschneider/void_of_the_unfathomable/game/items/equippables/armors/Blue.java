@@ -10,7 +10,8 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 /**
  * Blue.
  * <p>
- * Makes the player blue.
+ * Makes the player blue. While blue, defense is increased by 3 instead of 1 if the player has
+ * {@link StatusEffect.DEPRESSION}.
  */
 public class Blue implements Equippable {
     @Override
