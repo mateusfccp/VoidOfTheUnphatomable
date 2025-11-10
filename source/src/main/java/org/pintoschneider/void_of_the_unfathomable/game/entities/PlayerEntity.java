@@ -6,10 +6,12 @@ import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
+import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Color;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.time.Duration;
+import java.util.List;
 
 public final class PlayerEntity extends Entity<Player> implements DamageableEntity {
     private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
@@ -40,6 +42,12 @@ public final class PlayerEntity extends Entity<Player> implements DamageableEnti
         }
 
         return new Paint().withForegroundColor(color);
+    }
+
+    @Override
+    public List<TurnStep> processTurn() {
+        associatedObject().incrementTurnsWithoutFluoxetine();
+        return List.of();
     }
 
     @Override
