@@ -32,6 +32,7 @@ public final class InGame implements Scene {
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
+    private final BitSet[] exploredTiles;
     private final Player player = new Player();
     private final PlayerEntity playerEntity = new PlayerEntity(new Offset(103, 189), player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
@@ -57,6 +58,12 @@ public final class InGame implements Scene {
         new StaticDissonanceEntity(new Offset(15, 10), map);
         new ItemEntity(new Offset(6, 6), new ResoundingCore(), map);
         new StairEntity(new Offset(4, 2), map);
+
+        // Initialize explored tiles
+        exploredTiles = new BitSet[map.height()];
+        for (int y = 0; y < map.height(); y++) {
+            exploredTiles[y] = new BitSet(map.width());
+        }
     }
 
     @Override
@@ -80,7 +87,7 @@ public final class InGame implements Scene {
                         Constraints.expand(),
                         new Box()
                     ),
-                    new MapComponent(map, mapOffset, playerEntity.position())
+                    new MapComponent(map, mapOffset, playerEntity.position(), exploredTiles)
                 )
             ),
             new VerticalDivider(),
