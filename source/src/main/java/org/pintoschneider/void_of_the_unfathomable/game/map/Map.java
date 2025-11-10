@@ -75,8 +75,10 @@ public final class Map {
                         case '1':
                             map[x][y] = MapTile.WALL;
                             break;
-                        case '2':
                         case '3':
+                            map[x][y] = MapTile.DENSE_VOID;
+                            break;
+                        case '2':
                         case '4':
                         case '5':
                         case '6':

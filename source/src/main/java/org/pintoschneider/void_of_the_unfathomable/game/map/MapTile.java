@@ -19,7 +19,8 @@ public enum MapTile {
         '┴',
         new SpatialProperty(false, true)
     ),
-    FLOOR('·', new SpatialProperty(true, false));
+    FLOOR('·', new SpatialProperty(true, false)),
+    DENSE_VOID(' ', new SpatialProperty(false, true));
 
     final boolean autoTile;
     private final Character cross;
