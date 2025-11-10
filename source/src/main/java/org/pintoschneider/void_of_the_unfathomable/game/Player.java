@@ -299,6 +299,24 @@ public final class Player {
     }
 
     /**
+     * Removes an item of the specified type from the player's inventory.
+     * <p>
+     * If the player has more than one item of the specified type, only one instance will be removed.
+     *
+     * @param itemType The class type of the item to remove.
+     */
+    public void removeItemOfType(Class<? extends Item> itemType) {
+        final Iterator<Item> iterator = inventory.iterator();
+        while (iterator.hasNext()) {
+            final Item item = iterator.next();
+            if (itemType.isInstance(item)) {
+                iterator.remove();
+                return;
+            }
+        }
+    }
+
+    /**
      * Equips an equippable item to the player.
      *
      * @param item The equippable item to equip.

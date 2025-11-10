@@ -40,7 +40,7 @@ public abstract class Entity<T> {
      *
      * @return The character representation of the entity.
      */
-    public abstract char representation();
+    public abstract Character representation();
 
     /**
      * Gets the paint used to render the entity.

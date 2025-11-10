@@ -66,7 +66,7 @@ public final class MapComponent extends Component {
             final boolean withinRenderArea = ex >= minX && ex < maxX && ey >= minY && ey < maxY;
             final boolean visible = withinRenderArea && map.visibility().isVisible(playerOffset, new Offset(ex, ey));
 
-            if (visible) {
+            if (visible && entity.representation() != null) {
                 canvas.draw(
                     entity.representation(),
                     ex - offset.dx(),

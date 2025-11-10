@@ -11,7 +11,7 @@ public final class ItemEntity extends Entity<Item> {
     }
 
     @Override
-    public char representation() {
+    public Character representation() {
         return '○';
     }
 

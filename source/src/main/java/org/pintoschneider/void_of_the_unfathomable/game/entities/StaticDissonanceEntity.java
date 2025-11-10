@@ -29,7 +29,7 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
     }
 
     @Override
-    public char representation() {
+    public Character representation() {
         final int frame = (int) (representationAnimation.progress() * 4);
         return switch (frame) {
             case 1, 3 -> '*';

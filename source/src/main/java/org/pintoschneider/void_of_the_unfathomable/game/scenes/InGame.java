@@ -15,7 +15,9 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.LeftBanana;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.ResoundingCore;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.RightBanana;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -31,13 +33,14 @@ import java.util.concurrent.CompletableFuture;
 public final class InGame implements Scene {
     static private final Offset playerInitialPosition = new Offset(103, 189);
     static private final Offset debugBossRoomPosition = new Offset(130, 50);
+    static private final Offset mainHallRoomPosition = new Offset(110, 110);
 
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(debugBossRoomPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(mainHallRoomPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -54,6 +57,8 @@ public final class InGame implements Scene {
             player.addItemToInventory(new Sunga());
             player.addItemToInventory(new MaidDress());
             player.addItemToInventory(new Pajamas());
+            player.addItemToInventory(new LeftBanana());
+            player.addItemToInventory(new RightBanana());
         }
 
         // Add entity for testing purposes
@@ -66,6 +71,12 @@ public final class InGame implements Scene {
         exploredTiles = new BitSet[map.height()];
         for (int y = 0; y < map.height(); y++) {
             exploredTiles[y] = new BitSet(map.width());
+        }
+
+        // Initialize entities
+        for (int x = 108; x <= 111; x++) {
+            final Offset position = new Offset(x, 101);
+            new LockedDoor(position, map);
         }
     }
 

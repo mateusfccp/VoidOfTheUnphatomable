@@ -21,7 +21,7 @@ public final class PlayerEntity extends Entity<Player> implements DamageableEnti
     }
 
     @Override
-    public char representation() {
+    public Character representation() {
         return '@';
     }
 

@@ -14,7 +14,7 @@ public final class StairEntity extends Entity<Void> {
     }
 
     @Override
-    public char representation() {
+    public Character representation() {
         return '≡';
     }
 
