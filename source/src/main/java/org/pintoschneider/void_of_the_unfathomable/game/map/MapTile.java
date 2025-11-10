@@ -2,7 +2,8 @@ package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 public enum MapTile {
     VOID(' ', new SpatialProperty(false, false)),
-    WALL('┼',
+    WALL('⬤',
+        '┼',
         '─',
         '╴',
         '╶',
@@ -23,6 +24,7 @@ public enum MapTile {
     DENSE_VOID(' ', new SpatialProperty(false, true));
 
     final boolean autoTile;
+    private final Character single;
     private final Character cross;
     private final Character horizontalFull;
     private final Character horizontalLeft;
@@ -41,6 +43,7 @@ public enum MapTile {
     private final SpatialProperty spatialProperty;
 
     MapTile(Character symbol, SpatialProperty spatialProperty) {
+        this.single = symbol;
         this.cross = symbol;
         this.horizontalFull = symbol;
         this.horizontalLeft = symbol;
@@ -60,7 +63,8 @@ public enum MapTile {
         this.autoTile = false;
     }
 
-    MapTile(Character cross,
+    MapTile(Character single,
+            Character cross,
             Character horizontalFull,
             Character horizontalLeft,
             Character horizontalRight,
@@ -76,6 +80,7 @@ public enum MapTile {
             Character topTee,
             Character bottomTee,
             SpatialProperty spatialProperty) {
+        this.single = single;
         this.cross = cross;
         this.horizontalFull = horizontalFull;
         this.horizontalLeft = horizontalLeft;
@@ -122,7 +127,7 @@ public enum MapTile {
      */
     char getCharacter(int bitmask) {
         return switch (bitmask) {
-            case 0b0000 -> cross; // No neighbors
+            case 0b0000 -> single; // No neighbors
             case 0b0001 -> horizontalLeft; // Left neighbor
             case 0b0010 -> horizontalRight; // Right neighbor
             case 0b0011 -> horizontalFull; // Left and right neighbors
