@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 public enum MapTile {
-    VOID(' ', new SpatialProperty(false, true)),
+    VOID(' ', new SpatialProperty(false, false)),
     WALL('┼',
         '─',
         '╴',
