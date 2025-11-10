@@ -168,11 +168,23 @@ final public class AdamMillazosVisibility extends Visibility {
 
     boolean blocksLight(int x, int y, int octant, Offset origin) {
         final Offset position = transformOctant(x, y, octant, origin);
+
+        if (position.dx() < 0 || position.dx() >= map.width() ||
+            position.dy() < 0 || position.dy() >= map.height()) {
+            return false;
+        }
+
         return blocksLight(position);
     }
 
     void setVisible(int x, int y, int octant, Offset origin, boolean[][] visibility) {
         final Offset position = transformOctant(x, y, octant, origin);
+
+        if (position.dx() < 0 || position.dx() >= map.width() ||
+            position.dy() < 0 || position.dy() >= map.height()) {
+            return;
+        }
+
         visibility[position.dx()][position.dy()] = true;
     }
 }
