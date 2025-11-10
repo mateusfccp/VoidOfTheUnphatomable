@@ -1,5 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
+import org.pintoschneider.void_of_the_unfathomable.Main;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.engine.Context;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
@@ -10,17 +11,18 @@ import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.ResoundingCore;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
+import org.pintoschneider.void_of_the_unfathomable.ui.components.Stack;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -41,8 +43,14 @@ public final class InGame implements Scene {
     public InGame() {
         final Equippable initialWeapon = new Stickool();
         player.addItemToInventory(initialWeapon);
-        player.addItemToInventory(new Blue());
         player.equipItem(initialWeapon);
+
+        if (Main.debugMode) {
+            player.addItemToInventory(new Blue());
+            player.addItemToInventory(new Sunga());
+            player.addItemToInventory(new MaidDress());
+            player.addItemToInventory(new Pajamas());
+        }
 
         // Add entity for testing purposes
         new StaticDissonanceEntity(new Offset(14, 9), map);
