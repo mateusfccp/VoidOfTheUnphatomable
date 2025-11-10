@@ -141,6 +141,13 @@ public final class Player {
     }
 
     /**
+     * Increments the number of turns the player has gone without taking fluoxetine.
+     */
+    public void incrementTurnsWithoutFluoxetine() {
+        turnsWithoutFluoxetine = turnsWithoutFluoxetine + 1;
+    }
+
+    /**
      * Gets the current status effects affecting the player.
      *
      * @return An {@link EnumSet} of {@link StatusEffect} representing the player's current status effects
@@ -270,7 +277,7 @@ public final class Player {
      */
     public void useItem(Consumable item) {
         if (inventory.contains(item)) {
-            item.onConsume(this);
+            item.consume(this);
             inventory.remove(item);
         }
     }

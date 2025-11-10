@@ -23,8 +23,7 @@ public final class FluoxetineBottle extends Consumable {
     }
 
     @Override
-    public void onConsume(Player player) {
-        super.onConsume(player);
+    protected void onConsume(Player player) {
         player.removeStatusEffect(StatusEffect.DEPRESSION);
         player.takeFluoxetineDose();
     }

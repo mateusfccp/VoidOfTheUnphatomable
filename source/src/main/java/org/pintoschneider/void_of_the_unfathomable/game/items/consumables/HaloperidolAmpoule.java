@@ -20,8 +20,7 @@ public final class HaloperidolAmpoule extends Consumable {
     }
 
     @Override
-    public void onConsume(Player player) {
-        super.onConsume(player);
+    protected void onConsume(Player player) {
         player.heal(20);
         player.increaseNeuralToxicityBy(1);
     }
