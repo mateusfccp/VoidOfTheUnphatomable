@@ -29,12 +29,15 @@ import java.util.concurrent.CompletableFuture;
  * The in-game scene where the player can explore the map and interact with the game world.
  */
 public final class InGame implements Scene {
+    static private final Offset playerInitialPosition = new Offset(103, 189);
+    static private final Offset debugBossRoomPosition = new Offset(130, 50);
+
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(new Offset(103, 189), player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(debugBossRoomPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
