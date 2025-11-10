@@ -46,9 +46,6 @@ public class Grid { //<>//
         if (!colourPicker.getFill()) {
           tile.clickSetTileType(colourPicker.getColourID());
         }
-
-        if (tile.matrixPosVerifier(x, y)) {
-          currentTilex = i;
           currentTiley = j;
           currentTile = tile;
         }
