@@ -149,21 +149,6 @@ public final class Map {
     }
 
     /**
-     * Sets the tile at the specified coordinates.
-     * <p>
-     * If the coordinates are out of bounds, the method does nothing.
-     *
-     * @param x    The x coordinate of the tile.
-     * @param y    The y coordinate of the tile.
-     * @param tile The tile to set at the specified coordinates.
-     */
-    public void setTileAt(int x, int y, MapTile tile) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
-            tiles[x][y] = tile;
-        }
-    }
-
-    /**
      * Gets a list of all entities at the specified position.
      *
      * @param position The position to check for an entity.
