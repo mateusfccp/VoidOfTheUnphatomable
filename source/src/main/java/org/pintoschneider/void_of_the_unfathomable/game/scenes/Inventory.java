@@ -14,7 +14,6 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -59,6 +58,8 @@ public class Inventory extends SelectionScene {
         } else {
             content = super.build();
         }
+
+        final Item selectedItem = getSelectedItem();
 
         return new Padding(
             EdgeInsets.all(1),
@@ -113,13 +114,13 @@ public class Inventory extends SelectionScene {
                                 )
                             )
                         )
-                    ),
-                    new Flexible(new SizedBox(0, 0)),
-                    new ConstrainedBox(
+                    ).mainAxisSize(MainAxisSize.MIN),
+                    selectedItem == null ? null : new Flexible(new SizedBox(0, 0)),
+                    selectedItem == null ? null : new ConstrainedBox(
                         new Constraints(0, null, 8, 8),
                         new Box(
                             Border.SINGLE_ROUNDED,
-                            new Text(Objects.requireNonNullElse(getSelectedItem().description(), ""))
+                            new Text(selectedItem.description())
                         )
                     )
                 ).crossAxisAlignment(CrossAxisAlignment.CENTER)
@@ -267,6 +268,6 @@ class EquippableDifference extends Composent {
             new Text("%d".formatted(originalValue), oldValuePaint),
             new Text(" → ", Paint.DIM),
             new Text("%d".formatted(newValue), newValuePaint)
-        );
+        ).mainAxisSize(MainAxisSize.MIN);
     }
 }
