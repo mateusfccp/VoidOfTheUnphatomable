@@ -31,7 +31,7 @@ public final class InGame implements Scene {
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(new Offset(4, 4), player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(new Offset(103, 189), player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
