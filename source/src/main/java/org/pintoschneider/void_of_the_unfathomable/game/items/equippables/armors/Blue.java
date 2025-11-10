@@ -26,7 +26,7 @@ public class Blue implements Equippable {
 
     @Override
     public String description() {
-        return "";
+        return "Jessie, why are you blue?";
     }
 
     @Override
