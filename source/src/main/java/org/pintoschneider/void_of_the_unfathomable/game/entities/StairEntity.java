@@ -7,6 +7,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.QuestionScene;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
 
 /**
  * An entity representing stairs that allow the player to exit the Void.
@@ -37,7 +38,8 @@ public final class StairEntity extends Entity<Void> {
                 Engine.context().sceneManager().push(
                     new DialogScene(
                         "Con el Núcleo Resonante en tu posesión, sentís una oleada de poder y esperanza. Sabés que tenés la capacidad de detener El Vacío y restaurar el equilibrio en el mundo. Mientras ascendés de nuevo a la superficie, te preparás para enfrentar el desafío que te espera. El destino del mundo está en tus manos.",
-                        c -> Engine.context().sceneManager().pop()
+                        Alignment.CENTER,
+                        _ -> Engine.context().sceneManager().pop()
                     )
                 );
             } else {
@@ -47,7 +49,8 @@ public final class StairEntity extends Entity<Void> {
                         Engine.context().sceneManager().push(
                             new DialogScene(
                                 "Aunque no tengas el Núcleo Resonante, decidís huir del Vacío. Sentís un breve momento de alivio al ascender de nuevo a la superficie, pero sabés que toda esperanza para el mundo se ha perdido por tu culpa. El Vacío continuará extendiéndose, consumiendo todo a su paso. COBARDE.",
-                                c -> Engine.context().sceneManager().pop()
+                                Alignment.CENTER,
+                                _ -> Engine.context().sceneManager().pop()
                             )
                         );
                     }

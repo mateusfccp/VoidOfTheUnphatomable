@@ -1,10 +1,13 @@
 package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
+import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.function.Supplier;
@@ -25,7 +28,7 @@ public class ChestEntity extends Entity<Supplier<Item>> {
     @Override
     public Character representation() {
         if (isOpened) {
-            return '▢';
+            return '▭';
         } else {
             return '▆';
         }
@@ -44,6 +47,17 @@ public class ChestEntity extends Entity<Supplier<Item>> {
     @Override
     public void interact(Entity<?> entity) {
         if (!isOpened && entity instanceof PlayerEntity playerEntity) {
+            final String message = amount == 1
+                ? "Abriste el cofre y encontraste un %s!".formatted(associatedObject().get().name())
+                : "Abriste el cofre y encontraste %d %ss!".formatted(
+                amount,
+                associatedObject().get().name()
+            );
+
+            Engine.context().sceneManager().push(
+                new DialogScene(message, Alignment.CENTER)
+            );
+
             for (int i = 0; i < amount; i++) {
                 playerEntity.associatedObject().addItemToInventory(associatedObject().get());
             }

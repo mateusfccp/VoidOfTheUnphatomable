@@ -96,7 +96,7 @@ public final class InGame implements Scene {
         new StaticDissonanceEntity(new Offset(60, 197), map);
         new ChestEntity(new Offset(60, 179), FluoxetineBottle::new, map);
         new StaticDissonanceEntity(new Offset(91, 165), map);
-        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, map);
+        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, 10, map);
 
         // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);
@@ -120,7 +120,8 @@ public final class InGame implements Scene {
     public void onEnter() {
         Engine.context().sceneManager().push(
             new DialogScene(
-                "Finalmente entraste en El Vacío. Apenas puedes distinguir formas en la distancia. Te cuesta respirar, y una sensación de temor llena tu mente. Debés encontrar el Núcleo Resonante antes de que El Vacío te consuma por completo."
+                "Finalmente entraste en El Vacío. Apenas puedes distinguir formas en la distancia. Te cuesta respirar, y una sensación de temor llena tu mente. Debés encontrar el Núcleo Resonante antes de que El Vacío te consuma por completo.",
+                Alignment.CENTER
             )
         );
     }

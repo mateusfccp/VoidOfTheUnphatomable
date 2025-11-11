@@ -7,6 +7,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.RightBan
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
 
 /**
  * An entity representing a locked door that can be unlocked with specific key items.
@@ -35,7 +36,10 @@ public class LockedDoor extends Entity<Boolean> {
                 player.associatedObject().removeItemOfType(RightBanana.class);
             } else if (isLocked) {
                 Engine.context().sceneManager().push(
-                    new DialogScene("La puerta está cerrada y necesita de una bnn y una aaa para abrirse.")
+                    new DialogScene(
+                        "La puerta está cerrada y necesita de una banana para abrirse.",
+                        Alignment.CENTER
+                    )
                 );
             }
         }
