@@ -179,6 +179,27 @@ public final class Map {
     }
 
     /**
+     * Checks if the specified position is opaque.
+     * <p>
+     * A position is considered opaque if the tile at that position is opaque or any entity at that position is
+     * opaque.
+     *
+     * @param position The position to check.
+     * @return True if the position is opaque, false otherwise.
+     */
+    public boolean opaque(Offset position) {
+        final MapTile tile = getTileAt(position);
+
+        if (tile == null || tile.opaque()) {
+            return true;
+        }
+
+        return entities.stream().anyMatch(entity -> {
+            return entity.position() == position && entity.spatialProperty().opaque();
+        });
+    }
+
+    /**
      * Converts the map to a 2D array of characters, taking into the tile definitions.
      *
      * @return A 2D array of characters representing the map.
