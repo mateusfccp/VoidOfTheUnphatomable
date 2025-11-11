@@ -10,14 +10,17 @@ import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
+import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.BlackHole;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.LeftBanana;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.ResoundingCore;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.RightBanana;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.SpecialWeapon;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -156,6 +159,12 @@ public final class InGame implements Scene {
                     turnManager.startNewTurn();
                 }
             });
+        } else if (key == Key.C) {
+            final Equippable weapon = playerEntity.associatedObject().equippedItem(EquippableSlot.WEAPON);
+
+            if (weapon instanceof SpecialWeapon specialWeapon) {
+                specialWeapon.specialAbility(playerEntity);
+            }
         }
     }
 

@@ -13,9 +13,9 @@ public final class RegularAttack<T extends Enemy> implements TurnStep {
     final Entity<T> entity;
 
     /**
-     * Creates a new MoveTowardsPlayer action for the given entity.
+     * Creates a new RegularAttack action for the given entity.
      *
-     * @param entity The entity that will move towards the player.
+     * @param entity The entity that will attack the player.
      */
     public RegularAttack(Entity<T> entity) {
         this.entity = entity;

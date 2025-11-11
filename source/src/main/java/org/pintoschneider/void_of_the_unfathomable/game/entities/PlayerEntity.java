@@ -13,7 +13,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import java.time.Duration;
 import java.util.List;
 
-public final class PlayerEntity extends Entity<Player> implements DamageableEntity {
+public final class PlayerEntity extends DamageableEntity<Player> {
     private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
 
     public PlayerEntity(Offset position, Player associatedObject, Map map) {

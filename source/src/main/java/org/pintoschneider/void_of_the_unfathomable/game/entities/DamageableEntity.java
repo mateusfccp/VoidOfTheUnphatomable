@@ -1,13 +1,20 @@
 package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
+import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+
 /**
- * An interface representing an entity that can take damage.
+ * An entity that can be damaged.
  */
-public interface DamageableEntity {
+public abstract class DamageableEntity<T> extends Entity<T> {
+    protected DamageableEntity(Offset position, T associatedObject, Map map) {
+        super(position, associatedObject, map);
+    }
+
     /**
      * Inflicts damage to the entity.
      *
      * @param amount The amount of damage to inflict.
      */
-    void damage(int amount);
+    abstract public void damage(int amount);
 }

@@ -14,7 +14,7 @@ import java.util.*;
  */
 public final class Player {
     private static final int maximumHealth = 100;
-    private static final int baseAttack = 5;
+    private static final int baseAttack = 3;
     private static final int baseDefense = 0;
     private static final int baseCreativity = 1;
 

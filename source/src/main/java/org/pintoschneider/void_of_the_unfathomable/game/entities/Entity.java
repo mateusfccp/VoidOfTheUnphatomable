@@ -106,8 +106,6 @@ public abstract class Entity<T> {
             final int dy = nextStep.dy() - position.dy();
             final Offset offset = new Offset(dx, dy);
 
-            System.out.printf("%s moves towards the offset = %s.%n", this.getClass().getName(), offset);
-
             return moveBy(offset);
         }
     }

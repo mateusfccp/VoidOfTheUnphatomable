@@ -15,7 +15,8 @@ public enum Key {
     LEFT(key_left),
     RIGHT(key_right),
     ENTER(new Capability[]{key_enter}, new CharSequence[]{"\r", "\n"}),
-    I("i");
+    I("i"),
+    C("c");
 
     final Capability[] capabilities;
     final CharSequence[] sequences;
