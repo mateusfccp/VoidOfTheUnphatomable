@@ -22,10 +22,24 @@ public abstract class DamageableEntity<T extends Damageable> extends Entity<T> {
         super(position, associatedObject, map);
     }
 
+    /**
+     * The base paint of the entity, without any damage effects.
+     *
+     * @return The base paint of the entity.
+     */
+    protected Paint basePaint() {
+        return new Paint().withForegroundColor(ColorPalette.WHITE);
+    }
+
     @Override
     public Paint paint() {
-        final Color color = damageAnimation.playing() ? Color.lerp(ColorPalette.VERMILION, ColorPalette.WHITE, damageAnimation.progress()) : null;
-        return new Paint().withForegroundColor(color);
+        final Color baseColor = basePaint().foregroundColor();
+        final Color color = damageAnimation.playing() ? Color.lerp(
+            ColorPalette.VERMILION,
+            baseColor,
+            damageAnimation.progress()
+        ) : baseColor;
+        return basePaint().withForegroundColor(color);
     }
 
     /**

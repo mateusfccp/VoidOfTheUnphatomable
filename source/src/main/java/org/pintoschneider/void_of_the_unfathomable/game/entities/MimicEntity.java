@@ -23,8 +23,7 @@ import java.util.stream.IntStream;
  * A mimic entity that represents a mimic enemy in the game.
  */
 public final class MimicEntity extends DamageableEntity<Mimic> {
-    private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(1600));
-    private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
+    private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(800));
 
     /**
      * Creates a new MimicEntity at the given position on the given map.
@@ -43,17 +42,17 @@ public final class MimicEntity extends DamageableEntity<Mimic> {
             return '▆';
         }
 
-        final int frame = (int) (representationAnimation.progress() * 2);
+        final int frame = (int) (representationAnimation.progress() * 4);
         return switch (frame) {
-            case 1 -> '▆';
+            case 1, 3 -> '▆';
+            case 2 -> '▅';
             default -> '█';
         };
     }
 
     @Override
-    public Paint paint() {
-        final Color color = damageAnimation.playing() ? Color.lerp(ColorPalette.VERMILION, ColorPalette.WHITE, damageAnimation.progress()) : null;
-        return new Paint().withForegroundColor(color);
+    protected Paint basePaint() {
+        return new Paint().withForegroundColor(ColorPalette.APRICOT);
     }
 
     @Override
@@ -63,11 +62,13 @@ public final class MimicEntity extends DamageableEntity<Mimic> {
 
     @Override
     public void interact(Entity<?> entity) {
-        if (this.associatedObject().state() == Mimic.State.IDLE) {
-            associatedObject().followPlayer();
-        } else if (entity instanceof PlayerEntity playerEntity) {
+        if (entity instanceof PlayerEntity playerEntity) {
             final Player player = playerEntity.associatedObject();
             damage(player.attack());
+
+            if (this.associatedObject().state() == Mimic.State.IDLE) {
+                associatedObject().followPlayer();
+            }
         }
     }
 
