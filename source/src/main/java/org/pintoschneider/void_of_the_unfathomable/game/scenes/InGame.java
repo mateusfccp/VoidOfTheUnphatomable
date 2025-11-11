@@ -12,16 +12,14 @@ import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.BlackHole;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.LeftBanana;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.ResoundingCore;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.RightBanana;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.SpecialWeapon;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.*;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -44,7 +42,7 @@ public final class InGame implements Scene {
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(mainHallRoomPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(playerInitialPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -65,7 +63,7 @@ public final class InGame implements Scene {
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
 
-            final MimicEntity mimicEntity = new MimicEntity(
+            new MimicEntity(
                 new Offset(110, 104),
                 map
             );
@@ -88,6 +86,17 @@ public final class InGame implements Scene {
             final Offset position = new Offset(x, 101);
             new LockedDoor(position, map);
         }
+
+        // First area entities
+        new StaticDissonanceEntity(new Offset(53, 196), map);
+        new StaticDissonanceEntity(new Offset(57, 190), map);
+        new StaticDissonanceEntity(new Offset(55, 191), map);
+        new StaticDissonanceEntity(new Offset(60, 197), map);
+        new ChestEntity(new Offset(57, 194), MaidDress::new, map);
+        new StaticDissonanceEntity(new Offset(60, 197), map);
+        new ChestEntity(new Offset(60, 179), FluoxetineBottle::new, map);
+        new StaticDissonanceEntity(new Offset(91, 165), map);
+        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, map);
 
         // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);
