@@ -185,11 +185,12 @@ final public class AdamMillazosVisibility extends Visibility {
 
         visibility[position.dx()][position.dy()] = true;
     }
+
+    private int rangeLimit() {
+        return 30;
+    }
 }
 
-private int rangeLimit() {
-    return 30;
-}
 
 record Slope(int y, int x) {
     boolean greaterThan(int otherY, int otherX) {
