@@ -21,6 +21,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapon
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.*;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+import org.pintoschneider.void_of_the_unfathomable.game.map.MapTile;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Stack;
@@ -36,13 +37,14 @@ public final class InGame implements Scene {
     static private final Offset playerInitialPosition = new Offset(103, 189);
     static private final Offset debugBossRoomPosition = new Offset(130, 50);
     static private final Offset mainHallRoomPosition = new Offset(110, 110);
+    static private final Offset bnnRoomPosition = new Offset(99, 125);
 
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(playerInitialPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(bnnRoomPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -96,7 +98,24 @@ public final class InGame implements Scene {
         new StaticDissonanceEntity(new Offset(60, 197), map);
         new ChestEntity(new Offset(60, 179), FluoxetineBottle::new, map);
         new StaticDissonanceEntity(new Offset(91, 165), map);
-        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, 10, map);
+        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, 10, null, map);
+
+        // Entities in the maze area
+        new MimicEntity(new Offset(11, 134), map);
+        new MimicEntity(new Offset(20, 130), map);
+        new MimicEntity(new Offset(52, 153), map);
+        new MimicEntity(new Offset(73, 152), map);
+        new ChestEntity(
+            new Offset(99, 120),
+            LeftBanana::new,
+            1,
+            () -> map.setTileAt(
+                109,
+                118,
+                MapTile.FLOOR
+            ),
+            map
+        );
 
         // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);

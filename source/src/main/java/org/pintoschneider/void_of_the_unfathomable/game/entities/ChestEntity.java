@@ -15,14 +15,16 @@ import java.util.function.Supplier;
 public class ChestEntity extends Entity<Supplier<Item>> {
     private boolean isOpened = false;
     private final int amount;
+    private Runnable onOpenCallback;
 
     public ChestEntity(Offset position, Supplier<Item> itemBuilder, Map map) {
-        this(position, itemBuilder, 1, map);
+        this(position, itemBuilder, 1, null, map);
     }
 
-    public ChestEntity(Offset position, Supplier<Item> itemBuilder, int amount, Map map) {
+    public ChestEntity(Offset position, Supplier<Item> itemBuilder, int amount, Runnable onOpenCallback, Map map) {
         super(position, itemBuilder, map);
         this.amount = amount;
+        this.onOpenCallback = onOpenCallback;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class ChestEntity extends Entity<Supplier<Item>> {
 
             Engine.context().sceneManager().push(
                 new DialogScene(message, Alignment.CENTER)
-            );
+            ).thenRun(onOpenCallback);
 
             for (int i = 0; i < amount; i++) {
                 playerEntity.associatedObject().addItemToInventory(associatedObject().get());
