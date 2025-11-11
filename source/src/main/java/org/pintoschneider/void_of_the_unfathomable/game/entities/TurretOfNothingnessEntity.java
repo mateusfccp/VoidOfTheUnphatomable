@@ -1,12 +1,18 @@
 package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
+import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.TurretOfNothingness;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * An entity representing a Turret of Nothingness.
@@ -26,17 +32,25 @@ public class TurretOfNothingnessEntity extends DamageableEntity<TurretOfNothingn
     }
 
     @Override
-    public void damage(int amount) {
+    public Character representation() {
+        return '█';
     }
 
-    @Override
-    public Character representation() {
-        return '✱';
+    public Paint paint() {
+        return new Paint().withForegroundColor(ColorPalette.CLAY);
     }
 
     @Override
     public SpatialProperty spatialProperty() {
         return new SpatialProperty(false, true);
+    }
+
+    @Override
+    public void interact(Entity<?> entity) {
+        if (entity instanceof PlayerEntity playerEntity) {
+            final Player player = playerEntity.associatedObject();
+            damage(player.attack());
+        }
     }
 
     @Override
@@ -53,29 +67,27 @@ public class TurretOfNothingnessEntity extends DamageableEntity<TurretOfNothingn
     private List<TurnStep> shoot() {
         if (isShootingDiagonal) {
             isShootingDiagonal = false;
-            return List.of(
-                _ -> {
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.NORTH_WEST);
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.NORTH_EAST);
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.SOUTH_WEST);
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.SOUTH_EAST);
-
-                    return true;
-                }
-            );
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.NORTH_WEST);
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.NORTH_EAST);
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.SOUTH_WEST);
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.SOUTH_EAST);
         } else {
             isShootingDiagonal = true;
-
-            return List.of(
-                _ -> {
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.NORTH);
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.SOUTH);
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.EAST);
-                    new BulletEntity(position(), map(), associatedObject().attack(), Offset.WEST);
-
-                    return true;
-                }
-            );
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.NORTH);
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.SOUTH);
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.EAST);
+            new BulletEntity(position(), map(), associatedObject().attack(), Offset.WEST);
         }
+
+        return List.of();
+    }
+
+    @Override
+    protected List<Item> loot() {
+        final int dropQuantity = 1 + (int) (Math.random() * 2);
+
+        return IntStream.range(0, dropQuantity)
+            .<Item>mapToObj(_ -> new FragmentOfNothingness())
+            .toList();
     }
 }

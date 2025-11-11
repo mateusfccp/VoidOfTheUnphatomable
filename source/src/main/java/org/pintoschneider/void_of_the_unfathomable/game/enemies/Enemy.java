@@ -1,11 +1,13 @@
 package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 
+import org.pintoschneider.void_of_the_unfathomable.game.Damageable;
+
 import java.util.Objects;
 
 /**
  * A class representing an enemy in the game.
  */
-public abstract class Enemy {
+public abstract class Enemy implements Damageable {
     private final String name;
     private final int maxHealth;
     private final int attack;
@@ -70,12 +72,14 @@ public abstract class Enemy {
      *
      * @param amount The amount of damage to deal to the enemy.
      */
-    public void damage(int amount) {
+    public boolean damage(int amount) {
         assert amount >= 0 : "Damage amount must be non-negative";
 
         final int defendedAmount = Math.max(1, amount - defense);
 
         health = Math.max(0, health - defendedAmount);
+
+        return health == 0;
     }
 }
 

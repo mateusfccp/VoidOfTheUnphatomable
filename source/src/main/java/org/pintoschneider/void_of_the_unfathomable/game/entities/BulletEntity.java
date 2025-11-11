@@ -2,6 +2,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+import org.pintoschneider.void_of_the_unfathomable.game.map.MapTile;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.DoIfLastStepFails;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.MoveInDirection;
@@ -13,9 +14,9 @@ import java.util.List;
  * An entity representing a bullet in the game.
  */
 public class BulletEntity extends Entity<Void> {
+    final BulletManagerEntity manager;
     final private int damage;
     final private Offset direction;
-    final BulletManagerEntity manager;
 
     /**
      * Creates a new BulletEntity.
@@ -48,6 +49,7 @@ public class BulletEntity extends Entity<Void> {
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity playerEntity) {
             playerEntity.damage(damage);
+            destroy();
         }
     }
 
@@ -59,6 +61,37 @@ public class BulletEntity extends Entity<Void> {
                 return true;
             })
         );
+    }
+
+    // We override it because a bullet should only be stopped by walls, not by other entities.
+    // This is ugly, but works for now.
+    @Override
+    public boolean moveBy(Offset offset) {
+        final Offset targetPosition = position().translate(offset.dx(), offset.dy());
+
+        final boolean didMove;
+
+        final List<Entity<?>> entitiesToInteract;
+
+        final MapTile targetTile = map().getTileAt(targetPosition);
+
+        if (targetTile != null && targetTile != MapTile.WALL && targetTile != MapTile.DENSE_VOID) {
+            position = targetPosition;
+            didMove = true;
+            entitiesToInteract = map().getEntitiesAt(position);
+        } else {
+            didMove = false;
+            entitiesToInteract = map().getEntitiesAt(targetPosition);
+        }
+
+        for (Entity<?> entity : entitiesToInteract) {
+            if (entity != this) {
+                entity.interact(this);
+                this.interact(entity);
+            }
+        }
+
+        return didMove;
     }
 
     @Override

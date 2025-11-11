@@ -2,9 +2,9 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.StaticDissonance;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
@@ -12,19 +12,17 @@ import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.DoIfLastStepS
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.MoveTowardsPlayer;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.RegularAttack;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Color;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * A static dissonance entity that represents a Static Dissonance enemy in the game.
  */
-public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
+public final class StaticDissonanceEntity extends DamageableEntity<StaticDissonance> {
     private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(1600));
-    private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
 
     /**
      * Creates a new StaticDissonanceEntity at the given position on the given map.
@@ -45,12 +43,6 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
             case 2 -> '☼';
             default -> '•';
         };
-    }
-
-    @Override
-    public Paint paint() {
-        final Color color = damageAnimation.playing() ? Color.lerp(ColorPalette.VERMILION, ColorPalette.WHITE, damageAnimation.progress()) : null;
-        return new Paint().withForegroundColor(color);
     }
 
     @Override
@@ -96,20 +88,18 @@ public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
         return steps;
     }
 
-    private void damage(int amount) {
-        this.associatedObject().damage(amount);
-        damageAnimation.play();
+    @Override
+    protected List<Item> loot() {
+        final int dropQuantity = 1 + (int) (Math.random() * 2);
 
-        if (this.associatedObject().health() == 0) {
-            final int dropQuantity = 1 + (int) (Math.random() * 2);
-            drop(new FragmentOfNothingness(), dropQuantity);
-            destroy();
-        }
+        return IntStream.range(0, dropQuantity)
+            .<Item>mapToObj(_ -> new FragmentOfNothingness())
+            .toList();
     }
 
     @Override
     protected void dispose() {
-        damageAnimation.dispose();
+        super.dispose();
         representationAnimation.dispose();
     }
 }

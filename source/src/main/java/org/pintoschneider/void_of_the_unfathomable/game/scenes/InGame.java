@@ -6,9 +6,9 @@ import org.pintoschneider.void_of_the_unfathomable.engine.Context;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.engine.Scene;
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
-import org.pintoschneider.void_of_the_unfathomable.game.enemies.TurretOfNothingness;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
@@ -89,8 +89,22 @@ public final class InGame implements Scene {
             new LockedDoor(position, map);
         }
 
+        // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);
+        new TurretOfNothingnessEntity(new Offset(178, 88), map);
         new TurretOfNothingnessEntity(new Offset(185, 105), map);
+        new TurretOfNothingnessEntity(new Offset(187, 122), map);
+        new TurretOfNothingnessEntity(new Offset(166, 123), map);
+        new TurretOfNothingnessEntity(new Offset(175, 139), map);
+        new TurretOfNothingnessEntity(new Offset(190, 158), map);
+        new TurretOfNothingnessEntity(new Offset(165, 173), map);
+        new TurretOfNothingnessEntity(new Offset(187, 181), map);
+        new ItemEntity(
+            new Offset(153, 190),
+            new RightBanana(),
+            new Paint().withForegroundColor(ColorPalette.BANANA),
+            map
+        );
     }
 
     @Override

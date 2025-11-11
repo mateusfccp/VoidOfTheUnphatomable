@@ -109,7 +109,7 @@ public abstract class ColorPalette {
      * <p>
      * Defined by the RGB values (255, 228, 120).
      */
-    public static final Color SUNGLOW = new Color(255, 228, 120);
+    public static final Color BANANA = new Color(255, 228, 120);
 
     /**
      * The ivory color.

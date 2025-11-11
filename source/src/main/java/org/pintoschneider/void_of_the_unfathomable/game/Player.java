@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * A class representing the player character in the game including their attributes, status effects, and inventory.
  */
-public final class Player {
+public final class Player implements Damageable {
     private static final int maximumHealth = 100;
     private static final int baseAttack = 3;
     private static final int baseDefense = 0;
@@ -114,14 +114,12 @@ public final class Player {
         setCurrentHealth(currentHealth + health);
     }
 
-    /**
-     * Inflicts damage to the player, reducing their current health.
-     *
-     * @param damage The amount of damage to inflict
-     */
-    public void damage(int damage) {
+    @Override
+    public boolean damage(int damage) {
         final int defendedDamage = Math.max(1, damage - defense());
         setCurrentHealth(currentHealth - defendedDamage);
+
+        return currentHealth == 0;
     }
 
     /**

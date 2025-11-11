@@ -5,6 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.Mimic;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
@@ -16,6 +17,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * A mimic entity that represents a mimic enemy in the game.
@@ -91,20 +93,17 @@ public final class MimicEntity extends DamageableEntity<Mimic> {
     }
 
     @Override
-    public void damage(int amount) {
-        this.associatedObject().damage(amount);
-        damageAnimation.play();
+    protected List<Item> loot() {
+        final int dropQuantity = 1 + (int) (Math.random() * 2);
 
-        if (this.associatedObject().health() == 0) {
-            final int dropQuantity = 1 + (int) (Math.random() * 2);
-            drop(new FragmentOfNothingness(), dropQuantity);
-            destroy();
-        }
+        return IntStream.range(0, dropQuantity)
+            .<Item>mapToObj(_ -> new FragmentOfNothingness())
+            .toList();
     }
 
     @Override
     protected void dispose() {
-        damageAnimation.dispose();
+        super.dispose();
         representationAnimation.dispose();
     }
 }

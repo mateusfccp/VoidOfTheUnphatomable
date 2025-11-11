@@ -11,6 +11,16 @@ public abstract class Consumable implements Item {
     private static final WeakHashMap<Class<? extends Consumable>, Integer> useCount = new WeakHashMap<>();
 
     /**
+     * Gets the number of times a specific consumable has been used.
+     *
+     * @param consumableClass The class of the consumable item.
+     * @return The number of times the consumable has been used.
+     */
+    public static int getUseCount(Class<? extends Consumable> consumableClass) {
+        return useCount.getOrDefault(consumableClass, 0);
+    }
+
+    /**
      * Consumes the item, applying its effects to the player.
      *
      * @param player The player who consumed the item.
@@ -22,15 +32,5 @@ public abstract class Consumable implements Item {
     }
 
     abstract protected void onConsume(Player player);
-
-    /**
-     * Gets the number of times a specific consumable has been used.
-     *
-     * @param consumableClass The class of the consumable item.
-     * @return The number of times the consumable has been used.
-     */
-    public static int getUseCount(Class<? extends Consumable> consumableClass) {
-        return useCount.getOrDefault(consumableClass, 0);
-    }
 }
 

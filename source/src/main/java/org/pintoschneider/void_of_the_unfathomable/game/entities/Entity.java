@@ -17,7 +17,7 @@ import java.util.*;
  */
 public abstract class Entity<T> {
     private final T associatedObject;
-    private Offset position;
+    protected Offset position;
     private Map map;
 
     protected Entity(Offset position, T associatedObject, Map map) {
