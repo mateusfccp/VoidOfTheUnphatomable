@@ -8,6 +8,7 @@ import org.pintoschneider.void_of_the_unfathomable.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
+import org.pintoschneider.void_of_the_unfathomable.game.enemies.TurretOfNothingness;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
@@ -87,6 +88,9 @@ public final class InGame implements Scene {
             final Offset position = new Offset(x, 101);
             new LockedDoor(position, map);
         }
+
+        new BulletManagerEntity(Offset.ZERO, map);
+        new TurretOfNothingnessEntity(new Offset(185, 105), map);
     }
 
     @Override
@@ -170,6 +174,7 @@ public final class InGame implements Scene {
 
             if (weapon instanceof SpecialWeapon specialWeapon) {
                 specialWeapon.specialAbility(playerEntity);
+                turnManager.startNewTurn();
             }
         }
     }

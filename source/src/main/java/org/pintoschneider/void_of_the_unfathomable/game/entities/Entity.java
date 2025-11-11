@@ -71,17 +71,21 @@ public abstract class Entity<T> {
 
         final boolean didMove;
 
+        final List<Entity<?>> entitiesToInteract;
+
         if (map.walkable(targetPosition)) {
             position = targetPosition;
             didMove = true;
+            entitiesToInteract = map.getEntitiesAt(position);
         } else {
             didMove = false;
+            entitiesToInteract = map.getEntitiesAt(targetPosition);
         }
 
-        final List<Entity<?>> entityAtTarget = map.getEntitiesAt(targetPosition);
-        for (Entity<?> entity : entityAtTarget) {
+        for (Entity<?> entity : entitiesToInteract) {
             if (entity != this) {
                 entity.interact(this);
+                this.interact(entity);
             }
         }
 

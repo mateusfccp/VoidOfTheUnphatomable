@@ -1,11 +1,11 @@
 package org.pintoschneider.void_of_the_unfathomable.game.turn_steps;
 
 /**
- * A {@link TurnStep} that only executes if the last step was successful.
+ * A {@link TurnStep} that only executes if the last step failed.
  * <p>
  * If this is the first step, it will always execute.
  */
-public class DoIfLastStepSucceeds implements TurnStep {
+public class DoIfLastStepFails implements TurnStep {
     private final TurnStep step;
 
     /**
@@ -13,18 +13,16 @@ public class DoIfLastStepSucceeds implements TurnStep {
      *
      * @param step The step to execute if the last step was successful.
      */
-    public DoIfLastStepSucceeds(TurnStep step) {
+    public DoIfLastStepFails(TurnStep step) {
         this.step = step;
     }
 
-
     @Override
     public boolean execute(Boolean lastTurnResult) {
-        if (lastTurnResult == null || lastTurnResult) {
+        if (lastTurnResult == null || !lastTurnResult) {
             return step.execute(lastTurnResult);
         } else {
             return false;
         }
-
     }
 }
