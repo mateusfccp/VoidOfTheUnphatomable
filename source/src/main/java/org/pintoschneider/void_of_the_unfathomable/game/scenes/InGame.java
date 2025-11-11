@@ -120,44 +120,31 @@ public final class InGame implements Scene {
     public Component build() {
         centerOnPlayer(Engine.context());
 
-        return new Row(
-            new Flexible(
-                new Stack(
-                    // Use a box to fill the background
-                    new ConstrainedBox(
-                        Constraints.expand(),
-                        new Box()
-                    ),
-                    new MapComponent(map, mapOffset, playerEntity.position(), exploredTiles)
-                )
-            ),
-            new VerticalDivider(),
-            new ConstrainedBox(
-                new Constraints(12, 12, null, null),
-                new Column(
+        return
+            new Stack(
+                // Use a box to fill the background
+                new ConstrainedBox(
+                    Constraints.expand(),
+                    new Box()
+                ),
+                new MapComponent(map, mapOffset, playerEntity.position(), exploredTiles),
+                new Align(
+                    Alignment.TOP_RIGHT,
                     new Padding(
                         EdgeInsets.all(1),
-                        new Column(
-                            new ConstrainedBox(
-                                new Constraints(null, null, 1, 1),
-                                new Row(
-                                    new Text("SP:", Paint.BOLD),
-                                    new Text("%3d/%3d".formatted(player.currentHealth(), player.maximumHealth()))
-                                )
-                            ),
-                            new ConstrainedBox(
-                                new Constraints(null, null, 1, 1),
-                                new Row(
-                                    new Text("CP:", Paint.BOLD),
-                                    new Text("%3d/%3d".formatted(player.currentColorPoints(), player.maximumColorPoints()))
-                                )
+                        new Box(
+                            Border.SINGLE_ROUNDED,
+                            new Padding(
+                                EdgeInsets.all(1),
+                                new Column(
+                                    new Text("Sanity:", Paint.BOLD),
+                                    new Text("%d/%d".formatted(player.currentHealth(), player.maximumHealth()))
+                                ).mainAxisSize(MainAxisSize.MIN)
                             )
-                        ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
-                            .mainAxisSize(MainAxisSize.MIN)
+                        )
                     )
-                ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
-            )
-        ).crossAxisAlignment(CrossAxisAlignment.STRETCH);
+                )
+            );
     }
 
     @Override
