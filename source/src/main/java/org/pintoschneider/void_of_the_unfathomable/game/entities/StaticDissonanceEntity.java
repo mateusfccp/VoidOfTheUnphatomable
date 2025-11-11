@@ -19,10 +19,19 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A static dissonance entity that represents a Static Dissonance enemy in the game.
+ */
 public final class StaticDissonanceEntity extends Entity<StaticDissonance> {
     private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(1600));
     private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
 
+    /**
+     * Creates a new StaticDissonanceEntity at the given position on the given map.
+     *
+     * @param position The position of the static dissonance entity.
+     * @param map      The map where the static dissonance entity is located.
+     */
     public StaticDissonanceEntity(Offset position, Map map) {
         super(position, new StaticDissonance(), map);
         representationAnimation.play();

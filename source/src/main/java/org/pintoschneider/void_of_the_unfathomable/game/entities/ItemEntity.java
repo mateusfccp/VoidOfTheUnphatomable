@@ -5,6 +5,11 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 
+/**
+ * An entity representing an item on the map.
+ * <p>
+ * When a player interacts with this entity, the item is added to the player's inventory and the entity is destroyed.
+ */
 public final class ItemEntity extends Entity<Item> {
     public ItemEntity(Offset position, Item associatedObject, Map map) {
         super(position, associatedObject, map);

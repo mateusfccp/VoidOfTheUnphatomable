@@ -17,10 +17,19 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import java.time.Duration;
 import java.util.List;
 
+/**
+ * A mimic entity that represents a mimic enemy in the game.
+ */
 public final class MimicEntity extends DamageableEntity<Mimic> {
-        private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(1600));
+    private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(1600));
     private final Animation damageAnimation = new Animation(Duration.ofMillis(100));
 
+    /**
+     * Creates a new MimicEntity at the given position on the given map.
+     *
+     * @param position The position of the mimic entity.
+     * @param map      The map where the mimic entity is located.
+     */
     public MimicEntity(Offset position, Map map) {
         super(position, new Mimic(), map);
         representationAnimation.play();
@@ -81,6 +90,7 @@ public final class MimicEntity extends DamageableEntity<Mimic> {
         }
     }
 
+    @Override
     public void damage(int amount) {
         this.associatedObject().damage(amount);
         damageAnimation.play();

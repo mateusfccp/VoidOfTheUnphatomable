@@ -8,9 +8,18 @@ import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
 
+/**
+ * An entity representing a locked door that can be unlocked with specific key items.
+ */
 public class LockedDoor extends Entity<Boolean> {
     static Boolean isLocked = true;
 
+    /**
+     * Creates a new LockedDoor entity at the specified position on the given map.
+     *
+     * @param position The position of the locked door.
+     * @param map      The map the locked door is in.
+     */
     public LockedDoor(Offset position, Map map) {
         super(position, isLocked, map);
     }
