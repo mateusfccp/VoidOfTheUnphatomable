@@ -27,4 +27,9 @@ public final class FluoxetineBottle extends Consumable {
         player.removeStatusEffect(StatusEffect.DEPRESSION);
         player.takeFluoxetineDose();
     }
+
+    @Override
+    public int price() {
+        return 3;
+    }
 }

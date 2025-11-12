@@ -6,6 +6,8 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 
 import java.util.*;
 
@@ -186,6 +188,36 @@ public final class Player implements Damageable {
     public List<Item> inventory() {
         return Collections.unmodifiableList(inventory);
     }
+
+    /**
+     * Counts the number of "Fragment of Nothingness" items in the inventory.
+     *
+     * @return The total count of fragments.
+     */
+    public int getFragmentCount() {
+        return (int) inventory.stream()
+            .filter(FragmentOfNothingness.class::isInstance)
+            .count();
+    }
+
+    /**
+     * Removes a specified number of "Fragment of Nothingness" items from the inventory.
+     * It will safely stop if it runs out of fragments to remove.
+     *
+     * @param amount The number of fragments to remove.
+     */
+    public void removeFragments(int amount) {
+        int removedCount = 0;
+        final Iterator<Item> iterator = inventory.iterator();
+        while (iterator.hasNext() && removedCount < amount) {
+            final Item item = iterator.next();
+            if (FragmentOfNothingness.class.isInstance(item)) {
+                iterator.remove();
+                removedCount++;
+            }
+        }
+    }
+
 
     /**
      * Adds an item to the player's inventory.

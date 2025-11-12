@@ -3,9 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
-import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
-import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
@@ -16,26 +14,31 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * A scene representing the player's inventory, allowing them to view and interact with their items.
+ * A scene representing a shop, allowing the player to buy items.
  */
-public class Inventory extends SelectionScene {
+public class ShopScene extends SelectionScene {
+
     private final Player player;
+    private final List<Item> shopStock;
+    private List<ItemGroup> groupedShopItems;
 
     /**
-     * Constructs an Inventory scene for the given player.
+     * Constructs a Shop scene.
      *
-     * @param player The player whose inventory is to be displayed.
+     * @param player    The player who is shopping.
+     * @param shopItems The list of items available for sale.
      */
-    public Inventory(Player player) {
+    public ShopScene(Player player, List<Item> shopItems) {
         this.player = player;
+        this.shopStock = shopItems;
+        this.groupedShopItems = groupItems(shopItems);
     }
 
     @Override
     List<Option> options() {
-        final List<ItemGroup> groups = groupedItems();
-
+        this.groupedShopItems = groupItems(this.shopStock);
         return IntStream
-            .range(0, groups.size())
+            .range(0, groupedShopItems.size())
             .mapToObj(this::getOptionForIndex)
             .toList();
     }
@@ -44,13 +47,13 @@ public class Inventory extends SelectionScene {
     public Component build() {
         final Component content;
 
-        if (player.inventory().isEmpty()) {
+        if (shopStock.isEmpty()) {
             content =
                 new ConstrainedBox(
                     Constraints.tight(40, 20),
                     new Align(
                         Alignment.CENTER,
-                        new Text("Inventario vacío", Paint.DIM)
+                        new Text("Tienda vacía", Paint.DIM)
                     )
                 );
         } else {
@@ -58,7 +61,6 @@ public class Inventory extends SelectionScene {
         }
 
         final Item selectedItem = getSelectedItem();
-
         return new Padding(
             EdgeInsets.all(1),
             new Align(
@@ -66,7 +68,7 @@ public class Inventory extends SelectionScene {
                 new Column(
                     new Box(
                         Border.SINGLE_ROUNDED,
-                        new Text("Inventario")
+                        new Text("Tienda") // Changed title
                     ),
                     new SizedBox(0, 1),
                     new Row(
@@ -81,24 +83,11 @@ public class Inventory extends SelectionScene {
                                 new Padding(
                                     EdgeInsets.all(1),
                                     new Column(
-                                        new Text("Atk:", Paint.BOLD),
-                                        new SizedBox(0, 1),
-                                        new EquippableDifference(
-                                            player,
-                                            Player::attack,
-                                            getSelectedItem(),
-                                            Equippable::attackModifier
-                                        ),
                                         new SizedBox(0, 2),
-                                        new Text("Def:", Paint.BOLD),
+                                        new Text("Fragmentos:", Paint.BOLD),
                                         new SizedBox(0, 1),
-                                        new EquippableDifference(
-                                            player,
-                                            Player::defense,
-                                            getSelectedItem(),
-                                            e -> e.defenseModifier(player)
-                                        )
-                                    ).  mainAxisSize(MainAxisSize.MIN)
+                                        new Text("%d F".formatted(player.getFragmentCount()))
+                                    ).mainAxisSize(MainAxisSize.MIN)
                                 )
                             )
                         )
@@ -118,71 +107,66 @@ public class Inventory extends SelectionScene {
 
     @Override
     public void onKeyPress(Key key) {
-        if (key == Key.I || key == Key.ENTER && player.inventory().isEmpty()) {
+        if (key == Key.ESC || key == Key.BACKSPACE) {
+            Engine.context().sceneManager().pop(false);
+        }
+
+        if (key == Key.ENTER && shopStock.isEmpty()) {
             Engine.context().sceneManager().pop(false);
         }
 
         super.onKeyPress(key);
     }
 
+    /**
+     * Gets the currently selected item from the grouped list.
+     */
     private Item getSelectedItem() {
-        final List<ItemGroup> groups = groupedItems();
-        if (groups.isEmpty()) {
+        if (groupedShopItems.isEmpty() || currentIndex() < 0 || currentIndex() >= groupedShopItems.size()) {
             return null;
         } else {
-            return groups.get(currentIndex()).item;
+            return groupedShopItems.get(currentIndex()).item;
         }
     }
 
+    /**
+     * Creates a display Option for an item, showing its name, count, and price.
+     */
     private SelectionScene.Option getOptionForIndex(int index) {
-        final List<ItemGroup> groups = groupedItems();
-        final ItemGroup group = groups.get(index);
-        final boolean isKey = !(group.item instanceof Consumable) && !(group.item instanceof Equippable);
-        final String suffix = isGroupEquipped(group) ? "(E)" : "   ";
+        final ItemGroup group = groupedShopItems.get(index);
+
+        final int price = group.item.price();
+
         return new Option(
-            "%s %s x%d".formatted(group.item.name(), suffix, group.count),
+            "%s x%d (%dF)".formatted(group.item.name(), group.count, price),
             this::processSelectedItem,
-            !isKey
+            true
         );
     }
 
+    /**
+     * Handles the "buy" action when an item is selected.
+     */
     private void processSelectedItem() {
         final Item selectedItem = getSelectedItem();
+        if (selectedItem == null) return;
 
-        switch (selectedItem) {
-            case Consumable item -> {
-                player.useItem(item);
-                Engine.context().sceneManager().pop(true);
-            }
-            case Equippable equippable -> {
-                if (player.equippedItem(equippable.slot()) == equippable) {
-                    player.unequipItem(equippable.slot());
-                } else {
-                    player.equipItem(equippable);
-                }
-            }
-            case null, default -> {
-                // Do nothing
-            }
+        final int price = selectedItem.price();
+
+        if (player.getFragmentCount() >= price) {
+            player.removeFragments(price);
+            player.addItemToInventory(selectedItem);
+            shopStock.remove(selectedItem);
         }
     }
 
-    private boolean isGroupEquipped(ItemGroup group) {
-        if (!(group.item instanceof Equippable)) return false;
-
-        for (EquippableSlot slot : EquippableSlot.values()) {
-            final Equippable equipped = player.equippedItem(slot);
-            if (equipped != null && equipped.getClass().equals(group.item.getClass())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private List<ItemGroup> groupedItems() {
+    /**
+     * Groups a list of items by class and count.
+     */
+    private List<ItemGroup> groupItems(List<Item> items) {
         final LinkedHashMap<Class<? extends Item>, ItemGroup> map = new LinkedHashMap<>();
 
-        for (Item item : player.inventory()) {
+        for (Item item : items) {
             final Class<? extends Item> key = item.getClass();
             final ItemGroup existing = map.get(key);
             if (existing == null) {
@@ -195,6 +179,9 @@ public class Inventory extends SelectionScene {
         return new ArrayList<>(map.values());
     }
 
+    /**
+     * Helper class to store a grouped item and its count.
+     */
     private static final class ItemGroup {
         final Item item;
         int count;

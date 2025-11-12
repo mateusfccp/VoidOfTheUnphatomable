@@ -59,11 +59,13 @@ public final class InGame implements Scene {
         if (Main.debugMode) {
             player.addItemToInventory(new Blue());
             player.addItemToInventory(new Sunga());
-            player.addItemToInventory(new MaidDress());
             player.addItemToInventory(new Pajamas());
             player.addItemToInventory(new LeftBanana());
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
+            for (int i = 0; i < 100; i++) {
+                player.addItemToInventory(new FragmentOfNothingness());
+            }
         }
 
         // Add entity for testing purposes
@@ -83,6 +85,9 @@ public final class InGame implements Scene {
             final Offset position = new Offset(x, 101);
             new LockedDoor(position, map);
         }
+
+        // Shop
+        new ShopKeeperEntity(new Offset(104, 103), map, player);
 
         // First area entities
         new StaticDissonanceEntity(new Offset(53, 196), map);

@@ -16,6 +16,7 @@ public enum Key {
     RIGHT(key_right),
     ENTER(new Capability[]{key_enter}, new CharSequence[]{"\r", "\n"}),
     ESC("\033"),
+    BACKSPACE(new Capability[]{key_backspace}, new CharSequence[]{"\177"}),
     I("i"),
     C("c");
 
