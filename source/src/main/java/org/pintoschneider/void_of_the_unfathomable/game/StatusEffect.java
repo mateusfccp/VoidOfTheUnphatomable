@@ -32,7 +32,7 @@ public enum StatusEffect {
     /**
      * The entity is insane and has unpredictable behavior.
      */
-    INSANITY("Locura"),
+    INSANITY("Insanidad"),
 
     /**
      * The entity is dead.
