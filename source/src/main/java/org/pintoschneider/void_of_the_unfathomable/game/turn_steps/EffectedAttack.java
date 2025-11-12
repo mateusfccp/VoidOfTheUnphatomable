@@ -1,24 +1,32 @@
 package org.pintoschneider.void_of_the_unfathomable.game.turn_steps;
 
+import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.Enemy;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.PlayerEntity;
+
+import java.util.Random;
 
 /**
  * A {@link TurnStep} that performs a regular attack by an entity on the player.
  * <p>
  * A regular attack will consider the entity's attack power and the target's defense to calculate damage.
  */
-public final class RegularAttack<T extends Enemy> implements TurnStep {
+public final class EffectedAttack<T extends Enemy> implements TurnStep {
     final Entity<T> entity;
+    final StatusEffect effect;
+    final double effectChance;
+    final Random random = new Random();
 
     /**
-     * Creates a new RegularAttack action for the given entity.
+     * Creates a new EffectedAttack action for the given entity.
      *
      * @param entity The entity that will attack the player.
      */
-    public RegularAttack(Entity<T> entity) {
+    public EffectedAttack(Entity<T> entity, StatusEffect effect, double effectChance) {
         this.entity = entity;
+        this.effect = effect;
+        this.effectChance = effectChance;
     }
 
     @Override
@@ -29,6 +37,10 @@ public final class RegularAttack<T extends Enemy> implements TurnStep {
 
         final Enemy enemy = entity.associatedObject();
         playerEntity.damage(enemy.attack());
+
+        if (random.nextDouble() < effectChance) {
+            playerEntity.associatedObject().applyStatusEffect(effect);
+        }
 
         return true;
     }

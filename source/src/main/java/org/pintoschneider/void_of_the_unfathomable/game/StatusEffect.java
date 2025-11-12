@@ -5,11 +5,6 @@ package org.pintoschneider.void_of_the_unfathomable.game;
  */
 public enum StatusEffect {
     /**
-     * The entity is stunned and cannot take actions.
-     */
-    CONFUSION("Confusión"),
-
-    /**
      * The entity is weakened and has reduced attack power.
      */
     DEPRESSION("Depresión"),
@@ -37,7 +32,7 @@ public enum StatusEffect {
     /**
      * The entity is insane and has unpredictable behavior.
      */
-    INSANITY("Insanidad"),
+    INSANITY("Locura"),
 
     /**
      * The entity is dead.

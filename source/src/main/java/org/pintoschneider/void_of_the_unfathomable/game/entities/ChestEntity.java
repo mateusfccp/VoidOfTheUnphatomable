@@ -15,10 +15,10 @@ import java.util.function.Supplier;
 public class ChestEntity extends Entity<Supplier<Item>> {
     private boolean isOpened = false;
     private final int amount;
-    private Runnable onOpenCallback;
+    private final Runnable onOpenCallback;
 
     public ChestEntity(Offset position, Supplier<Item> itemBuilder, Map map) {
-        this(position, itemBuilder, 1, null, map);
+        this(position, itemBuilder, 1, () -> {}, map);
     }
 
     public ChestEntity(Offset position, Supplier<Item> itemBuilder, int amount, Runnable onOpenCallback, Map map) {

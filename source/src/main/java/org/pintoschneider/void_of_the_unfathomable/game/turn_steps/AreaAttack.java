@@ -14,7 +14,7 @@ public final class AreaAttack<T extends Enemy> implements TurnStep {
     final Entity<T> entity;
 
     /**
-     * Creates a new RegularAttack action for the given entity.
+     * Creates a new AreaAttack action for the given entity.
      *
      * @param entity The entity that will attack the player.
      */

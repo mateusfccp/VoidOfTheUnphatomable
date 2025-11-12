@@ -3,14 +3,15 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
 import org.pintoschneider.void_of_the_unfathomable.game.enemies.StaticDissonance;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.DoIfLastStepSucceeds;
+import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.EffectedAttack;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.MoveTowardsPlayer;
-import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.RegularAttack;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 
 import java.time.Duration;
@@ -60,22 +61,19 @@ public final class StaticDissonanceEntity extends DamageableEntity<StaticDissona
 
     @Override
     public List<TurnStep> processTurn() {
-        // If the entity can see the player, it moves towards them
         final Entity<Player> playerEntity = map().getEntitiesOfType(PlayerEntity.class).getFirst();
-
-        List<TurnStep> steps = new ArrayList<>();
+        final List<TurnStep> steps = new ArrayList<>();
 
         if (canSee(playerEntity)) {
             final int distance = distanceTo(playerEntity);
+            final EffectedAttack<StaticDissonance> attack = new EffectedAttack<>(this, StatusEffect.DEPRESSION, 0.1);
 
             switch (distance) {
-                case 1 -> steps.add(new RegularAttack<>(this));
+                case 1 -> steps.add(attack);
                 case 2 -> {
                     steps.add(new MoveTowardsPlayer(this));
                     steps.add(
-                        new DoIfLastStepSucceeds(
-                            new RegularAttack<>(this)
-                        )
+                        new DoIfLastStepSucceeds(attack)
                     );
                 }
                 default -> {

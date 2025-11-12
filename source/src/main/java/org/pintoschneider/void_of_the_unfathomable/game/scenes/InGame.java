@@ -8,11 +8,13 @@ import org.pintoschneider.void_of_the_unfathomable.engine.Key;
 import org.pintoschneider.void_of_the_unfathomable.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
@@ -65,6 +67,8 @@ public final class InGame implements Scene {
             player.addItemToInventory(new BlackHole());
             for (int i = 0; i < 100; i++) {
                 player.addItemToInventory(new FragmentOfNothingness());
+                player.addItemToInventory(new FluoxetineBottle());
+                player.addItemToInventory(new HaloperidolAmpoule());
             }
         }
 
@@ -155,6 +159,17 @@ public final class InGame implements Scene {
     public Component build() {
         centerOnPlayer(Engine.context());
 
+        final Component[] statusEffects =
+            player.statusEffects()
+                .stream()
+                .map(
+                    status -> new Text(
+                        "· " + status.displayString(),
+                        new Paint().withForegroundColor(statusToColor(status))
+                    )
+                )
+                .toArray(Component[]::new);
+
         return
             new Stack(
                 // Use a box to fill the background
@@ -172,8 +187,10 @@ public final class InGame implements Scene {
                             new Padding(
                                 EdgeInsets.all(1),
                                 new Column(
-                                    new Text("Sanity:", Paint.BOLD),
-                                    new Text("%d/%d".formatted(player.currentHealth(), player.maximumHealth()))
+                                    new Text("Sanidad:", Paint.BOLD),
+                                    new Text("%d/%d".formatted(player.currentHealth(), player.maximumHealth())),
+                                    statusEffects.length == 0 ? null : new SizedBox(0, 1),
+                                    statusEffects.length == 0 ? null : new Column(statusEffects).mainAxisSize(MainAxisSize.MIN)
                                 ).mainAxisSize(MainAxisSize.MIN)
                             )
                         )
@@ -239,6 +256,18 @@ public final class InGame implements Scene {
             playerEntity.position().dx() - context.size().width() / 2,
             playerEntity.position().dy() - context.size().height() / 2
         );
+    }
+
+    private Color statusToColor(StatusEffect statusEffect) {
+        return switch (statusEffect) {
+            case DEPRESSION -> ColorPalette.ROYAL_BLUE;
+            case DEPENDENCY -> ColorPalette.BANANA;
+            case DISCONTINUATION_SYNDROME -> ColorPalette.APRICOT;
+            case DYSKINESIA -> ColorPalette.CLAY;
+            case TARDIVE_DYSKINESIA -> ColorPalette.VERMILION;
+            case INSANITY -> ColorPalette.BLUSH;
+            case DEATH -> ColorPalette.CHARCOAL;
+        };
     }
 }
 

@@ -132,9 +132,9 @@ public final class Player implements Damageable {
             statusEffects.add(StatusEffect.INSANITY);
         }
 
-        if (neuralToxicity >= 2) {
+        if (neuralToxicity >= 6) {
             statusEffects.add(StatusEffect.TARDIVE_DYSKINESIA);
-        } else if (neuralToxicity == 1) {
+        } else if (neuralToxicity >= 3) {
             statusEffects.add(StatusEffect.DYSKINESIA);
         }
 
@@ -142,7 +142,7 @@ public final class Player implements Damageable {
             statusEffects.add(StatusEffect.DEPENDENCY);
         }
 
-        if (turnsWithoutFluoxetine >= 100 && statusEffects.contains(StatusEffect.DEPENDENCY)) {
+        if (turnsWithoutFluoxetine >= 50 && statusEffects.contains(StatusEffect.DEPENDENCY)) {
             statusEffects.add(StatusEffect.DISCONTINUATION_SYNDROME);
         }
 
