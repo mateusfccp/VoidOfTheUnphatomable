@@ -266,7 +266,7 @@ public final class InGame implements Scene {
             case DYSKINESIA -> ColorPalette.CLAY;
             case TARDIVE_DYSKINESIA -> ColorPalette.VERMILION;
             case INSANITY -> ColorPalette.BLUSH;
-            case DEATH -> ColorPalette.CHARCOAL;
+            case DEATH -> ColorPalette.SLATE;
         };
     }
 }
