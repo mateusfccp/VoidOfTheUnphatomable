@@ -206,6 +206,20 @@ public final class InGame implements Scene {
                 specialWeapon.specialAbility(playerEntity);
                 turnManager.startNewTurn();
             }
+        } else if (key == Key.ESC) {
+            Engine.context().sceneManager().<Boolean>push(
+                new QuestionScene<>(
+                    "¿Deseas salir al menú principal?\nTodo el progreso se perderá.",
+                    List.of(
+                        new QuestionScene.Answer<>("Sí", true, true),
+                        new QuestionScene.Answer<>("No", false, true)
+                    )
+                )
+            ).thenAccept(answers -> {
+                if (answers) {
+                    Engine.context().sceneManager().pop();
+                }
+            });
         }
     }
 

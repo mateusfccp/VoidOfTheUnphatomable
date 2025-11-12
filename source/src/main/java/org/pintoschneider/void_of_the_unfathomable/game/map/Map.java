@@ -196,8 +196,7 @@ public final class Map {
     /**
      * Checks if the specified position is opaque.
      * <p>
-     * A position is considered opaque if the tile at that position is opaque or any entity at that position is
-     * opaque.
+     * A position is considered opaque if the tile at that position is opaque.
      *
      * @param position The position to check.
      * @return True if the position is opaque, false otherwise.
@@ -205,13 +204,16 @@ public final class Map {
     public boolean opaque(Offset position) {
         final MapTile tile = getTileAt(position);
 
-        if (tile == null || tile.opaque()) {
-            return true;
-        }
+        return tile == null || tile.opaque();
 
-        return entities.stream().anyMatch(entity -> {
-            return entity.position() == position && entity.spatialProperty().opaque();
-        });
+        // This was causing a hellish lag, so I'm going to workaround it for now.
+        //  return entities.stream().anyMatch(entity -> {
+        //      if (entity.position() == position) {
+        //          return entity.spatialProperty().opaque();
+        //      } else {
+        //          return false;
+        //      }
+        //  });
     }
 
     /**
