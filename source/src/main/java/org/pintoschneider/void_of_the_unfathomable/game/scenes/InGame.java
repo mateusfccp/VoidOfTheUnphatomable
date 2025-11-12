@@ -116,6 +116,12 @@ public final class InGame implements Scene {
             ),
             map
         );
+        new ItemEntity(
+            new Offset(58, 54),
+            new BlackHole(),
+            new Paint().withForegroundColor(ColorPalette.CHARCOAL),
+            map
+        );
 
         // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);
