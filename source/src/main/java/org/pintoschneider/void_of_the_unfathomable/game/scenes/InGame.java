@@ -66,11 +66,6 @@ public final class InGame implements Scene {
             for (int i = 0; i < 100; i++) {
                 player.addItemToInventory(new FragmentOfNothingness());
             }
-
-            new MimicEntity(
-                new Offset(110, 104),
-                map
-            );
         }
 
         // Add entity for testing purposes
@@ -119,6 +114,12 @@ public final class InGame implements Scene {
                 118,
                 MapTile.FLOOR
             ),
+            map
+        );
+        new ItemEntity(
+            new Offset(58, 54),
+            new BlackHole(),
+            new Paint().withForegroundColor(ColorPalette.CHARCOAL),
             map
         );
 

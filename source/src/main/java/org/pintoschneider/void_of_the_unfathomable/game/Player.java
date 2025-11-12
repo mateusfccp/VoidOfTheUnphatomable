@@ -18,12 +18,10 @@ public final class Player implements Damageable {
     private static final int maximumHealth = 100;
     private static final int baseAttack = 3;
     private static final int baseDefense = 0;
-    private static final int baseCreativity = 1;
 
     private final EnumSet<StatusEffect> statusEffects = EnumSet.noneOf(StatusEffect.class);
     private final Map<EquippableSlot, Equippable> equippedItems = new EnumMap<>(EquippableSlot.class);
     private final List<Item> inventory = new ArrayList<>();
-    private final int currentColorPoints = maximumColorPoints();
 
     private int currentHealth = maximumHealth();
     private int neuralToxicity = 0;
@@ -48,24 +46,6 @@ public final class Player implements Damageable {
     }
 
     /**
-     * Gets the current color points of the player.
-     *
-     * @return The current color points of the player.
-     */
-    public int currentColorPoints() {
-        return currentColorPoints;
-    }
-
-    /**
-     * Gets the maximum color points of the player.
-     *
-     * @return The maximum color points of the player.
-     */
-    public int maximumColorPoints() {
-        return 10;
-    }
-
-    /**
      * Gets the player's attack power.
      *
      * @return The player's attack power.
@@ -84,17 +64,6 @@ public final class Player implements Damageable {
     public int defense() {
         return baseDefense + equippedItems.values().stream()
             .mapToInt(e -> e.defenseModifier(this))
-            .sum();
-    }
-
-    /**
-     * Gets the player's creativity power.
-     *
-     * @return The player's creativity power.
-     */
-    public int creativity() {
-        return baseCreativity + equippedItems.values().stream()
-            .mapToInt(Equippable::creativityModifier)
             .sum();
     }
 

@@ -97,18 +97,8 @@ public class Inventory extends SelectionScene {
                                             Player::defense,
                                             getSelectedItem(),
                                             e -> e.defenseModifier(player)
-                                        ),
-                                        new SizedBox(0, 2),
-                                        new Text("Crt:", Paint.BOLD),
-                                        new SizedBox(0, 1),
-                                        new EquippableDifference(
-                                            player,
-                                            Player::creativity,
-                                            getSelectedItem(),
-                                            Equippable::creativityModifier
                                         )
-                                    ).
-                                        mainAxisSize(MainAxisSize.MIN)
+                                    ).  mainAxisSize(MainAxisSize.MIN)
                                 )
                             )
                         )
