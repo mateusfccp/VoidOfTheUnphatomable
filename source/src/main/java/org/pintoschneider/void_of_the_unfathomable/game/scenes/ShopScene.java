@@ -107,7 +107,7 @@ public class ShopScene extends SelectionScene {
 
     @Override
     public void onKeyPress(Key key) {
-        if (key == Key.ESC) {
+        if (key == Key.ESC || key == Key.BACKSPACE) {
             Engine.context().sceneManager().pop(false);
         }
 
