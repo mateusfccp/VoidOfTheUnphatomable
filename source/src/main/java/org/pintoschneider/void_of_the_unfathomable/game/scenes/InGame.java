@@ -64,11 +64,6 @@ public final class InGame implements Scene {
             player.addItemToInventory(new LeftBanana());
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
-
-            new MimicEntity(
-                new Offset(110, 104),
-                map
-            );
         }
 
         // Add entity for testing purposes
