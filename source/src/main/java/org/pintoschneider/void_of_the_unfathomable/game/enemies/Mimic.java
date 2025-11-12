@@ -12,7 +12,7 @@ public final class Mimic extends Enemy {
     private State state = State.IDLE;
 
     public Mimic() {
-        super("Mímico", 50, 2, 3);
+        super("Mímico", 20, 5, 3);
     }
 
     /**

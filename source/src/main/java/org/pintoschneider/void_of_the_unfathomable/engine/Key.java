@@ -15,6 +15,7 @@ public enum Key {
     LEFT(key_left),
     RIGHT(key_right),
     ENTER(new Capability[]{key_enter}, new CharSequence[]{"\r", "\n"}),
+    ESC("\033"),
     BACKSPACE(new Capability[]{key_backspace}, new CharSequence[]{"\177"}),
     I("i"),
     C("c");
@@ -40,6 +41,7 @@ public enum Key {
 
     static KeyMap<Key> createKeyMap(Terminal terminal) {
         final KeyMap<Key> keyMap = new KeyMap<>();
+        keyMap.setAmbiguousTimeout(100);
 
         for (Key key : values()) {
             for (Capability capability : key.capabilities) {

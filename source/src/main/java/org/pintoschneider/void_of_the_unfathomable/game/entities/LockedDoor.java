@@ -5,8 +5,10 @@ import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.LeftBanana;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.RightBanana;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+import org.pintoschneider.void_of_the_unfathomable.game.map.MapTile;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
 
 /**
  * An entity representing a locked door that can be unlocked with specific key items.
@@ -30,12 +32,27 @@ public class LockedDoor extends Entity<Boolean> {
             final boolean hasLeftBanana = player.associatedObject().hasItemOfType(LeftBanana.class);
             final boolean hasRightBanana = player.associatedObject().hasItemOfType(RightBanana.class);
             if (hasLeftBanana && hasRightBanana && isLocked) {
-                isLocked = false;
-                player.associatedObject().removeItemOfType(LeftBanana.class);
-                player.associatedObject().removeItemOfType(RightBanana.class);
+                Engine.context().sceneManager().push(
+                    new DialogScene(
+                        "Al juntar Bnn y aaa, una banana completa aparece y es absorbida por la cerradura mónica. La puerta se abre. Al fondo se ve un pasillo oscuro, y se puede escuchar un leve susurro que dice \"Uh... Uh... Uh-uh-haah!\"",
+                        Alignment.CENTER
+                    )
+                ).thenRun(() -> {
+                    isLocked = false;
+                    player.associatedObject().removeItemOfType(LeftBanana.class);
+                    player.associatedObject().removeItemOfType(RightBanana.class);
+
+                    // This shouldn't be hardcoded, but what do I know?
+                    for (int x = 108; x <= 111; x++) {
+                        map().setTileAt(x, 101, MapTile.FLOOR);
+                    }
+                });
             } else if (isLocked) {
                 Engine.context().sceneManager().push(
-                    new DialogScene("La puerta está cerrada y necesita de una bnn y una aaa para abrirse.")
+                    new DialogScene(
+                        "La puerta está cerrada y necesita de una banana para abrirse.",
+                        Alignment.CENTER
+                    )
                 );
             }
         }

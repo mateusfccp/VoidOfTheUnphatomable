@@ -12,8 +12,6 @@ import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
  * article</a>.
  */
 final public class AdamMillazosVisibility extends Visibility {
-    final int rangeLimit = Math.max(map.width(), map.height());
-
     /**
      * Constructs a AdamMillazosVisibility instance for the given map.
      *
@@ -38,7 +36,7 @@ final public class AdamMillazosVisibility extends Visibility {
     }
 
     private void computeOctant(int octant, Offset origin, int x, Slope top, Slope bottom, boolean[][] visibility) {
-        for (; x <= rangeLimit; x++) {
+        for (; x <= rangeLimit(); x++) {
             int topY;
             if (top.x() == 1) {
                 //noinspection SuspiciousNameCombination
@@ -75,14 +73,14 @@ final public class AdamMillazosVisibility extends Visibility {
             for (int y = topY; y >= bottomY; y--) {
                 boolean isOpaque = blocksLight(x, y, octant, origin);
                 final Offset offset = new Offset(x, y);
-                if (rangeLimit < 0 || origin.chebyshevDistanceTo(offset) <= rangeLimit) {
+                if (rangeLimit() < 0 || Offset.ZERO.chebyshevDistanceTo(offset) <= rangeLimit()) {
                     boolean isVisible = isOpaque
                         || (y != topY || top.greaterThan(y * 4 - 1, x * 4 + 1))
                         && (y != bottomY || bottom.lessThan(y * 4 + 1, x * 4 - 1));
 
                     if (isVisible) setVisible(x, y, octant, origin, visibility);
 
-                    if (x != rangeLimit) {
+                    if (x != rangeLimit()) {
                         if (isOpaque) {
                             if (wasOpaque == 0) {
                                 int nx = x * 2;
@@ -187,7 +185,12 @@ final public class AdamMillazosVisibility extends Visibility {
 
         visibility[position.dx()][position.dy()] = true;
     }
+
+    private int rangeLimit() {
+        return 30;
+    }
 }
+
 
 record Slope(int y, int x) {
     boolean greaterThan(int otherY, int otherX) {

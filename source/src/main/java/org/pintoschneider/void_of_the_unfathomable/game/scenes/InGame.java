@@ -12,6 +12,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
+import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
@@ -20,6 +21,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapon
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.*;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+import org.pintoschneider.void_of_the_unfathomable.game.map.MapTile;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Stack;
@@ -35,13 +37,14 @@ public final class InGame implements Scene {
     static private final Offset playerInitialPosition = new Offset(103, 189);
     static private final Offset debugBossRoomPosition = new Offset(130, 50);
     static private final Offset mainHallRoomPosition = new Offset(110, 110);
+    static private final Offset bnnRoomPosition = new Offset(99, 125);
 
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(mainHallRoomPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(bnnRoomPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -64,7 +67,7 @@ public final class InGame implements Scene {
                 player.addItemToInventory(new FragmentOfNothingness());
             }
 
-            final MimicEntity mimicEntity = new MimicEntity(
+            new MimicEntity(
                 new Offset(110, 104),
                 map
             );
@@ -91,6 +94,34 @@ public final class InGame implements Scene {
         // Shop
         new ShopKeeperEntity(new Offset(104, 103), map);
 
+        // First area entities
+        new StaticDissonanceEntity(new Offset(53, 196), map);
+        new StaticDissonanceEntity(new Offset(57, 190), map);
+        new StaticDissonanceEntity(new Offset(55, 191), map);
+        new StaticDissonanceEntity(new Offset(60, 197), map);
+        new ChestEntity(new Offset(57, 194), MaidDress::new, map);
+        new StaticDissonanceEntity(new Offset(60, 197), map);
+        new ChestEntity(new Offset(60, 179), FluoxetineBottle::new, map);
+        new StaticDissonanceEntity(new Offset(91, 165), map);
+        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, 10, null, map);
+
+        // Entities in the maze area
+        new MimicEntity(new Offset(11, 134), map);
+        new MimicEntity(new Offset(20, 130), map);
+        new MimicEntity(new Offset(52, 153), map);
+        new MimicEntity(new Offset(73, 152), map);
+        new ChestEntity(
+            new Offset(99, 120),
+            LeftBanana::new,
+            1,
+            () -> map.setTileAt(
+                109,
+                118,
+                MapTile.FLOOR
+            ),
+            map
+        );
+
         // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);
         new TurretOfNothingnessEntity(new Offset(178, 88), map);
@@ -113,7 +144,8 @@ public final class InGame implements Scene {
     public void onEnter() {
         Engine.context().sceneManager().push(
             new DialogScene(
-                "Finalmente entraste en El Vacío. Apenas puedes distinguir formas en la distancia. Te cuesta respirar, y una sensación de temor llena tu mente. Debés encontrar el Núcleo Resonante antes de que El Vacío te consuma por completo."
+                "Finalmente entraste en El Vacío. Apenas puedes distinguir formas en la distancia. Te cuesta respirar, y una sensación de temor llena tu mente. Debés encontrar el Núcleo Resonante antes de que El Vacío te consuma por completo.",
+                Alignment.CENTER
             )
         );
     }
@@ -122,44 +154,31 @@ public final class InGame implements Scene {
     public Component build() {
         centerOnPlayer(Engine.context());
 
-        return new Row(
-            new Flexible(
-                new Stack(
-                    // Use a box to fill the background
-                    new ConstrainedBox(
-                        Constraints.expand(),
-                        new Box()
-                    ),
-                    new MapComponent(map, mapOffset, playerEntity.position(), exploredTiles)
-                )
-            ),
-            new VerticalDivider(),
-            new ConstrainedBox(
-                new Constraints(12, 12, null, null),
-                new Column(
+        return
+            new Stack(
+                // Use a box to fill the background
+                new ConstrainedBox(
+                    Constraints.expand(),
+                    new Box()
+                ),
+                new MapComponent(map, mapOffset, playerEntity.position(), exploredTiles),
+                new Align(
+                    Alignment.TOP_RIGHT,
                     new Padding(
                         EdgeInsets.all(1),
-                        new Column(
-                            new ConstrainedBox(
-                                new Constraints(null, null, 1, 1),
-                                new Row(
-                                    new Text("SP:", Paint.BOLD),
-                                    new Text("%3d/%3d".formatted(player.currentHealth(), player.maximumHealth()))
-                                )
-                            ),
-                            new ConstrainedBox(
-                                new Constraints(null, null, 1, 1),
-                                new Row(
-                                    new Text("CP:", Paint.BOLD),
-                                    new Text("%3d/%3d".formatted(player.currentColorPoints(), player.maximumColorPoints()))
-                                )
+                        new Box(
+                            Border.SINGLE_ROUNDED,
+                            new Padding(
+                                EdgeInsets.all(1),
+                                new Column(
+                                    new Text("Sanity:", Paint.BOLD),
+                                    new Text("%d/%d".formatted(player.currentHealth(), player.maximumHealth()))
+                                ).mainAxisSize(MainAxisSize.MIN)
                             )
-                        ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
-                            .mainAxisSize(MainAxisSize.MIN)
+                        )
                     )
-                ).crossAxisAlignment(CrossAxisAlignment.STRETCH)
-            )
-        ).crossAxisAlignment(CrossAxisAlignment.STRETCH);
+                )
+            );
     }
 
     @Override
@@ -192,6 +211,20 @@ public final class InGame implements Scene {
                 specialWeapon.specialAbility(playerEntity);
                 turnManager.startNewTurn();
             }
+        } else if (key == Key.ESC) {
+            Engine.context().sceneManager().<Boolean>push(
+                new QuestionScene<>(
+                    "¿Deseas salir al menú principal?\nTodo el progreso se perderá.",
+                    List.of(
+                        new QuestionScene.Answer<>("Sí", true, true),
+                        new QuestionScene.Answer<>("No", false, true)
+                    )
+                )
+            ).thenAccept(answers -> {
+                if (answers) {
+                    Engine.context().sceneManager().pop();
+                }
+            });
         }
     }
 

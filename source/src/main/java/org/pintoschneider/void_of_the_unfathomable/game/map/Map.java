@@ -151,6 +151,21 @@ public final class Map {
     }
 
     /**
+     * Sets the tile at the specified coordinates.
+     * <p>
+     * If the coordinates are out of bounds, the method does nothing.
+     *
+     * @param x    The x coordinate of the tile.
+     * @param y    The y coordinate of the tile.
+     * @param tile The tile to set at the specified coordinates.
+     */
+    public void setTileAt(int x, int y, MapTile tile) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            tiles[x][y] = tile;
+        }
+    }
+
+    /**
      * Gets a list of all entities at the specified position.
      *
      * @param position The position to check for an entity.
@@ -176,6 +191,29 @@ public final class Map {
 
         final List<Entity<?>> entitiesAtPosition = getEntitiesAt(position);
         return entitiesAtPosition.isEmpty() || entitiesAtPosition.stream().allMatch(entity -> entity.spatialProperty().walkable());
+    }
+
+    /**
+     * Checks if the specified position is opaque.
+     * <p>
+     * A position is considered opaque if the tile at that position is opaque.
+     *
+     * @param position The position to check.
+     * @return True if the position is opaque, false otherwise.
+     */
+    public boolean opaque(Offset position) {
+        final MapTile tile = getTileAt(position);
+
+        return tile == null || tile.opaque();
+
+        // This was causing a hellish lag, so I'm going to workaround it for now.
+        //  return entities.stream().anyMatch(entity -> {
+        //      if (entity.position() == position) {
+        //          return entity.spatialProperty().opaque();
+        //      } else {
+        //          return false;
+        //      }
+        //  });
     }
 
     /**
