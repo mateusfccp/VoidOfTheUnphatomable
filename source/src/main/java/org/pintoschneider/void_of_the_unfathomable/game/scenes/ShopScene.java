@@ -30,8 +30,8 @@ public class ShopScene extends SelectionScene {
      */
     public ShopScene(Player player, List<Item> shopItems) {
         this.player = player;
-        this.shopStock = new ArrayList<>(shopItems);
-        this.groupedShopItems = groupItems(this.shopStock);
+        this.shopStock = shopItems;
+        this.groupedShopItems = groupItems(shopItems);
     }
 
     @Override
@@ -83,39 +83,11 @@ public class ShopScene extends SelectionScene {
                                 new Padding(
                                     EdgeInsets.all(1),
                                     new Column(
-                                        new Text("Atk:", Paint.BOLD),
-                                        new SizedBox(0, 1),
-                                        new EquippableDifference(
-                                            player,
-                                            Player::attack,
-                                            getSelectedItem(),
-                                            Equippable::attackModifier
-                                        ),
-                                        new SizedBox(0, 2),
-                                        new Text("Def:", Paint.BOLD),
-                                        new SizedBox(0, 1),
-                                        new EquippableDifference(
-                                            player,
-                                            Player::defense,
-                                            getSelectedItem(),
-                                            e -> e.defenseModifier(player)
-                                        ),
-                                        new SizedBox(0, 2),
-                                        new Text("Crt:", Paint.BOLD),
-                                        new SizedBox(0, 1),
-                                        new EquippableDifference(
-                                            player,
-                                            Player::creativity,
-                                            getSelectedItem(),
-                                            Equippable::creativityModifier
-                                        ),
-                                        // Display current fragments
                                         new SizedBox(0, 2),
                                         new Text("Fragmentos:", Paint.BOLD),
                                         new SizedBox(0, 1),
                                         new Text("%d F".formatted(player.getFragmentCount()))
-                                    ).
-                                        mainAxisSize(MainAxisSize.MIN)
+                                    ).mainAxisSize(MainAxisSize.MIN)
                                 )
                             )
                         )
@@ -135,7 +107,7 @@ public class ShopScene extends SelectionScene {
 
     @Override
     public void onKeyPress(Key key) {
-        if (key == Key.BACKSPACE) {
+        if (key == Key.ESC) {
             Engine.context().sceneManager().pop(false);
         }
 

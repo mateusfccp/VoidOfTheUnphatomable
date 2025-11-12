@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
@@ -25,10 +26,12 @@ public class ShopKeeperEntity extends Entity<Void> {
      * The list of items this shopkeeper will sell.
      */
     private final List<Item> shopItems;
+    private final Player player;
 
-    public ShopKeeperEntity(Offset position, Map map) {
+    public ShopKeeperEntity(Offset position, Map map, Player player) {
         super(position, null, map);
         this.shopItems = createShopStock();
+        this.player = player;
     }
 
     /**
@@ -46,21 +49,31 @@ public class ShopKeeperEntity extends Entity<Void> {
 
     @Override
     public Character representation() {
-        return '$';
+        if (player.statusEffects().contains(StatusEffect.INSANITY)) {
+            return '$';
+        } else {
+            return null;
+        }
     }
 
     @Override
     public SpatialProperty spatialProperty() {
-        return new SpatialProperty(false, true);
+        if (player.statusEffects().contains(StatusEffect.INSANITY)) {
+            return new SpatialProperty(false, true);
+        } else {
+            return new SpatialProperty(true, false);
+        }
     }
 
     @Override
     public void interact(Entity<?> entity) {
-        if (entity instanceof PlayerEntity playerEntity) {
-            Player player = playerEntity.associatedObject();
-            Engine.context().sceneManager().push(
-                new ShopScene(player, this.shopItems)
-            );
+        if (player.statusEffects().contains(StatusEffect.INSANITY)) {
+            if (entity instanceof PlayerEntity playerEntity) {
+                Player player = playerEntity.associatedObject();
+                Engine.context().sceneManager().push(
+                    new ShopScene(player, this.shopItems)
+                );
+            }
         }
     }
 

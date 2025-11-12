@@ -92,7 +92,7 @@ public final class InGame implements Scene {
         }
 
         // Shop
-        new ShopKeeperEntity(new Offset(104, 103), map);
+        new ShopKeeperEntity(new Offset(104, 103), map, player);
 
         // First area entities
         new StaticDissonanceEntity(new Offset(53, 196), map);
