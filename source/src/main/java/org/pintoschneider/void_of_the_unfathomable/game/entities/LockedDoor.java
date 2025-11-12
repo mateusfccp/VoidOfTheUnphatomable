@@ -50,7 +50,7 @@ public class LockedDoor extends Entity<Boolean> {
             } else if (isLocked) {
                 Engine.context().sceneManager().push(
                     new DialogScene(
-                        "La puerta está cerrada y necesita de una banana para abrirse.",
+                        "La puerta está cerrada. Hay una ranura en forma de banana en la cerradura.",
                         Alignment.CENTER
                     )
                 );
