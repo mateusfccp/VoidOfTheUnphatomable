@@ -24,4 +24,9 @@ public final class HaloperidolAmpoule extends Consumable {
         player.heal(20);
         player.increaseNeuralToxicityBy(1);
     }
+
+    @Override
+    public int price() {
+        return 5;
+    }
 }

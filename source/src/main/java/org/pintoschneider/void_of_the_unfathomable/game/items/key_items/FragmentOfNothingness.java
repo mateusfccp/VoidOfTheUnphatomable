@@ -18,4 +18,12 @@ public final class FragmentOfNothingness implements Item {
     public String description() {
         return "Un pequeño fragmento que pulsa con una horripilante energía nula. Parece absorber la luz y el calor a su alrededor.";
     }
+
+    /**
+     * The price of the currency item is 1, as it is the base unit of value.
+     */
+    @Override
+    public int price() {
+        return 1;
+    }
 }

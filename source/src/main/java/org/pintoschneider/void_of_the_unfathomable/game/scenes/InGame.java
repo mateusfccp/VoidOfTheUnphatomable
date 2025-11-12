@@ -18,10 +18,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.BlackHole;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.Stickool;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.LeftBanana;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.ResoundingCore;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.RightBanana;
-import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.SpecialWeapon;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.*;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
@@ -59,11 +56,13 @@ public final class InGame implements Scene {
         if (Main.debugMode) {
             player.addItemToInventory(new Blue());
             player.addItemToInventory(new Sunga());
-            player.addItemToInventory(new MaidDress());
             player.addItemToInventory(new Pajamas());
             player.addItemToInventory(new LeftBanana());
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
+            for (int i = 0; i < 100; i++) {
+                player.addItemToInventory(new FragmentOfNothingness());
+            }
 
             final MimicEntity mimicEntity = new MimicEntity(
                 new Offset(110, 104),
@@ -88,6 +87,9 @@ public final class InGame implements Scene {
             final Offset position = new Offset(x, 101);
             new LockedDoor(position, map);
         }
+
+        // Shop
+        new ShopKeeperEntity(new Offset(104, 103), map);
 
         // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);

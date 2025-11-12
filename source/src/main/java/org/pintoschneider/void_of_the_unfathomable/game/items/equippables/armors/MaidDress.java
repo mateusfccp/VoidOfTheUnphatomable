@@ -28,4 +28,9 @@ public class MaidDress implements Equippable {
     public Paint playerPaint(Paint paint) {
         return paint.withForegroundColor(ColorPalette.BLUSH).withBlink(true);
     }
+
+    @Override
+    public int price() {
+        return 40;
+    }
 }

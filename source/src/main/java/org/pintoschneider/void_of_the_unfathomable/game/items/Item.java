@@ -19,5 +19,16 @@ public interface Item {
      * @return The description of the item
      */
     String description();
+
+    /**
+     * Gets the price of the item, denominated in "Fragments of Nothingness".
+     * By default, an item has no value.
+     *
+     * @return The price of the item.
+     */
+    default int price() {
+        return 0;
+    }
 }
+
 

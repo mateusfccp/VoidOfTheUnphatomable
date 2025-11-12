@@ -253,7 +253,7 @@ public final class Constraints {
             deflatedMinWidth,
             Math.max(deflatedMinWidth, maxWidth - width),
             deflatedMinHeight,
-            Math.max(deflatedMinHeight, maxHeight - width)
+            Math.max(deflatedMinHeight, maxHeight - height)
         );
     }
 
