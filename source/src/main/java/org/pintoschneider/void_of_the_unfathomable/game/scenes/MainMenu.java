@@ -36,7 +36,7 @@ public final class MainMenu extends SelectionScene {
         return List.of(
             new Option("Nuevo Juego", this::startNewGame),
             new Option("Add High Score Entry", this::addHighScoreEntry),
-            new Option("High Scores"),
+            new Option("Puntaje Máximo", this::highscores),
             new Option("Salir", this::exitGame)
         );
     }
@@ -64,6 +64,12 @@ public final class MainMenu extends SelectionScene {
 
     private void addHighScoreEntry() {
         manager.addHighscore(new HighscoreEntry(RunStatus.VICTORIOUS, 100, 16));
+    }
+
+    private void highscores() {
+        Engine.context().sceneManager().push(
+            new HighscoreScene(manager)
+        );
     }
 
     private void exitGame() {

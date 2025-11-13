@@ -19,7 +19,7 @@ public class HighscoreManager implements AutoCloseable {
         readFromFile();
     }
 
-    List<HighscoreEntry> entries() {
+    public List<HighscoreEntry> entries() {
         return entries;
     }
 
