@@ -10,6 +10,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
@@ -51,6 +52,7 @@ public class ShopKeeperEntity extends Entity<Void> {
     private List<Item> createShopStock() {
         List<Item> stock = new ArrayList<>();
         addItemToStock(stock, new MaidDress());
+        addItemToStock(stock, new Sunga());
         for (int i = 0; i < 99; i++) {
             addItemToStock(stock, new FluoxetineBottle());
             addItemToStock(stock, new HaloperidolAmpoule());
@@ -181,5 +183,10 @@ public class ShopKeeperEntity extends Entity<Void> {
         }
 
         return mid;
+    }
+
+    @Override
+    protected void dispose() {
+        idleAnimation.dispose();
     }
 }
