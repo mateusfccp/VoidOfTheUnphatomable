@@ -46,7 +46,7 @@ public final class InGame implements Scene {
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(debugBossRoomPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(playerInitialPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -66,18 +66,13 @@ public final class InGame implements Scene {
             player.addItemToInventory(new LeftBanana());
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
+            player.addItemToInventory(new ResoundingCore());
             for (int i = 0; i < 100; i++) {
                 player.addItemToInventory(new FragmentOfNothingness());
                 player.addItemToInventory(new FluoxetineBottle());
                 player.addItemToInventory(new HaloperidolAmpoule());
             }
         }
-
-        // Add entity for testing purposes
-        new StaticDissonanceEntity(new Offset(14, 9), map);
-        new StaticDissonanceEntity(new Offset(15, 10), map);
-        new ItemEntity(new Offset(6, 6), new ResoundingCore(), map);
-        new StairEntity(new Offset(4, 2), map);
 
         // Initialize explored tiles
         exploredTiles = new BitSet[map.height()];
@@ -95,6 +90,7 @@ public final class InGame implements Scene {
         new ShopKeeperEntity(new Offset(104, 103), map, player);
 
         // First area entities
+        new StairEntity(new Offset(98, 187), map);
         new StaticDissonanceEntity(new Offset(53, 196), map);
         new StaticDissonanceEntity(new Offset(57, 190), map);
         new StaticDissonanceEntity(new Offset(55, 191), map);

@@ -3,6 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FamilyPhoto;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
@@ -43,6 +44,11 @@ public final class PlayerEntity extends DamageableEntity<Player> {
     @Override
     public List<TurnStep> processTurn() {
         associatedObject().incrementTurnsWithoutFluoxetine();
+
+        if (!associatedObject().hasItemOfType(FamilyPhoto.class)) {
+            damage(1);
+        }
+
         return List.of();
     }
 

@@ -62,7 +62,7 @@ public class AbyssmonkeyEntity extends DamageableEntity<Abyssmonkey> {
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity playerEntity) {
             final Player player = playerEntity.associatedObject();
-            damage(player.attack());
+            damage(player.attack(), player.hitChance());
         }
     }
 

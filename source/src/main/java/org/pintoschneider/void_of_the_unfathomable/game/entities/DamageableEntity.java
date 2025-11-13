@@ -11,12 +11,14 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Random;
 
 /**
  * An entity that can be damaged.
  */
 public abstract class DamageableEntity<T extends Damageable> extends Entity<T> {
     protected final Animation damageAnimation = new Animation(Duration.ofMillis(100));
+    private static final Random random = new Random();
 
     protected DamageableEntity(Offset position, T associatedObject, Map map) {
         super(position, associatedObject, map);
@@ -48,17 +50,29 @@ public abstract class DamageableEntity<T extends Damageable> extends Entity<T> {
      * @param amount The amount of damage to deal to the associated object.
      */
     final public void damage(int amount) {
-        damageAnimation.play();
-        final boolean result = this.associatedObject().damage(amount);
+        damage(amount, 1.0);
+    }
 
-        if (result) {
-            final List<Item> loot = loot();
+    /**
+     * Damages the associated object and destroy the entity if necessary.
+     *
+     * @param amount    The amount of damage to deal to the associated object.
+     * @param hitChance The chance to hit the target (between 0.0 and 1.0).
+     */
+    final public void damage(int amount, double hitChance) {
+        if (random.nextDouble() < hitChance) {
+            damageAnimation.play();
+            final boolean result = this.associatedObject().damage(amount);
 
-            for (final Item item : loot) {
-                drop(item);
+            if (result) {
+                final List<Item> loot = loot();
+
+                for (final Item item : loot) {
+                    drop(item);
+                }
+
+                destroy();
             }
-
-            destroy();
         }
     }
 

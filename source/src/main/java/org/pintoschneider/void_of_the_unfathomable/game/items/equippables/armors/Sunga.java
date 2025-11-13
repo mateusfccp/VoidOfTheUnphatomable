@@ -24,4 +24,9 @@ public class Sunga implements Equippable {
     public String description() {
         return "No te protege de nada, pero te da una libertad de movimiento increíble, y hace con que los enemigos se sientan intimidados con tamaña aura.";
     }
+
+    @Override
+    public int price() {
+        return 40;
+    }
 }

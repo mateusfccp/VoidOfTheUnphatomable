@@ -55,7 +55,7 @@ public final class StaticDissonanceEntity extends DamageableEntity<StaticDissona
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity playerEntity) {
             final Player player = playerEntity.associatedObject();
-            damage(player.attack());
+            damage(player.attack(), player.hitChance());
         }
     }
 

@@ -5,9 +5,8 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FragmentOfNothingness;
-import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.*;
 
@@ -51,9 +50,15 @@ public final class Player implements Damageable {
      * @return The player's attack power.
      */
     public int attack() {
-        return baseAttack + equippedItems.values().stream()
+        final int equipsModifiedAttack = baseAttack + equippedItems.values().stream()
             .mapToInt(Equippable::attackModifier)
             .sum();
+
+        final int statusModifiedAttack = statusEffects.contains(StatusEffect.DEPRESSION)
+            ? equipsModifiedAttack - 1
+            : equipsModifiedAttack;
+
+        return Math.max(1, statusModifiedAttack);
     }
 
     /**
@@ -355,6 +360,21 @@ public final class Player implements Damageable {
             return basePaint;
         } else {
             return armor.playerPaint(basePaint);
+        }
+    }
+
+    /**
+     * Calculates the player's hit chance based on their current status effects.
+     *
+     * @return The player's hit chance as a double between 0.0 and 1.0.
+     */
+    public double hitChance() {
+        if (statusEffects.contains(StatusEffect.DYSKINESIA)) {
+            return 0.7;
+        } else if (statusEffects.contains(StatusEffect.TARDIVE_DYSKINESIA)) {
+            return 0.5;
+        } else {
+            return 1.0;
         }
     }
 }

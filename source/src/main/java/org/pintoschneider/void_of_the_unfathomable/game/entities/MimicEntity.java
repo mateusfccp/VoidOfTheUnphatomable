@@ -64,7 +64,7 @@ public final class MimicEntity extends DamageableEntity<Mimic> {
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity playerEntity) {
             final Player player = playerEntity.associatedObject();
-            damage(player.attack());
+            damage(player.attack(), player.hitChance());
 
             if (this.associatedObject().state() == Mimic.State.IDLE) {
                 associatedObject().followPlayer();
