@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
  */
 public class HighscoreEntry {
     private final RunStatus status;
-    private final int turnCount;
     private final int percentage;
+    private final long turnCount;
     private final LocalDateTime creationTime;
 
     /**
@@ -20,7 +20,7 @@ public class HighscoreEntry {
      * @param percentage The percentage of the game completed.
      * @param turnCount  The amount of turns taken.
      */
-    public HighscoreEntry(RunStatus status, int percentage, int turnCount) {
+    public HighscoreEntry(RunStatus status, int percentage, long turnCount) {
         this.status = status;
         this.percentage = percentage;
         this.turnCount = turnCount;
@@ -65,7 +65,7 @@ public class HighscoreEntry {
      *
      * @return The amount of turns the player took.
      */
-    public int turnCount() {
+    public long turnCount() {
         return turnCount;
     }
 
