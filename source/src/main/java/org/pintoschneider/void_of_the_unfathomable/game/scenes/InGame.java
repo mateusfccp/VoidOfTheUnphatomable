@@ -213,7 +213,9 @@ public final class InGame implements Scene {
                                     new Text("Sanidad:", Paint.BOLD),
                                     new Text("%d/%d".formatted(player.currentHealth(), player.maximumHealth())),
                                     statusEffects.length == 0 ? null : new SizedBox(0, 1),
-                                    statusEffects.length == 0 ? null : new Column(statusEffects).mainAxisSize(MainAxisSize.MIN)
+                                    statusEffects.length == 0 ? null : new Column(statusEffects).mainAxisSize(MainAxisSize.MIN),
+                                    new Text("Progreso:", Paint.BOLD),
+                                    new Text("%d%%".formatted(progress()))
                                 ).mainAxisSize(MainAxisSize.MIN)
                             )
                         )
