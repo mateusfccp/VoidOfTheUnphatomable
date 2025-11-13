@@ -13,6 +13,9 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A scene that shows the list of high-scores
+ */
 public class HighscoreScene implements Scene {
     private final HighscoreManager manager;
 
