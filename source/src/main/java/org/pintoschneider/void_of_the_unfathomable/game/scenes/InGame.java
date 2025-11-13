@@ -381,7 +381,7 @@ public final class InGame implements Scene {
      *
      * @return The current turn count.
      */
-    public int turnCount() {
+    public long turnCount() {
         return turnManager.turnCount();
     }
 }
@@ -485,7 +485,7 @@ final class TurnManager {
      *
      * @return The turn count.
      */
-    public int turnCount() {
+    public long turnCount() {
         return turnCount;
     }
 
