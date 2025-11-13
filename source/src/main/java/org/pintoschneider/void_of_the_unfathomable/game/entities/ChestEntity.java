@@ -12,15 +12,36 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.function.Supplier;
 
+/**
+ * An entity representing a chest that can be opened to obtain items.
+ * <p>
+ * When the player interacts with this entity, it will open and give the associated item(s) to the player.
+ */
 public class ChestEntity extends Entity<Supplier<Item>> {
     private boolean isOpened = false;
     private final int amount;
     private final Runnable onOpenCallback;
 
+    /**
+     * Creates a new ChestEntity.
+     *
+     * @param position    The position of the chest.
+     * @param itemBuilder A supplier that builds the item contained in the chest.
+     * @param map         The map the chest is in.
+     */
     public ChestEntity(Offset position, Supplier<Item> itemBuilder, Map map) {
         this(position, itemBuilder, 1, () -> {}, map);
     }
 
+    /**
+     * Creates a new ChestEntity.
+     *
+     * @param position       The position of the chest.
+     * @param itemBuilder    A supplier that builds the item contained in the chest.
+     * @param amount         The amount of items contained in the chest.
+     * @param onOpenCallback A callback to be executed when the chest is opened.
+     * @param map            The map the chest is in.
+     */
     public ChestEntity(Offset position, Supplier<Item> itemBuilder, int amount, Runnable onOpenCallback, Map map) {
         super(position, itemBuilder, map);
         this.amount = amount;
