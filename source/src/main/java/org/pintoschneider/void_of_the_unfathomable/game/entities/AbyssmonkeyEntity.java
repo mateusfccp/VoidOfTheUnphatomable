@@ -68,7 +68,11 @@ public class AbyssmonkeyEntity extends DamageableEntity<Abyssmonkey> {
 
     @Override
     public List<TurnStep> processTurn() {
-        final PlayerEntity playerEntity = map().getEntitiesOfType(PlayerEntity.class).getFirst();
+        final List<PlayerEntity> players = map().getEntitiesOfType(PlayerEntity.class);
+
+        if (players.isEmpty()) return List.of();
+
+        final PlayerEntity playerEntity = players.getFirst();
         final int distanceToPlayer = this.distanceTo(playerEntity);
 
         if (didStealPhoto) {

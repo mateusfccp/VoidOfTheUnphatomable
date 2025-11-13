@@ -74,6 +74,7 @@ final class Title extends Composent {
         ▌▌▛▌▛▌▛▌▀▌▜▘▛▌▛▛▌▀▌▛▌▐ █▌
         ▙▌▌▌▙▌▌▌█▌▐▖▙▌▌▌▌█▌▙▌▐▖▙▖
             ▌""";
+
     private final Animation animation;
 
     Title(Animation animation) {
