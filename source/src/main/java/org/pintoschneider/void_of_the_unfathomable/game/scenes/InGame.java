@@ -40,13 +40,14 @@ public final class InGame implements Scene {
     static private final Offset debugBossRoomPosition = new Offset(130, 50);
     static private final Offset debugMainHallRoomPosition = new Offset(110, 110);
     static private final Offset debugBnnRoomPosition = new Offset(99, 125);
+    static private final Offset debugWellRoomPosition = new Offset(49, 118);
 
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(playerInitialPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(debugWellRoomPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -67,6 +68,7 @@ public final class InGame implements Scene {
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
             player.addItemToInventory(new ResoundingCore());
+
             for (int i = 0; i < 100; i++) {
                 player.addItemToInventory(new FragmentOfNothingness());
                 player.addItemToInventory(new FluoxetineBottle());
@@ -95,7 +97,7 @@ public final class InGame implements Scene {
         new StaticDissonanceEntity(new Offset(57, 190), map);
         new StaticDissonanceEntity(new Offset(55, 191), map);
         new StaticDissonanceEntity(new Offset(60, 197), map);
-        new ChestEntity(new Offset(57, 194), MaidDress::new, map);
+        new ChestEntity(new Offset(57, 194), FragmentOfNothingness::new, 20, null, map);
         new StaticDissonanceEntity(new Offset(60, 197), map);
         new ChestEntity(new Offset(60, 179), FluoxetineBottle::new, map);
         new StaticDissonanceEntity(new Offset(91, 165), map);
@@ -123,6 +125,7 @@ public final class InGame implements Scene {
             new Paint().withForegroundColor(ColorPalette.CHARCOAL),
             map
         );
+        new WellOfTransformationEntity(new Offset(49, 120), map);
 
         // Entities in the bullet hell area
         new BulletManagerEntity(Offset.ZERO, map);
