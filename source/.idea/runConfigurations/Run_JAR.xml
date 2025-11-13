@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run JAR" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="java -Ddebug=true -jar build/libs/source-1.0-SNAPSHOT.jar" />
+    <option name="SCRIPT_TEXT" value="java -jar build/libs/source-1.0-SNAPSHOT.jar" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
