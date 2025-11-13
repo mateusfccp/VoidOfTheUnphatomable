@@ -317,7 +317,6 @@ public final class InGame implements Scene {
             total += percentageItems(item);
         }
 
-
         return total;
     }
 
@@ -351,12 +350,10 @@ public final class InGame implements Scene {
         // Armours and Weapons
         if (item instanceof MaidDress) {
             return 5;
-        } else if (item instanceof Blue) {
-            return 10;
         } else if (item instanceof Sunga) {
             return 5;
-        } else if (item instanceof Pajamas) {
-            return 10;
+        } else if (item instanceof Pajamas || item instanceof Blue) {
+            return 20;
         } else if (item instanceof BlackHole) {
             return 5;
         } else if (item instanceof Stickool) {
