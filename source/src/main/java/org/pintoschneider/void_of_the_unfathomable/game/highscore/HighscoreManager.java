@@ -29,7 +29,7 @@ public class HighscoreManager implements AutoCloseable {
      * @return The sorted list of high-score entries.
      */
     public List<HighscoreEntry> entries() {
-        quickSort(entries, 0, entries.size());
+        quickSort(entries, 0, entries.size() - 1);
         return entries;
     }
 
