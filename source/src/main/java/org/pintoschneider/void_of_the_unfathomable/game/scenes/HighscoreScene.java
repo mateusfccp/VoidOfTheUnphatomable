@@ -23,6 +23,46 @@ public class HighscoreScene implements Scene {
         this.manager = manager;
     }
 
+    static Component entryToComponent(HighscoreEntry entry) {
+        return new Row(
+            new ConstrainedBox(
+                new Constraints(12, 12, null, null),
+                statusToComponent(entry.status())
+            ),
+            new SizedBox(1, 0),
+            new ConstrainedBox(
+                new Constraints(12, 12, null, null),
+                new Text("%d%%".formatted(entry.percentage()))
+            ),
+            new SizedBox(1, 0),
+            new ConstrainedBox(
+                new Constraints(12, 12, null, null),
+                new Text(String.valueOf(entry.turnCount()))
+            )
+        ).mainAxisSize(MainAxisSize.MIN);
+    }
+
+    static private Component statusToComponent(RunStatus status) {
+        return switch (status) {
+            case FORSAKEN -> new Text(
+                "Abandonado",
+                new Paint().withForegroundColor(ColorPalette.VERMILION)
+            );
+            case COWARD -> new Text(
+                "Cobarde",
+                new Paint().withForegroundColor(ColorPalette.VERMILION)
+            );
+            case DECEASED -> new Text(
+                "Muerto",
+                new Paint().withForegroundColor(ColorPalette.BANANA)
+            );
+            case VICTORIOUS -> new Text(
+                "Victoria",
+                new Paint().withForegroundColor(ColorPalette.EMERALD)
+            );
+        };
+    }
+
     @Override
     public Component build() {
         final List<Component> content = new ArrayList<>();
@@ -87,45 +127,5 @@ public class HighscoreScene implements Scene {
         if (key == Key.ENTER) {
             Engine.context().sceneManager().pop();
         }
-    }
-
-    static Component entryToComponent(HighscoreEntry entry) {
-        return new Row(
-            new ConstrainedBox(
-                new Constraints(12, 12, null, null),
-                statusToComponent(entry.status())
-            ),
-            new SizedBox(1, 0),
-            new ConstrainedBox(
-                new Constraints(12, 12, null, null),
-                new Text("%d%%".formatted(entry.percentage()))
-            ),
-            new SizedBox(1, 0),
-            new ConstrainedBox(
-                new Constraints(12, 12, null, null),
-                new Text(String.valueOf(entry.turnCount()))
-            )
-        ).mainAxisSize(MainAxisSize.MIN);
-    }
-
-    static private Component statusToComponent(RunStatus status) {
-        return switch (status) {
-            case FORSAKEN -> new Text(
-                "Abandonado",
-                new Paint().withForegroundColor(ColorPalette.VERMILION)
-            );
-            case COWARD -> new Text(
-                "Cobarde",
-                new Paint().withForegroundColor(ColorPalette.VERMILION)
-            );
-            case DECEASED -> new Text(
-                "Muerto",
-                new Paint().withForegroundColor(ColorPalette.BANANA)
-            );
-            case VICTORIOUS -> new Text(
-                "Victoria",
-                new Paint().withForegroundColor(ColorPalette.EMERALD)
-            );
-        };
     }
 }

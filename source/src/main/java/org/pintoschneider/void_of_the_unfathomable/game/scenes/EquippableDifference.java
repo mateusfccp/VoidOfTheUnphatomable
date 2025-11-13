@@ -1,16 +1,15 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Composent;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Row;
-import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.MainAxisSize;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
-
+import org.pintoschneider.void_of_the_unfathomable.ui.components.Row;
+import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Composent;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.MainAxisSize;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.function.Function;
 
@@ -27,9 +26,9 @@ public class EquippableDifference extends Composent {
     /**
      * Constructs an EquippableDifference component.
      *
-     * @param player                 The player to check stats against.
-     * @param playerAttributeGetter  A function to get the base stat from the player (e.g., Player::attack).
-     * @param item                   The selected item (which may or may not be an Equippable).
+     * @param player                   The player to check stats against.
+     * @param playerAttributeGetter    A function to get the base stat from the player (e.g., Player::attack).
+     * @param item                     The selected item (which may or may not be an Equippable).
      * @param equippableModifierGetter A function to get the relevant modifier from the Equippable (e.g., Equippable::attackModifier).
      */
     EquippableDifference(

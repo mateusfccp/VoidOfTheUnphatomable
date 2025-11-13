@@ -216,7 +216,7 @@ public final class Player implements Damageable {
         final Iterator<Item> iterator = inventory.iterator();
         while (iterator.hasNext() && removedCount < amount) {
             final Item item = iterator.next();
-            if (FragmentOfNothingness.class.isInstance(item)) {
+            if (item instanceof FragmentOfNothingness) {
                 iterator.remove();
                 removedCount++;
             }

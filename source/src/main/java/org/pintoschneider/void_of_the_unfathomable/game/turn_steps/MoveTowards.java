@@ -1,9 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.turn_steps;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
-import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.Entity;
-import org.pintoschneider.void_of_the_unfathomable.game.entities.PlayerEntity;
 
 /**
  * A {@link TurnStep} that moves an entity towards a position.

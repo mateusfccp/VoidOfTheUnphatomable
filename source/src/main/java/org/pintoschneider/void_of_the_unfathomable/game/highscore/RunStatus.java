@@ -25,6 +25,7 @@ public enum RunStatus {
     VICTORIOUS(0);
 
     private final int priority;
+
     RunStatus(int priority) {
         this.priority = priority;
     }

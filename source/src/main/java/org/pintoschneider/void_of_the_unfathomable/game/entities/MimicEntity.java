@@ -12,7 +12,6 @@ import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.AreaAttack;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.MoveTowardsPlayer;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
-import org.pintoschneider.void_of_the_unfathomable.ui.core.Color;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.time.Duration;

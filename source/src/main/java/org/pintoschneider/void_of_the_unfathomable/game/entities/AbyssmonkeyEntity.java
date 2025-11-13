@@ -29,10 +29,10 @@ import java.util.stream.Stream;
  * An entity that represents the abyssmonkey enemy in the game.
  */
 public class AbyssmonkeyEntity extends DamageableEntity<Abyssmonkey> {
-    private boolean didStealPhoto = false;
-    private int turnsSinceLastTranana = 0;
     private static final Random random = new Random();
     private static final int movementSpeed = 2;
+    private boolean didStealPhoto = false;
+    private int turnsSinceLastTranana = 0;
 
     /**
      * Creates a new AbyssmonkeyEntity at the given position on the given map.

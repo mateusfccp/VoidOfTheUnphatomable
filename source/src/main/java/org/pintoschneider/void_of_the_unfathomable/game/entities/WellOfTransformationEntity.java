@@ -27,9 +27,6 @@ import java.util.List;
  * powerful one.
  */
 public class WellOfTransformationEntity extends Entity<Void> {
-    private final Animation idleAnimation = Animation.repeating(
-        Duration.ofSeconds(2)
-    );
     private static final List<Color> colorSequence = List.of(
         ColorPalette.BLUSH,
         ColorPalette.AZURE,
@@ -43,6 +40,9 @@ public class WellOfTransformationEntity extends Entity<Void> {
         ColorPalette.EMERALD,
         ColorPalette.IVORY
     );
+    private final Animation idleAnimation = Animation.repeating(
+        Duration.ofSeconds(2)
+    );
     private boolean wasUsed = false;
 
     /**
@@ -54,6 +54,16 @@ public class WellOfTransformationEntity extends Entity<Void> {
     public WellOfTransformationEntity(Offset position, Map map) {
         super(position, null, map);
         idleAnimation.play();
+    }
+
+    private static Equippable getTransformation(Equippable item) {
+        if (item instanceof Sunga) {
+            return new Pajamas();
+        } else if (item instanceof MaidDress) {
+            return new Blue();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -128,15 +138,5 @@ public class WellOfTransformationEntity extends Entity<Void> {
     @Override
     protected void dispose() {
         idleAnimation.dispose();
-    }
-
-    private static Equippable getTransformation(Equippable item) {
-        if (item instanceof Sunga) {
-            return new Pajamas();
-        } else if (item instanceof MaidDress) {
-            return new Blue();
-        } else {
-            return null;
-        }
     }
 }

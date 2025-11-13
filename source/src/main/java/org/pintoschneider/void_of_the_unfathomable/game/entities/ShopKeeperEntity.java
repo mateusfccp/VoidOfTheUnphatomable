@@ -28,16 +28,15 @@ import java.util.List;
  * When the player interacts with this entity, the ShopScene scene is called.
  */
 public class ShopKeeperEntity extends Entity<Void> {
-    boolean isFirstInteraction = true;
     final Animation idleAnimation = Animation.repeating(
         Duration.ofSeconds(2)
     );
-
     /**
      * The list of items this shopkeeper will sell.
      */
     private final List<Item> shopItems;
     private final Player player;
+    boolean isFirstInteraction = true;
 
     public ShopKeeperEntity(Offset position, Map map, Player player) {
         super(position, null, map);

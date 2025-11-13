@@ -17,8 +17,8 @@ import java.util.Random;
  * An entity that can be damaged.
  */
 public abstract class DamageableEntity<T extends Damageable> extends Entity<T> {
-    protected final Animation damageAnimation = new Animation(Duration.ofMillis(100));
     private static final Random random = new Random();
+    protected final Animation damageAnimation = new Animation(Duration.ofMillis(100));
 
     protected DamageableEntity(Offset position, T associatedObject, Map map) {
         super(position, associatedObject, map);

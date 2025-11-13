@@ -18,9 +18,9 @@ import java.util.function.Supplier;
  * When the player interacts with this entity, it will open and give the associated item(s) to the player.
  */
 public class ChestEntity extends Entity<Supplier<Item>> {
-    private boolean isOpened = false;
     private final int amount;
     private final Runnable onOpenCallback;
+    private boolean isOpened = false;
 
     /**
      * Creates a new ChestEntity.
