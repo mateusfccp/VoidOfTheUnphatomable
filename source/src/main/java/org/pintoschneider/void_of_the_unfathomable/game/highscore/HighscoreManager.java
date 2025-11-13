@@ -102,7 +102,7 @@ public class HighscoreManager implements AutoCloseable {
         HighscoreEntry pivot = list.get(high);
         int i = low - 1;
         for (int j = low; j < high; j++) {
-            if (list.get(j).status().priority() > pivot.status().priority()) {
+            if (list.get(j).status().priority() < pivot.status().priority()) {
                 i = i + 1;
                 aux = list.get(i);
                 list.set(i, list.get(j));
