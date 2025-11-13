@@ -166,19 +166,17 @@ public abstract class Entity<T> {
      * @return The Chebyshev distance to the other entity.
      */
     public int distanceTo(Entity<?> other) {
-        return this.position.manhattanDistanceTo(other.position);
+        return distanceTo(other.position());
     }
 
-    public List<Entity<?>> getEntitiesInRange(int range) {
-        final List<Entity<?>> entitiesInRange = new ArrayList<>();
-
-        for (Entity<?> entity : map().entities()) {
-            if (entity != this && this.distanceTo(entity) <= range) {
-                entitiesInRange.add(entity);
-            }
-        }
-
-        return entitiesInRange;
+    /**
+     * Calculates the Chebyshev distance to another position.
+     *
+     * @param otherPosition The other position to calculate the distance to.
+     * @return The Chebyshev distance to the other position.
+     */
+    public int distanceTo(Offset otherPosition) {
+        return position.manhattanDistanceTo(otherPosition);
     }
 
     public <U> List<Entity<U>> getEntitiesInRange(int range, Class<? extends Entity<U>> type) {

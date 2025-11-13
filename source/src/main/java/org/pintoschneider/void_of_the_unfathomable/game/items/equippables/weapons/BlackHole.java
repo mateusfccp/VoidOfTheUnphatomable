@@ -1,5 +1,6 @@
 package org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons;
 
+import org.pintoschneider.void_of_the_unfathomable.game.entities.AbyssmonkeyEntity;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.DamageableEntity;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.PlayerEntity;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.SpecialWeapon;
@@ -27,7 +28,7 @@ public final class BlackHole extends SpecialWeapon {
         player.damage(90);
 
         for (final var entity : player.map().getEntitiesOfType(DamageableEntity.class)) {
-            if (entity != player) {
+            if (entity != player && !(entity instanceof AbyssmonkeyEntity)) {
                 entity.damage(Integer.MAX_VALUE);
             }
         }

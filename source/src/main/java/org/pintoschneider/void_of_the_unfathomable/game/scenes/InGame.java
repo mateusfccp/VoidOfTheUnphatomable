@@ -38,15 +38,15 @@ import java.util.concurrent.CompletableFuture;
 public final class InGame implements Scene {
     static private final Offset playerInitialPosition = new Offset(103, 189);
     static private final Offset debugBossRoomPosition = new Offset(130, 50);
-    static private final Offset mainHallRoomPosition = new Offset(110, 110);
-    static private final Offset bnnRoomPosition = new Offset(99, 125);
+    static private final Offset debugMainHallRoomPosition = new Offset(110, 110);
+    static private final Offset debugBnnRoomPosition = new Offset(99, 125);
 
     static private final Offset verticalOffset = new Offset(0, 1);
     static private final Offset horizontalOffset = new Offset(1, 0);
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(bnnRoomPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(debugBossRoomPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -57,6 +57,7 @@ public final class InGame implements Scene {
         final Equippable initialWeapon = new Stickool();
         player.addItemToInventory(initialWeapon);
         player.equipItem(initialWeapon);
+        player.addItemToInventory(new FamilyPhoto());
 
         if (Main.debugMode) {
             player.addItemToInventory(new Blue());
@@ -143,6 +144,9 @@ public final class InGame implements Scene {
             new Paint().withForegroundColor(ColorPalette.BANANA),
             map
         );
+
+        // Entities in the boss area
+        new AbyssmonkeyEntity(new Offset(130, 32), map);
     }
 
     @Override
