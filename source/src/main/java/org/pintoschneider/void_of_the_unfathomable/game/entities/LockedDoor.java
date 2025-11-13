@@ -14,7 +14,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
  * An entity that represents a locked door that can be unlocked with specific key items.
  */
 public class LockedDoor extends Entity<Boolean> {
-    static Boolean isLocked = true;
+    private static Boolean isLocked = true;
 
     /**
      * Creates a new LockedDoor entity at the specified position on the given map.
@@ -74,5 +74,14 @@ public class LockedDoor extends Entity<Boolean> {
         } else {
             return new SpatialProperty(true, false);
         }
+    }
+
+    /**
+     * Whether the door is locked.
+     *
+     * @return True if the door is locked, false if it is not.
+     */
+    static public boolean isLocked() {
+        return isLocked;
     }
 }

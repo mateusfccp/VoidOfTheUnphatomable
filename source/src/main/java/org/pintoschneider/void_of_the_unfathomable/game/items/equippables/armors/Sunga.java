@@ -27,6 +27,6 @@ public class Sunga implements Equippable {
 
     @Override
     public int price() {
-        return 40;
+        return 30;
     }
 }

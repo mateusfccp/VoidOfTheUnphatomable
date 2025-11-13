@@ -93,7 +93,7 @@ public final class MimicEntity extends DamageableEntity<Mimic> {
 
     @Override
     protected List<Item> loot() {
-        final int dropQuantity = 1 + (int) (Math.random() * 2);
+        final int dropQuantity = 3 + (int) (Math.random() * 2);
 
         return IntStream.range(0, dropQuantity)
             .<Item>mapToObj(_ -> new FragmentOfNothingness())
