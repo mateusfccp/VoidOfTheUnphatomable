@@ -58,7 +58,11 @@ public class ChestEntity extends Entity<Supplier<Item>> {
 
             Engine.context().sceneManager().push(
                 new DialogScene(message, Alignment.CENTER)
-            ).thenRun(onOpenCallback);
+            ).thenRun(() -> {
+                if (onOpenCallback != null) {
+                    onOpenCallback.run();
+                }
+            });
 
             for (int i = 0; i < amount; i++) {
                 playerEntity.associatedObject().addItemToInventory(associatedObject().get());
