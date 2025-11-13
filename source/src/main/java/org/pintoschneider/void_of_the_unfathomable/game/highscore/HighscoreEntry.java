@@ -1,5 +1,9 @@
 package org.pintoschneider.void_of_the_unfathomable.game.highscore;
 
+import org.pintoschneider.void_of_the_unfathomable.game.scenes.InGame;
+
+import java.time.LocalDateTime;
+
 /**
  * A class representing a high-score entry.
  */
@@ -7,11 +11,35 @@ public class HighscoreEntry {
     private final RunStatus status;
     private final int turnCount;
     private final int percentage;
+    private final LocalDateTime creationTime;
 
-    public HighscoreEntry(RunStatus status, int percentage,  int turnCount) {
+    /**
+     * Creates a new HighscoreEntry with the given parameters.
+     *
+     * @param status     The RunStatus of the high-score.
+     * @param percentage The percentage of the game completed.
+     * @param turnCount  The amount of turns taken.
+     */
+    public HighscoreEntry(RunStatus status, int percentage, int turnCount) {
         this.status = status;
         this.percentage = percentage;
         this.turnCount = turnCount;
+        this.creationTime = LocalDateTime.now();
+    }
+
+    /**
+     * Creates a new HighscoreEntry from the given InGame instance and RunStatus.
+     *
+     * @param game   The InGame instance to extract data from.
+     * @param status The RunStatus of the high-score.
+     * @return A new HighscoreEntry instance.
+     */
+    public static HighscoreEntry fromGame(InGame game, RunStatus status) {
+        return new HighscoreEntry(
+            status,
+            game.progress(),
+            game.turnCount()
+        );
     }
 
     /**
@@ -39,5 +67,14 @@ public class HighscoreEntry {
      */
     public int turnCount() {
         return turnCount;
+    }
+
+    /**
+     * Gets the creation time of the high-score entry.
+     *
+     * @return The creation time of the high-score entry.
+     */
+    public LocalDateTime creationTime() {
+        return creationTime;
     }
 }

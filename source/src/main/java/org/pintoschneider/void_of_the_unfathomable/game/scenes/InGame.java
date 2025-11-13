@@ -11,12 +11,13 @@ import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
 import org.pintoschneider.void_of_the_unfathomable.game.components.MapComponent;
 import org.pintoschneider.void_of_the_unfathomable.game.entities.*;
+import org.pintoschneider.void_of_the_unfathomable.game.highscore.HighscoreEntry;
+import org.pintoschneider.void_of_the_unfathomable.game.highscore.RunStatus;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
-import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.BlackHole;
@@ -31,6 +32,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 /**
  * The in-game scene where the player can explore the map and interact with the game world.
@@ -47,7 +49,7 @@ public final class InGame implements Scene {
     private final Map map = new Map();
     private final BitSet[] exploredTiles;
     private final Player player = new Player();
-    private final PlayerEntity playerEntity = new PlayerEntity(debugWellRoomPosition, player, map);
+    private final PlayerEntity playerEntity = new PlayerEntity(playerInitialPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
 
@@ -67,7 +69,7 @@ public final class InGame implements Scene {
             player.addItemToInventory(new LeftBanana());
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
-            player.addItemToInventory(new ResoundingCore());
+//            player.addItemToInventory(new ResoundingCore());
 
             for (int i = 0; i < 100; i++) {
                 player.addItemToInventory(new FragmentOfNothingness());
@@ -243,7 +245,9 @@ public final class InGame implements Scene {
                 )
             ).thenAccept(answers -> {
                 if (answers) {
-                    Engine.context().sceneManager().pop();
+                    Engine.context().sceneManager().pop(
+                        HighscoreEntry.fromGame(this, RunStatus.FORSAKEN)
+                    );
                 }
             });
         }
@@ -272,8 +276,44 @@ public final class InGame implements Scene {
             case DEATH -> ColorPalette.SLATE;
         };
     }
+
+    /**
+     * Returns the progress of the current game.
+     *
+     * @return An integer representing the progress between 0 and 100.
+     */
+    public int progress() {
+        final int total = 34; // Total number of entities in the game (manually counted hehe)
+        final int exempted = 14; // The number of entities that shouldn't count towards the remaining entities
+        final int relevant = total - exempted; // Number of entities that count towards the highscore
+        final Stream<Entity<?>> relevantEntities =
+            map
+                .entities()
+                .stream()
+                .filter(e -> !(e instanceof BulletEntity))
+                .filter(e -> !(e instanceof ItemEntity) || e.associatedObject() instanceof RightBanana || e.associatedObject() instanceof BlackHole);
+        final int remaining = Math.clamp(relevantEntities.count() - exempted, 0, relevant); // Shouldn't ever be negative, but I may have made a mistake when counting
+        final int destroyed = relevant - remaining;
+
+        return Math.min(
+            (int) Math.ceil((destroyed / (double) relevant) * 100),
+            100
+        );
+    }
+
+    /**
+     * Returns the current turn count.
+     *
+     * @return The current turn count.
+     */
+    public int turnCount() {
+        return turnManager.turnCount();
+    }
 }
 
+/**
+ * Manages the turn-based system of the game, processing turns and turn steps for all entities.
+ */
 final class TurnManager {
     static private final int turnStepInterval = 100_000_000; // 0.1 seconds per turn
     private final PlayerEntity playerEntity;
@@ -283,7 +323,14 @@ final class TurnManager {
     private boolean isProcessingStep = false;
     private long timeSinceLastTurnStep = 0;
     private Boolean lastStepResult = null;
+    private int turnCount = 0;
 
+    /**
+     * Creates a new TurnManager for the given player entity and map.
+     *
+     * @param playerEntity The player entity.
+     * @param map          The map.
+     */
     TurnManager(PlayerEntity playerEntity, Map map) {
         this.playerEntity = playerEntity;
         this.map = map;
@@ -316,6 +363,11 @@ final class TurnManager {
         }
     }
 
+    /**
+     * Updates the turn manager, processing turn steps based on the elapsed time.
+     *
+     * @param deltaTime The time elapsed since the last update in nanoseconds.
+     */
     public void update(long deltaTime) {
         if (!isProcessingTurn) return;
 
@@ -349,7 +401,17 @@ final class TurnManager {
         if (currentTurnSteps.isEmpty() && !isProcessingStep) {
             isProcessingTurn = false;
             lastStepResult = null;
+            turnCount = turnCount + 1;
         }
+    }
+
+    /**
+     * Returns the number of turns that have been processed.
+     *
+     * @return The turn count.
+     */
+    public int turnCount() {
+        return turnCount;
     }
 
     private record Step(TurnStep step, boolean isInstant) {}

@@ -29,7 +29,6 @@ public class HighscoreManager implements AutoCloseable {
      * @return The sorted list of high-score entries.
      */
     public List<HighscoreEntry> entries() {
-        quickSort(entries, 0, entries.size() - 1);
         return entries;
     }
 
@@ -42,6 +41,7 @@ public class HighscoreManager implements AutoCloseable {
     public void addHighscore(HighscoreEntry entry) {
         try {
             entries.add(entry);
+            quickSort(entries, 0, entries.size() - 1);
             fileWriter.write("%s,%s,%s%n".formatted(entry.status(), entry.percentage(), entry.turnCount()));
             fileWriter.flush();
         } catch (IOException exception) {
@@ -71,13 +71,15 @@ public class HighscoreManager implements AutoCloseable {
                 )
             );
         }
+
+        quickSort(entries, 0, entries.size() - 1);
     }
 
     /**
      * Sorts a list using QuickSort with an efficiency of (n log n).
      *
      * @param list The list of high-score entries to be sorted.
-     * @param low The start of the list.
+     * @param low  The start of the list.
      * @param high The end of the list.
      */
     private void quickSort(List<HighscoreEntry> list, int low, int high) {
@@ -94,7 +96,7 @@ public class HighscoreManager implements AutoCloseable {
      * The list is ordered first by RunStatus priority, then percentage completed and then least amount of turns.
      *
      * @param list The list of high-score entries to be sorted.
-     * @param low The start of the list.
+     * @param low  The start of the list.
      * @param high The end of the list.
      */
     private int partition(List<HighscoreEntry> list, int low, int high) {

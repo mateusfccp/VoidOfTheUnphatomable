@@ -2,12 +2,16 @@ package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
+import org.pintoschneider.void_of_the_unfathomable.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
+import org.pintoschneider.void_of_the_unfathomable.game.highscore.HighscoreEntry;
+import org.pintoschneider.void_of_the_unfathomable.game.highscore.RunStatus;
 import org.pintoschneider.void_of_the_unfathomable.game.items.key_items.FamilyPhoto;
 import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
 import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.GameOver;
+import org.pintoschneider.void_of_the_unfathomable.game.scenes.InGame;
 import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Color;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
@@ -63,6 +67,12 @@ public final class PlayerEntity extends DamageableEntity<Player> {
     protected void dispose() {
         Engine.context().sceneManager().push(
             new GameOver()
-        ).thenRun(Engine.context().sceneManager()::pop);
+        ).thenRun(() -> {
+            final Scene scene = Engine.context().sceneManager().currentScene();
+            if (scene instanceof InGame gameScene) {
+                final HighscoreEntry highscoreEntry = HighscoreEntry.fromGame(gameScene, RunStatus.DECEASED);
+                Engine.context().sceneManager().pop(highscoreEntry);
+            }
+        });
     }
 }

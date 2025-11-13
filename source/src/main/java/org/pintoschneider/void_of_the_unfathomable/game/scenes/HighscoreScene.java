@@ -56,7 +56,6 @@ public class HighscoreScene implements Scene {
                 .stream()
                 .map(HighscoreScene::entryToComponent)
                 .toList()
-
         );
 
         return new Box(

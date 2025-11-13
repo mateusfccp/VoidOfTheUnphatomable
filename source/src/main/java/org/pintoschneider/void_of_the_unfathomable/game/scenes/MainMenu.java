@@ -6,7 +6,6 @@ import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.highscore.HighscoreEntry;
 import org.pintoschneider.void_of_the_unfathomable.game.highscore.HighscoreManager;
-import org.pintoschneider.void_of_the_unfathomable.game.highscore.RunStatus;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Align;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Column;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.SizedBox;
@@ -15,7 +14,6 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 public final class MainMenu extends SelectionScene {
@@ -58,7 +56,7 @@ public final class MainMenu extends SelectionScene {
     }
 
     private void startNewGame() {
-        Engine.context().sceneManager().push(new InGame());
+        Engine.context().sceneManager().<HighscoreEntry>push(new InGame()).thenAccept(manager::addHighscore);
     }
 
     private void highscores() {
