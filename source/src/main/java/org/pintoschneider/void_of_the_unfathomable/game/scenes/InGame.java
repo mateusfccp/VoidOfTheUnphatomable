@@ -15,9 +15,11 @@ import org.pintoschneider.void_of_the_unfathomable.game.highscore.HighscoreEntry
 import org.pintoschneider.void_of_the_unfathomable.game.highscore.RunStatus;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
+import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
+import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Sunga;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.weapons.BlackHole;
@@ -52,6 +54,7 @@ public final class InGame implements Scene {
     private final PlayerEntity playerEntity = new PlayerEntity(playerInitialPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
     private Offset mapOffset = Offset.ZERO;
+    private final List<Entity<?>> allEntities = new ArrayList<>();
 
     /**
      * Creates a new in-game scene.
@@ -69,7 +72,7 @@ public final class InGame implements Scene {
             player.addItemToInventory(new LeftBanana());
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
-//            player.addItemToInventory(new ResoundingCore());
+            // player.addItemToInventory(new ResoundingCore());
 
             for (int i = 0; i < 100; i++) {
                 player.addItemToInventory(new FragmentOfNothingness());
@@ -87,29 +90,36 @@ public final class InGame implements Scene {
         // Initialize entities
         for (int x = 108; x <= 111; x++) {
             final Offset position = new Offset(x, 101);
-            new LockedDoor(position, map);
+            new LockedDoor(position, map); // Not a scorable enemy
         }
 
         // Shop
-        new ShopKeeperEntity(new Offset(104, 103), map, player);
+        new ShopKeeperEntity(new Offset(104, 103), map, player); // Not scorable
 
         // First area entities
-        new StairEntity(new Offset(98, 187), map);
-        new StaticDissonanceEntity(new Offset(53, 196), map);
-        new StaticDissonanceEntity(new Offset(57, 190), map);
-        new StaticDissonanceEntity(new Offset(55, 191), map);
-        new StaticDissonanceEntity(new Offset(60, 197), map);
+        new StairEntity(new Offset(98, 187), map); // Not scorable
+
+        // StaticDissonance (x6)
+        allEntities.add(new StaticDissonanceEntity(new Offset(53, 196), map));
+        allEntities.add(new StaticDissonanceEntity(new Offset(57, 190), map));
+        allEntities.add(new StaticDissonanceEntity(new Offset(55, 191), map));
+        allEntities.add(new StaticDissonanceEntity(new Offset(60, 197), map));
+        allEntities.add(new StaticDissonanceEntity(new Offset(60, 197), map));
+        allEntities.add(new StaticDissonanceEntity(new Offset(91, 165), map));
+
+        // Chests (not scorable)
         new ChestEntity(new Offset(57, 194), FragmentOfNothingness::new, 20, null, map);
-        new StaticDissonanceEntity(new Offset(60, 197), map);
         new ChestEntity(new Offset(60, 179), FluoxetineBottle::new, map);
-        new StaticDissonanceEntity(new Offset(91, 165), map);
         new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, 10, null, map);
 
         // Entities in the maze area
-        new MimicEntity(new Offset(11, 134), map);
-        new MimicEntity(new Offset(20, 130), map);
-        new MimicEntity(new Offset(52, 153), map);
-        new MimicEntity(new Offset(73, 152), map);
+        // Mimics (x4)
+        allEntities.add(new MimicEntity(new Offset(11, 134), map));
+        allEntities.add(new MimicEntity(new Offset(20, 130), map));
+        allEntities.add(new MimicEntity(new Offset(52, 153), map));
+        allEntities.add(new MimicEntity(new Offset(73, 152), map));
+
+        // LeftBanana
         new ChestEntity(
             new Offset(99, 120),
             LeftBanana::new,
@@ -121,6 +131,8 @@ public final class InGame implements Scene {
             ),
             map
         );
+
+        // Trans Well
         new ItemEntity(
             new Offset(58, 54),
             new BlackHole(),
@@ -130,15 +142,19 @@ public final class InGame implements Scene {
         new WellOfTransformationEntity(new Offset(49, 120), map);
 
         // Entities in the bullet hell area
-        new BulletManagerEntity(Offset.ZERO, map);
-        new TurretOfNothingnessEntity(new Offset(178, 88), map);
-        new TurretOfNothingnessEntity(new Offset(185, 105), map);
-        new TurretOfNothingnessEntity(new Offset(187, 122), map);
-        new TurretOfNothingnessEntity(new Offset(166, 123), map);
-        new TurretOfNothingnessEntity(new Offset(175, 139), map);
-        new TurretOfNothingnessEntity(new Offset(190, 158), map);
-        new TurretOfNothingnessEntity(new Offset(165, 173), map);
-        new TurretOfNothingnessEntity(new Offset(187, 181), map);
+        new BulletManagerEntity(Offset.ZERO, map); // Not scorable
+
+        // Turrets (x8)
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(178, 88), map));
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(185, 105), map));
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(187, 122), map));
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(166, 123), map));
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(175, 139), map));
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(190, 158), map));
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(165, 173), map));
+        allEntities.add(new TurretOfNothingnessEntity(new Offset(187, 181), map));
+
+        // Right Banana
         new ItemEntity(
             new Offset(153, 190),
             new RightBanana(),
@@ -146,8 +162,10 @@ public final class InGame implements Scene {
             map
         );
 
-        // Entities in the boss area
-        new AbyssmonkeyEntity(new Offset(130, 32), map);
+// Entities in the boss area
+        // Abyssmonkey (x1)
+        allEntities.add(new AbyssmonkeyEntity(new Offset(130, 32), map));
+
     }
 
     @Override
@@ -283,23 +301,75 @@ public final class InGame implements Scene {
      * @return An integer representing the progress between 0 and 100.
      */
     public int progress() {
-        final int total = 34; // Total number of entities in the game (manually counted hehe)
-        final int exempted = 14; // The number of entities that shouldn't count towards the remaining entities
-        final int relevant = total - exempted; // Number of entities that count towards the highscore
-        final Stream<Entity<?>> relevantEntities =
-            map
-                .entities()
-                .stream()
-                .filter(e -> !(e instanceof BulletEntity))
-                .filter(e -> !(e instanceof ItemEntity) || e.associatedObject() instanceof RightBanana || e.associatedObject() instanceof BlackHole);
-        final int remaining = Math.clamp(relevantEntities.count() - exempted, 0, relevant); // Shouldn't ever be negative, but I may have made a mistake when counting
-        final int destroyed = relevant - remaining;
+        int total = 0;
+        final Set<Entity<?>> entities = new HashSet<>(map.entities());
+        final List<Item> items = player.inventory();
 
-        return Math.min(
-            (int) Math.ceil((destroyed / (double) relevant) * 100),
-            100
-        );
+        for (Entity<?> enemy : allEntities) {
+            if (!entities.contains(enemy)) {
+                total += percentageEnemies(enemy);
+            }
+        }
+
+        for (Item item : items) {
+            total += percentageItems(item);
+        }
+
+        return total;
     }
+
+    /**
+     * Returns the progress value of an enemy
+     *
+     * @return An integer representing the progress between 0 and 100.
+     */
+    private int percentageEnemies(Entity<?> entity) {
+        if (entity instanceof AbyssmonkeyEntity) { // x1
+            return 10;
+        } else if (entity instanceof StaticDissonanceEntity) { // x6
+            return 2;
+        } else if (entity instanceof TurretOfNothingnessEntity) { // x8
+            return 2;
+        } else if (entity instanceof MimicEntity) { // x4
+            return 3;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Returns the progress value of an Item
+     *
+     * @return An integer representing the progress between 0 and 100.
+     */
+    private int percentageItems(Item item) {
+        // Armours and Weapons
+        if (item instanceof MaidDress) {
+            return 5;
+        } else if (item instanceof Blue) {
+            return 15;
+        } else if (item instanceof Sunga) {
+            return 5;
+        } else if (item instanceof Pajamas) {
+            return 15;
+        } else if (item instanceof BlackHole) {
+            return 5;
+        } else if (item instanceof Stickool) {
+            return 5;
+        }
+
+        // Key Items
+        else if (item instanceof RightBanana) {
+            return 5;
+        } else if (item instanceof LeftBanana) {
+            return 5;
+        } else if (item instanceof ResoundingCore) {
+            return 10;
+        }
+
+        return 0;
+    }
+
 
     /**
      * Returns the current turn count.
