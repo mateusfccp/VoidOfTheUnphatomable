@@ -186,7 +186,7 @@ public final class InGame implements Scene {
                 .stream()
                 .map(
                     status -> new Text(
-                        "· " + status.displayString(),
+                        status.displayString(),
                         new Paint().withForegroundColor(statusToColor(status))
                     )
                 )
@@ -213,6 +213,7 @@ public final class InGame implements Scene {
                                     new Text("%d/%d".formatted(player.currentHealth(), player.maximumHealth())),
                                     statusEffects.length == 0 ? null : new SizedBox(0, 1),
                                     statusEffects.length == 0 ? null : new Column(statusEffects).mainAxisSize(MainAxisSize.MIN),
+                                    new SizedBox(0, 1),
                                     new Text("Progreso:", Paint.BOLD),
                                     new Text("%d%%".formatted(progress()))
                                 ).mainAxisSize(MainAxisSize.MIN)
