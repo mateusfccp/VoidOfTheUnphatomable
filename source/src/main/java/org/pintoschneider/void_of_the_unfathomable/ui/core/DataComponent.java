@@ -10,6 +10,9 @@ public abstract class DataComponent extends Component {
 
     /**
      * The data associated with this component.
+     *
+     * @param data  The data associated with this component.
+     * @param child The child component.
      */
     public DataComponent(Object data, Component child) {
         this.data = data;

@@ -16,10 +16,18 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
+/**
+ * The main menu of the game.
+ */
 public final class MainMenu extends SelectionScene {
+    final HighscoreManager manager = new HighscoreManager();
     Animation titleAnimation;
-    HighscoreManager manager = new HighscoreManager();
 
+    /**
+     * Constructs the main menu scene.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public MainMenu() throws IOException {}
 
     @Override

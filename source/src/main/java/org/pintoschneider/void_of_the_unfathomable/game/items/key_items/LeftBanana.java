@@ -2,6 +2,9 @@ package org.pintoschneider.void_of_the_unfathomable.game.items.key_items;
 
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 
+/**
+ * The left banana key item.
+ */
 public class LeftBanana implements Item {
     @Override
     public String name() {

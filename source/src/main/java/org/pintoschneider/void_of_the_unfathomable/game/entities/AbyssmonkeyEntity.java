@@ -98,7 +98,6 @@ public class AbyssmonkeyEntity extends DamageableEntity<Abyssmonkey> {
 
                 steps.add(
                     new CreateEntity(
-                        this,
                         () -> new TrananaEntity(position(), map())
                     )
                 );

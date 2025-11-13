@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * An entity representing a well of transformation in the game.
  * <p>
- * A well of transformation is a special entity that can be used once to transform a equipment item into another, more
+ * A well of transformation is a special entity that can be used once to transform an equipment item into another, more
  * powerful one.
  */
 public class WellOfTransformationEntity extends Entity<Void> {

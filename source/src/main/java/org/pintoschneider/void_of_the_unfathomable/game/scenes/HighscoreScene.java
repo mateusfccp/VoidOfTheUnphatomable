@@ -19,6 +19,11 @@ import java.util.List;
 public class HighscoreScene implements Scene {
     private final HighscoreManager manager;
 
+    /**
+     * Creates a new HighscoreScene.
+     *
+     * @param manager The high-score manager.
+     */
     public HighscoreScene(HighscoreManager manager) {
         this.manager = manager;
     }

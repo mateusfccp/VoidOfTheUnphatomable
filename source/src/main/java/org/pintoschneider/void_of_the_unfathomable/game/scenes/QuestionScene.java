@@ -73,8 +73,10 @@ public final class QuestionScene<T> extends SelectionScene {
     /**
      * Represents an answer in the questin scene.
      *
+     * @param label   The label of the option.
      * @param value   The value of the option.
      * @param enabled Whether the option is enabled or disabled.
+     * @param <T>     The type of the answer value.
      */
     public record Answer<T>(String label, T value, boolean enabled) {
         private Option toOption() {

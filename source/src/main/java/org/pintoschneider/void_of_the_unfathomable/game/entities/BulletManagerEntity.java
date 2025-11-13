@@ -12,7 +12,7 @@ import java.util.List;
  * An entity that manages all bullets in the game.
  */
 public class BulletManagerEntity extends Entity<Void> {
-    private final List<BulletEntity> bullets = new ArrayList<BulletEntity>();
+    private final List<BulletEntity> bullets = new ArrayList<>();
 
     /**
      * Creates a new BulletManagerEntity.

@@ -18,7 +18,17 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 import java.util.List;
 
+/**
+ * An entity representing the player in the game.
+ */
 public final class PlayerEntity extends DamageableEntity<Player> {
+    /**
+     * Creates a new PlayerEntity.
+     *
+     * @param position         The position of the player.
+     * @param associatedObject The associated player object.
+     * @param map              The map the player is in.
+     */
     public PlayerEntity(Offset position, Player associatedObject, Map map) {
         super(position, associatedObject, map);
     }

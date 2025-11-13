@@ -32,6 +32,7 @@ public final class Canvas {
     /**
      * Constructs a new {@link Canvas} with the specified width and height.
      *
+     * @param component The component for which this canvas is created.
      */
     public Canvas(Component component) {
         this.component = component;
@@ -149,22 +150,13 @@ public final class Canvas {
     }
 
     /**
-     * Draws a character at the specified offset with no style.
-     *
-     * @param c      The character to draw.
-     * @param offset The offset to draw at.
-     */
-    public void draw(char c, Offset offset) {
-        draw(c, offset.dx(), offset.dy(), null);
-    }
-
-    /**
      * Draws a character at the specified position with an optional style.
      *
      * @param c     The character to draw.
      * @param x     The x-coordinate.
      * @param y     The y-coordinate.
      * @param paint The paint style to apply, or null for no style.
+     * @throws UIException If there was an error drawing the character (e.g., overflow).
      */
     public void draw(char c, int x, int y, Paint paint) throws UIException {
         if (x < 0 || x >= width || y < 0 || y >= height) {
@@ -172,21 +164,6 @@ public final class Canvas {
         }
 
         tiles[x][y] = c;
-        paints[x][y] = paint;
-    }
-
-    /**
-     * Sets the paint style at the specified position.
-     *
-     * @param x     The x-coordinate.
-     * @param y     The y-coordinate.
-     * @param paint The paint style to set.
-     */
-    public void setPaintAt(int x, int y, Paint paint) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-            throw new OverflowException(component, new Offset(x, y));
-        }
-
         paints[x][y] = paint;
     }
 
@@ -218,6 +195,8 @@ public final class Canvas {
      * Builds and returns a list of {@link AttributedString} objects representing the canvas content.
      * <p>
      * Each row is written in order, with null cells rendered as spaces.
+     *
+     * @return A list of {@link AttributedString} objects for each row of the canvas.
      */
     public List<AttributedString> toAttributedStrings() {
         final List<AttributedString> lines = new ArrayList<>(this.height);

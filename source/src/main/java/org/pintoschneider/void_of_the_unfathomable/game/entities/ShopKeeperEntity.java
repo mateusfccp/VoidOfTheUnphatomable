@@ -38,6 +38,13 @@ public class ShopKeeperEntity extends Entity<Void> {
     private final Player player;
     boolean isFirstInteraction = true;
 
+    /**
+     * Creates a new ShopKeeperEntity.
+     *
+     * @param position The position of the shopkeeper.
+     * @param map      The map the shopkeeper is in.
+     * @param player   The player object.
+     */
     public ShopKeeperEntity(Offset position, Map map, Player player) {
         super(position, null, map);
         this.shopItems = createShopStock();

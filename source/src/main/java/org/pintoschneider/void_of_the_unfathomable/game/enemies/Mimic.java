@@ -11,6 +11,9 @@ package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 public final class Mimic extends Enemy {
     private State state = State.IDLE;
 
+    /**
+     * Creates a new Mimic enemy with predefined attributes.
+     */
     public Mimic() {
         super("Mímico", 20, 5, 3);
     }

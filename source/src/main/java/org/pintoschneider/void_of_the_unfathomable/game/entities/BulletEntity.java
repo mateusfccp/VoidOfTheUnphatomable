@@ -53,6 +53,11 @@ public class BulletEntity extends Entity<Void> {
         }
     }
 
+    /**
+     * Creates the turn steps for moving the bullet.
+     *
+     * @return The list of turn steps to be executed.
+     */
     public List<TurnStep> move() {
         return List.of(
             new MoveInDirection(this, direction),

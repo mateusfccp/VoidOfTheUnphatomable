@@ -21,6 +21,12 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
  * they are asked if they wish to exit without it, leading to a somber outcome.
  */
 public final class StairEntity extends Entity<Void> {
+    /**
+     * Creates a new StairEntity.
+     *
+     * @param position The position of the stairs.
+     * @param map      The map the stairs are in.
+     */
     public StairEntity(Offset position, Map map) {
         super(position, null, map);
     }

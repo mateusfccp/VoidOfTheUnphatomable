@@ -8,17 +8,14 @@ import java.util.function.Supplier;
  * A {@link TurnStep} that drops an item at a specified offset.
  */
 public class CreateEntity implements TurnStep {
-    final Entity<?> entity;
-    final Supplier<Entity<?>> entitySupplier;
+    private final Supplier<Entity<?>> entitySupplier;
 
     /**
      * Creates a new CreateEntity action for the given entity.
      *
-     * @param entity         The entity that will drop the item.
      * @param entitySupplier A supplier that provides the item to be dropped.
      */
-    public CreateEntity(Entity<?> entity, Supplier<Entity<?>> entitySupplier) {
-        this.entity = entity;
+    public CreateEntity(Supplier<Entity<?>> entitySupplier) {
         this.entitySupplier = entitySupplier;
     }
 

@@ -19,7 +19,8 @@ public final class DialogScene implements Scene {
     /**
      * Creates a new dialog scene with the specified message.
      *
-     * @param message The message to display in the dialog.
+     * @param message   The message to display in the dialog.
+     * @param alignment The alignment of the dialog on the screen.
      */
     public DialogScene(String message, Alignment alignment) {
         this(message, alignment, null);
@@ -28,8 +29,9 @@ public final class DialogScene implements Scene {
     /**
      * Creates a new dialog scene with the specified message and a callback for when the dialog is closed.
      *
-     * @param message The message to display in the dialog.
-     * @param onClose A callback function to be executed when the dialog is closed.
+     * @param message   The message to display in the dialog.
+     * @param alignment The alignment of the dialog on the screen.
+     * @param onClose   A callback function to be executed when the dialog is closed.
      */
     public DialogScene(String message, Alignment alignment, Consumer<Void> onClose) {
         this.message = message;

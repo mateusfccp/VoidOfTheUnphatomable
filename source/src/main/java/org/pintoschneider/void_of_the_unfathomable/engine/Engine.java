@@ -18,6 +18,9 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+/**
+ * The main engine class that manages the terminal, input, UI rendering, and scene management.
+ */
 public final class Engine implements AutoCloseable, Context {
     private static Engine context = null;
     private final Terminal terminal = TerminalBuilder.builder().build();
@@ -29,6 +32,12 @@ public final class Engine implements AutoCloseable, Context {
     private final List<_EngineTicker> tickers = new ArrayList<>();
     private boolean running = true;
 
+    /**
+     * Creates a new engine instance with the specified initial scene.
+     *
+     * @param initialScene The initial scene to display.
+     * @throws IOException If an I/O error occurs while initializing the terminal.
+     */
     public Engine(Scene initialScene) throws IOException {
         terminal.enterRawMode();
 
@@ -63,6 +72,11 @@ public final class Engine implements AutoCloseable, Context {
 
     }
 
+    /**
+     * Returns the current engine context.
+     *
+     * @return The current engine context.
+     */
     static public Context context() {
         if (context == null) {
             throw new IllegalStateException("No Engine instance is currently running.");
@@ -113,6 +127,8 @@ public final class Engine implements AutoCloseable, Context {
 
     /**
      * Returns whether the engine is still running.
+     *
+     * @throws InterruptedException If the thread is interrupted while waiting.
      */
     public synchronized void waitUntilStopped() throws InterruptedException {
         while (running) {

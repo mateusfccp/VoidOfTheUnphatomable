@@ -29,18 +29,10 @@ public interface Equippable extends Item {
     /**
      * Gets the defense modifier provided by this equippable item.
      *
+     * @param player The player wearing the item.
      * @return The defense modifier.
      */
     default int defenseModifier(Player player) {
-        return 0;
-    }
-
-    /**
-     * Gets the creativity modifier provided by this equippable item.
-     *
-     * @return The creativity modifier.
-     */
-    default int creativityModifier() {
         return 0;
     }
 
@@ -54,6 +46,11 @@ public interface Equippable extends Item {
         return paint;
     }
 
+    /**
+     * Transforms the status effects applied to the player when this equippable item is worn.
+     *
+     * @param originalStatusEffects The original set of status effects.
+     */
     default void transformStatusEffects(EnumSet<StatusEffect> originalStatusEffects) {}
 }
 

@@ -14,6 +14,8 @@ import java.util.*;
  * <p>
  * An entity is any kind of object that can be placed in the map and have its position changed, such as the player,
  * enemies, items, etc.
+ *
+ * @param <T> The type of the associated object with the entity.
  */
 public abstract class Entity<T> {
     private final T associatedObject;
@@ -179,18 +181,6 @@ public abstract class Entity<T> {
         return position.manhattanDistanceTo(otherPosition);
     }
 
-    public <U> List<Entity<U>> getEntitiesInRange(int range, Class<? extends Entity<U>> type) {
-        final List<Entity<U>> entitiesInRange = new ArrayList<>();
-
-        for (Entity<?> entity : map().entities()) {
-            if (type.isInstance(entity) && entity != this && this.distanceTo(entity) <= range) {
-                entitiesInRange.add(type.cast(entity));
-            }
-        }
-
-        return entitiesInRange;
-    }
-
     /**
      * Processes the entity's turn and returns a list of turn steps to be executed.
      *
@@ -267,18 +257,6 @@ public abstract class Entity<T> {
      */
     protected void drop(Item droppedItem) {
         new ItemEntity(position(), droppedItem, map());
-    }
-
-    /**
-     * Drops multiple items at the entity's current position on the map.
-     *
-     * @param droppedItem The item to drop.
-     * @param quantity    The quantity of items to drop.
-     */
-    protected void drop(Item droppedItem, int quantity) {
-        for (int i = 0; i < quantity; i++) {
-            drop(droppedItem);
-        }
     }
 
     /**

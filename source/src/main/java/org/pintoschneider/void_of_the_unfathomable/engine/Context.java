@@ -39,6 +39,9 @@ public interface Context {
 
     /**
      * Creates a new ticker that executes actions on each engine tick.
+     *
+     * @param onTick The action to execute on each tick, receiving the elapsed time since the last tick.
+     * @return The created ticker.
      */
     Ticker createTicker(Consumer<Duration> onTick);
 }

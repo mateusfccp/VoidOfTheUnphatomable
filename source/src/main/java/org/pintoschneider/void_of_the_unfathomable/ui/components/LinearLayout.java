@@ -33,6 +33,7 @@ public class LinearLayout extends Component {
      * Sets how much space the layout should occupy in the main axis.
      *
      * @param mainAxisSize The main axis size to set.
+     * @return This layout instance.
      */
     public LinearLayout mainAxisSize(MainAxisSize mainAxisSize) {
         this.mainAxisSize = Objects.requireNonNullElse(mainAxisSize, MainAxisSize.MAX);
@@ -43,6 +44,7 @@ public class LinearLayout extends Component {
      * Sets the cross-axis alignment for this layout.
      *
      * @param crossAxisAlignment The cross-axis alignment to set.
+     * @return This layout instance.
      */
     public LinearLayout crossAxisAlignment(CrossAxisAlignment crossAxisAlignment) {
         this.crossAxisAlignment = Objects.requireNonNullElse(crossAxisAlignment, CrossAxisAlignment.START);

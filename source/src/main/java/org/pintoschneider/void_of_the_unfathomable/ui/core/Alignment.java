@@ -22,6 +22,9 @@ import org.pintoschneider.void_of_the_unfathomable.core.Size;
  * <p>
  * {@code Alignment(x, y)} in a rectangle with height h and width w describes the point (x * w/2 + w/2, y * h/2 + h/2)
  * in the coordinate system of the rectangle.
+ *
+ * @param x The x value of the alignment, ranging from -1.0 (left) to 1.0 (right).
+ * @param y The y value of the alignment, ranging from -1.0 (top) to 1.0 (bottom).
  */
 public record Alignment(double x, double y) {
     /**

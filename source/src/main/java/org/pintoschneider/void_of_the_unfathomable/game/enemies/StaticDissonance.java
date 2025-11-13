@@ -10,6 +10,9 @@ package org.pintoschneider.void_of_the_unfathomable.game.enemies;
  * the player, it will immediately move towards them, closing the distance quickly.
  */
 public final class StaticDissonance extends Enemy {
+    /**
+     * Creates a new StaticDissonance.
+     */
     public StaticDissonance() {
         super("Disonancia Estática", 10, 2, 1);
     }

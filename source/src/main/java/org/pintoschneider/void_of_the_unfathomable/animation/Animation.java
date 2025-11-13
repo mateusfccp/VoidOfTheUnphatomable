@@ -29,6 +29,14 @@ public class Animation {
         progress = 0;
     }
 
+    /**
+     * Creates a new repeating animation with the specified duration.
+     * <p>
+     * A repeating animation will automatically restart once it reaches the end.
+     *
+     * @param duration The duration of the animation.
+     * @return A new repeating animation.
+     */
     public static Animation repeating(Duration duration) {
         return new _RepeatingAnimation(duration);
     }

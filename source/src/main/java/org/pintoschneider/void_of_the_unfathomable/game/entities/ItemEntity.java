@@ -14,10 +14,25 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 public final class ItemEntity extends Entity<Item> {
     private final Paint paint;
 
+    /**
+     * Creates a new ItemEntity.
+     *
+     * @param position The position of the item entity.
+     * @param item     The item associated with the entity.
+     * @param map      The map the item entity is in.
+     */
     public ItemEntity(Offset position, Item item, Map map) {
         this(position, item, null, map);
     }
 
+    /**
+     * Creates a new ItemEntity with a specific paint.
+     *
+     * @param position The position of the item entity.
+     * @param item     The item associated with the entity.
+     * @param paint    The paint used to render the item entity.
+     * @param map      The map the item entity is in.
+     */
     public ItemEntity(Offset position, Item item, Paint paint, Map map) {
         super(position, item, map);
         this.paint = paint;

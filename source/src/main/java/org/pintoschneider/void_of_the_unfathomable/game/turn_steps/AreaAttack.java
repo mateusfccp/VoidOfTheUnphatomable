@@ -8,6 +8,8 @@ import org.pintoschneider.void_of_the_unfathomable.game.entities.PlayerEntity;
  * A {@link TurnStep} that performs a regular attack by an entity on the player.
  * <p>
  * A regular attack will consider the entity's attack power and the target's defense to calculate damage.
+ *
+ * @param <T> The type of enemy associated with the attacking entity.
  */
 public final class AreaAttack<T extends Enemy> implements TurnStep {
     final int area;
@@ -17,6 +19,7 @@ public final class AreaAttack<T extends Enemy> implements TurnStep {
      * Creates a new AreaAttack action for the given entity.
      *
      * @param entity The entity that will attack the player.
+     * @param area   The area within which the attack will hit the player.
      */
     public AreaAttack(Entity<T> entity, int area) {
         this.entity = entity;

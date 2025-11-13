@@ -21,6 +21,7 @@ public final class SceneManager {
      * Creates a new SceneManager with the specified initial scene.
      *
      * @param initialScene The initial scene to be added to the manager.
+     * @param onDone       A runnable to be executed when all scenes have been popped.
      */
     public SceneManager(Scene initialScene, Runnable onDone) {
         push(initialScene);
@@ -44,7 +45,8 @@ public final class SceneManager {
      * Pushes a new scene onto the stack, making it the current active scene.
      *
      * @param scene The scene to be pushed onto the stack.
-     * @return a {@link CompletableFuture} that will be completed when the scene is popped.
+     * @param <T>   The type of the result that is expected to be returned when the scene is popped.
+     * @return A {@link CompletableFuture} that is expected to be completed when the scene is popped.
      */
     @SuppressWarnings("unchecked")
     public <T> CompletableFuture<T> push(Scene scene) {

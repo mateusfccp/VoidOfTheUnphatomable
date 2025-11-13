@@ -14,6 +14,11 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Constraints;
 public class Stack extends Component {
     final Component[] children;
 
+    /**
+     * Creates a new Stack component with the given children.
+     *
+     * @param children The child components to be stacked.
+     */
     public Stack(Component... children) {
         this.children = children;
     }

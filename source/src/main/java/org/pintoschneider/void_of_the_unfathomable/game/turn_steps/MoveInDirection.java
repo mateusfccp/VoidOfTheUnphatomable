@@ -13,7 +13,8 @@ public final class MoveInDirection implements TurnStep {
     /**
      * Creates a new MoveTowardsPlayer action for the given entity.
      *
-     * @param entity The entity that will move towards the player.
+     * @param entity    The entity that will move towards the player.
+     * @param direction The direction in which the entity will move.
      */
     public MoveInDirection(Entity<?> entity, Offset direction) {
         this.entity = entity;

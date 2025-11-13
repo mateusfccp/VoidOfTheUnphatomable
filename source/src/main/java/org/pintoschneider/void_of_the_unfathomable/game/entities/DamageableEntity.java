@@ -15,6 +15,8 @@ import java.util.Random;
 
 /**
  * An entity that can be damaged.
+ *
+ * @param <T> The type of the associated damageable object.
  */
 public abstract class DamageableEntity<T extends Damageable> extends Entity<T> {
     private static final Random random = new Random();

@@ -1,7 +1,17 @@
 package org.pintoschneider.void_of_the_unfathomable.game.map;
 
+/**
+ * Enum representing different types of map tiles with their character representations and spatial properties.
+ */
 public enum MapTile {
+    /**
+     * An empty tile that is neither walkable nor opaque.
+     */
     VOID(' ', new SpatialProperty(false, false)),
+
+    /**
+     * A wall tile that is opaque and not walkable, with auto-tiling characters.
+     */
     WALL('⬤',
         '┼',
         '─',
@@ -20,7 +30,15 @@ public enum MapTile {
         '┴',
         new SpatialProperty(false, true)
     ),
+
+    /**
+     * A floor tile that is walkable and not opaque.
+     */
     FLOOR('·', new SpatialProperty(true, false)),
+
+    /**
+     * A dense void tile that is not walkable but is opaque.
+     */
     DENSE_VOID(' ', new SpatialProperty(false, true));
 
     final boolean autoTile;

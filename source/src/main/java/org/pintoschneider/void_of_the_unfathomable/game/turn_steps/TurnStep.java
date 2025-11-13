@@ -1,5 +1,8 @@
 package org.pintoschneider.void_of_the_unfathomable.game.turn_steps;
 
+/**
+ * Represents a single step in a game turn.
+ */
 @FunctionalInterface
 public interface TurnStep {
     /**

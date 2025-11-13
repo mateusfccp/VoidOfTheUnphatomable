@@ -19,6 +19,11 @@ public class HighscoreManager implements AutoCloseable {
     private final Scanner scanner = new Scanner(file);
     private final List<HighscoreEntry> entries = new ArrayList<>();
 
+    /**
+     * Creates a new HighscoreManager and reads all existing high-score entries from a file.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     public HighscoreManager() throws IOException {
         readFromFile();
     }

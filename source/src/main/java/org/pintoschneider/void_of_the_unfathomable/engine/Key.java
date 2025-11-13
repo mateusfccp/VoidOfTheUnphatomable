@@ -10,14 +10,49 @@ import static org.jline.utils.InfoCmp.Capability.*;
  * A utility class that holds key code constants for common keyboard keys.
  */
 public enum Key {
+    /**
+     * The Up Arrow key.
+     */
     UP(key_up),
+
+    /**
+     * The Down Arrow key.
+     */
     DOWN(key_down),
+
+    /**
+     * The Left Arrow key.
+     */
     LEFT(key_left),
+
+    /**
+     * The Right Arrow key.
+     */
     RIGHT(key_right),
+
+    /**
+     * The Enter key.
+     */
     ENTER(new Capability[]{key_enter}, new CharSequence[]{"\r", "\n"}),
+
+    /**
+     * The Escape key.
+     */
     ESC("\033"),
+
+    /**
+     * The Backspace key.
+     */
     BACKSPACE(new Capability[]{key_backspace}, new CharSequence[]{"\177"}),
+
+    /**
+     * The 'I' key.
+     */
     I("i"),
+
+    /**
+     * The 'C' key.
+     */
     C("c");
 
     final Capability[] capabilities;

@@ -25,9 +25,10 @@ public final class MapComponent extends Component {
     /**
      * Creates a new MapComponent.
      *
-     * @param map          The map to render.
-     * @param offset       The offset of the map to render.
-     * @param playerOffset The offset of the player on the map.
+     * @param map           The map to render.
+     * @param offset        The offset of the map to render.
+     * @param playerOffset  The offset of the player on the map.
+     * @param exploredTiles The explored tiles on the map.
      */
     public MapComponent(Map map, Offset offset, Offset playerOffset, BitSet[] exploredTiles) {
         this.map = Objects.requireNonNull(map);
