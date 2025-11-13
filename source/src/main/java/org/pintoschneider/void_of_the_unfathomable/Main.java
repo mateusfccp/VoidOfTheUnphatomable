@@ -5,6 +5,8 @@ import org.pintoschneider.void_of_the_unfathomable.engine.Scene;
 import org.pintoschneider.void_of_the_unfathomable.game.scenes.MainMenu;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 
 public final class Main {
@@ -22,6 +24,9 @@ public final class Main {
                 );
             }
         } else {
+            final var nullStream = new PrintStream(OutputStream.nullOutputStream());
+            System.setOut(nullStream);
+            System.setErr(nullStream);
             run();
         }
     }
