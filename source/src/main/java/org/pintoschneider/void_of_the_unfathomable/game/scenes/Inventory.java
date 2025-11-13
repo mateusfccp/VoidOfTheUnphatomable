@@ -62,7 +62,7 @@ public class Inventory extends SelectionScene {
         return new Padding(
             EdgeInsets.all(1),
             new Align(
-                Alignment.TOP_CENTER,
+                Alignment.CENTER,
                 new Column(
                     new Box(
                         Border.SINGLE_ROUNDED,
@@ -98,20 +98,21 @@ public class Inventory extends SelectionScene {
                                             getSelectedItem(),
                                             e -> e.defenseModifier(player)
                                         )
-                                    ).  mainAxisSize(MainAxisSize.MIN)
+                                    ).mainAxisSize(MainAxisSize.MIN)
                                 )
                             )
                         )
                     ).mainAxisSize(MainAxisSize.MIN),
-                    selectedItem == null ? null : new Flexible(new SizedBox(0, 0)),
+                    new SizedBox(0, 1),
                     selectedItem == null ? null : new ConstrainedBox(
-                        new Constraints(0, null, 8, 8),
+                        new Constraints(0, 57, 8, 8),
                         new Box(
                             Border.SINGLE_ROUNDED,
                             new Text(selectedItem.description())
                         )
                     )
                 ).crossAxisAlignment(CrossAxisAlignment.CENTER)
+                    .mainAxisSize(MainAxisSize.MIN)
             )
         );
     }

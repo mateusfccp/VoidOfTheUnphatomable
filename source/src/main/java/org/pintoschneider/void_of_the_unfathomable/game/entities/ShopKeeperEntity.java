@@ -1,17 +1,23 @@
 package org.pintoschneider.void_of_the_unfathomable.game.entities;
 
+import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
+import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
 import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
-import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
-import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
-import org.pintoschneider.void_of_the_unfathomable.game.scenes.ShopScene;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
+import org.pintoschneider.void_of_the_unfathomable.game.map.Map;
+import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
+import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
+import org.pintoschneider.void_of_the_unfathomable.game.scenes.ShopScene;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
+import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +27,10 @@ import java.util.List;
  * When the player interacts with this entity, the ShopScene scene is called.
  */
 public class ShopKeeperEntity extends Entity<Void> {
+    boolean isFirstInteraction = true;
+    final Animation idleAnimation = Animation.repeating(
+        Duration.ofSeconds(2)
+    );
 
     /**
      * The list of items this shopkeeper will sell.
@@ -32,6 +42,7 @@ public class ShopKeeperEntity extends Entity<Void> {
         super(position, null, map);
         this.shopItems = createShopStock();
         this.player = player;
+        idleAnimation.play();
     }
 
     /**
@@ -52,7 +63,24 @@ public class ShopKeeperEntity extends Entity<Void> {
         if (player.statusEffects().contains(StatusEffect.INSANITY)) {
             return '$';
         } else {
-            return null;
+            final int frame = (int) (idleAnimation.progress() * 4);
+
+            return switch (frame) {
+                case 1, 3 -> '▒';
+                case 2 -> '▓';
+                default -> '░';
+            };
+        }
+    }
+
+    @Override
+    public Paint paint() {
+        final Paint basePaint = new Paint().withForegroundColor(ColorPalette.MINT_GREEN);
+
+        if (player.statusEffects().contains(StatusEffect.INSANITY)) {
+            return basePaint;
+        } else {
+            return basePaint.withDim(true);
         }
     }
 
@@ -61,7 +89,7 @@ public class ShopKeeperEntity extends Entity<Void> {
         if (player.statusEffects().contains(StatusEffect.INSANITY)) {
             return new SpatialProperty(false, true);
         } else {
-            return new SpatialProperty(true, false);
+            return new SpatialProperty(false, false);
         }
     }
 
@@ -69,11 +97,35 @@ public class ShopKeeperEntity extends Entity<Void> {
     public void interact(Entity<?> entity) {
         if (player.statusEffects().contains(StatusEffect.INSANITY)) {
             if (entity instanceof PlayerEntity playerEntity) {
-                Player player = playerEntity.associatedObject();
-                Engine.context().sceneManager().push(
-                    new ShopScene(player, this.shopItems)
-                );
+                if (isFirstInteraction) {
+                    Engine.context().sceneManager().push(
+                        new DialogScene(
+                            "¿Podés verme? Hmmm... Eso quiere decir que tu mente está lo suficientemente perturbada como para percibirme. Pero tal vez eso no sea tan malo... ¿Sabés estes Fragmentos de Nulidad que están por todos lados? Puedo ofrecerte algunos objetos a cambio de ellos, si te interesan.",
+                            Alignment.CENTER
+                        )
+                    ).thenRun(() -> {
+                        Player player = playerEntity.associatedObject();
+                        Engine.context().sceneManager().push(
+                            new ShopScene(player, this.shopItems)
+                        );
+
+                        isFirstInteraction = false;
+                    });
+
+                } else {
+                    Player player = playerEntity.associatedObject();
+                    Engine.context().sceneManager().push(
+                        new ShopScene(player, this.shopItems)
+                    );
+                }
             }
+        } else {
+            Engine.context().sceneManager().push(
+                new DialogScene(
+                    "Sentís una débil presencia, pero tu mente no puede comprenderla... Te parece que estás alucinando. O... tal vez... ¿estés muy sano?",
+                    Alignment.CENTER
+                )
+            );
         }
     }
 
