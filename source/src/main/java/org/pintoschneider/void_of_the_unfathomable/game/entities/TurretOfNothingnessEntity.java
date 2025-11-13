@@ -84,7 +84,7 @@ public class TurretOfNothingnessEntity extends DamageableEntity<TurretOfNothingn
 
     @Override
     protected List<Item> loot() {
-        final int dropQuantity = 1 + (int) (Math.random() * 2);
+        final int dropQuantity = 2 + (int) (Math.random() * 4);
 
         return IntStream.range(0, dropQuantity)
             .<Item>mapToObj(_ -> new FragmentOfNothingness())

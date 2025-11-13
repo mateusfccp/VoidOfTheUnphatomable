@@ -72,7 +72,6 @@ public final class InGame implements Scene {
             player.addItemToInventory(new LeftBanana());
             player.addItemToInventory(new RightBanana());
             player.addItemToInventory(new BlackHole());
-            // player.addItemToInventory(new ResoundingCore());
 
             for (int i = 0; i < 100; i++) {
                 player.addItemToInventory(new FragmentOfNothingness());
@@ -107,10 +106,10 @@ public final class InGame implements Scene {
         allEntities.add(new StaticDissonanceEntity(new Offset(60, 197), map));
         allEntities.add(new StaticDissonanceEntity(new Offset(91, 165), map));
 
-        // Chests (not scorable)
+        // Chests
         new ChestEntity(new Offset(57, 194), FragmentOfNothingness::new, 20, null, map);
         new ChestEntity(new Offset(60, 179), FluoxetineBottle::new, map);
-        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, 10, null, map);
+        new ChestEntity(new Offset(115, 156), FragmentOfNothingness::new, 15, null, map);
 
         // Entities in the maze area
         // Mimics (x4)
