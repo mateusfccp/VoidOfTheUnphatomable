@@ -34,3 +34,9 @@ Despues de compilado, se puede correr el juego con `java -jar <nombre_del_jar>`.
 - Enter: interactuar con la interfaz
 - I: abrir/cerrar inventario
 - C: activar habilidad especial de arma
+
+## Extras
+
+Además del juego, hay un editor de mapa horrible que usamos durante el desarrollo porque Mathy no quería usar Tiled,
+pero funcionó lo suficiente bien para lo que necesitábamos. Para correr el editor de mapa (no lo hagas) necesitás tener
+instalado el [Processing](http://processing.org). Una vez instalado, abrí el archivo `MapMaker/Main.pde`.
