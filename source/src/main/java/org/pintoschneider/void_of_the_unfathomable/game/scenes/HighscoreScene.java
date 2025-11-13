@@ -59,7 +59,7 @@ public class HighscoreScene implements Scene {
         return new Box(
             new Align(
                 Alignment.CENTER,
-                new Column( 
+                new Column(
                     new Box(
                         Border.SINGLE_ROUNDED,
                         new Text("Puntaje Máximo", Paint.BOLD)
