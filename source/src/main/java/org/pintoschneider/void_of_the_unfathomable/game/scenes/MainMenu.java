@@ -4,17 +4,25 @@ import org.pintoschneider.void_of_the_unfathomable.animation.Animation;
 import org.pintoschneider.void_of_the_unfathomable.animation.curves.CubicCurve;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
 import org.pintoschneider.void_of_the_unfathomable.game.ColorPalette;
+import org.pintoschneider.void_of_the_unfathomable.game.highscore.HighscoreEntry;
+import org.pintoschneider.void_of_the_unfathomable.game.highscore.HighscoreManager;
+import org.pintoschneider.void_of_the_unfathomable.game.highscore.RunStatus;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Align;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Column;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.SizedBox;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.Text;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
 public final class MainMenu extends SelectionScene {
     Animation titleAnimation;
+    HighscoreManager manager = new HighscoreManager();
+
+    public MainMenu() throws IOException {}
 
     @Override
     public void onEnter() {
@@ -27,8 +35,7 @@ public final class MainMenu extends SelectionScene {
     List<Option> options() {
         return List.of(
             new Option("Nuevo Juego", this::startNewGame),
-            new Option("Cargar Juego"),
-            new Option("Configuraciones"),
+            new Option("Puntaje Máximo", this::highscores),
             new Option("Salir", this::exitGame)
         );
     }
@@ -52,6 +59,12 @@ public final class MainMenu extends SelectionScene {
 
     private void startNewGame() {
         Engine.context().sceneManager().push(new InGame());
+    }
+
+    private void highscores() {
+        Engine.context().sceneManager().push(
+            new HighscoreScene(manager)
+        );
     }
 
     private void exitGame() {
