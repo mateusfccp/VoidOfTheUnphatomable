@@ -77,7 +77,7 @@ public record Alignment(double x, double y) {
      * Computes the offset within a given size that corresponds to this alignment.
      *
      * @param other The size of the rectangle.
-     * @return The {@link Offset} representing the aligned point within the rectangle.
+     * @return The {@link Offset} that represents the aligned point within the rectangle.
      */
     public Offset alongSize(Size other) {
         final double centerX = other.width() / 2.0;

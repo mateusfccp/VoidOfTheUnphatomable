@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.highscore;
 
 /**
- * Enum representing status of the game state
+ * Enum that represents status of the game state
  */
 public enum RunStatus {
     /**

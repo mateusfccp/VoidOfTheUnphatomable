@@ -3,7 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.engine;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Component;
 
 /**
- * Interface representing a scene in the game.
+ * Interface that represents a scene in the game.
  * <p>
  * A scene is responsible for building its UI component, handling key press events, and disposing of resources when no
  * longer needed.

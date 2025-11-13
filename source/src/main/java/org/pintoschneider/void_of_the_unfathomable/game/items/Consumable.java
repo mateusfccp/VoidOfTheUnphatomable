@@ -5,7 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import java.util.WeakHashMap;
 
 /**
- * A class representing consumable items that can be used by the player to produce various effects.
+ * A class that represents consumable items that can be used by the player to produce various effects.
  */
 public abstract class Consumable implements Item {
     private static final WeakHashMap<Class<? extends Consumable>, Integer> useCount = new WeakHashMap<>();

@@ -14,7 +14,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.scenes.QuestionScene;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
 
 /**
- * An entity representing stairs that allow the player to exit the Void.
+ * An entity that represents stairs that allow the player to exit the Void.
  * <p>
  * When the player interacts with this entity, they are given the option to exit the Void. If the player possesses the
  * Resounding Core, they are informed of their ability to stop the Void. If they do not possess the Resounding Core,

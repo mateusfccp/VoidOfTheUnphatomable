@@ -5,7 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.StatusEffect;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 
 /**
- * A class representing a bottle of fluoxetine.
+ * A class that represents a bottle of fluoxetine.
  * <p>
  * When consumed, it removes the {@code StatusEffect.DEPRESSION} status effect from the player.
  * <p>

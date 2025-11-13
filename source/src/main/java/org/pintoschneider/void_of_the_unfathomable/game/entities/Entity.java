@@ -10,7 +10,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import java.util.*;
 
 /**
- * A class representing an entity on the map.
+ * A class that represents an entity on the map.
  * <p>
  * An entity is any kind of object that can be placed in the map and have its position changed, such as the player,
  * enemies, items, etc.

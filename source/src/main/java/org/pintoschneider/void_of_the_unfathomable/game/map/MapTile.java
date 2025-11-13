@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.map;
 
 /**
- * Enum representing different types of map tiles with their character representations and spatial properties.
+ * Enum that represents different types of map tiles with their character representations and spatial properties.
  */
 public enum MapTile {
     /**
@@ -139,7 +139,7 @@ public enum MapTile {
     /**
      * Gets the character representation of the tile based on the bitmask of neighboring tiles.
      *
-     * @param bitmask The bitmask representing the presence of neighboring tiles.
+     * @param bitmask The bitmask that represents the presence of neighboring tiles.
      *                The bits are ordered as follows: 0bBTLR (Bottom, Top, Left, Right)
      * @return The character representation of the tile.
      */

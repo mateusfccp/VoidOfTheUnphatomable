@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
 /**
- * A record representing a 24-bit RGB color.
+ * A record that represents a 24-bit RGB color.
  *
  * @param red   The red component of the color.
  * @param green The green component of the color.

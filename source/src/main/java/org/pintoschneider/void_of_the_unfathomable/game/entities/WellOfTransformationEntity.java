@@ -21,7 +21,7 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * An entity representing a well of transformation in the game.
+ * An entity that represents a well of transformation in the game.
  * <p>
  * A well of transformation is a special entity that can be used once to transform an equipment item into another, more
  * powerful one.

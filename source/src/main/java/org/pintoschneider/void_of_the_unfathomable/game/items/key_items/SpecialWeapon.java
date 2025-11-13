@@ -5,7 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 
 /**
- * An abstract class representing a special weapon that can be equipped by the player.
+ * An abstract class that represents a special weapon that can be equipped by the player.
  */
 public abstract class SpecialWeapon implements Equippable {
     @Override

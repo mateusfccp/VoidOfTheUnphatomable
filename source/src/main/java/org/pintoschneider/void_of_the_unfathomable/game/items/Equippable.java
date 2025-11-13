@@ -7,7 +7,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import java.util.EnumSet;
 
 /**
- * A class representing equippable items that can be worn or used by the player.
+ * A class that represents equippable items that can be worn or used by the player.
  */
 public interface Equippable extends Item {
     /**

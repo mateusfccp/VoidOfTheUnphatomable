@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * A static dissonance entity that represents a Static Dissonance enemy in the game.
+ * An entity that represents a Static Dissonance enemy in the game.
  */
 public final class StaticDissonanceEntity extends DamageableEntity<StaticDissonance> {
     private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(1600));

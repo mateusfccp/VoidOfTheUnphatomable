@@ -10,47 +10,47 @@ import java.util.Objects;
  */
 public record Offset(int dx, int dy) {
     /**
-     * A constant representing an offset of (0, 0).
+     * A constant that represents an offset of (0, 0).
      */
     public static final Offset ZERO = new Offset(0, 0);
 
     /**
-     * A constant representing an offset of (-1, 0).
+     * A constant that represents an offset of (-1, 0).
      */
     public static final Offset WEST = new Offset(-1, 0);
 
     /**
-     * A constant representing an offset of (1, 0).
+     * A constant that represents an offset of (1, 0).
      */
     public static final Offset EAST = new Offset(1, 0);
 
     /**
-     * A constant representing an offset of (0, -1).
+     * A constant that represents an offset of (0, -1).
      */
     public static final Offset NORTH = new Offset(0, -1);
 
     /**
-     * A constant representing an offset of (0, 1).
+     * A constant that represents an offset of (0, 1).
      */
     public static final Offset SOUTH = new Offset(0, 1);
 
     /**
-     * A constant representing an offset of (-1, -1).
+     * A constant that represents an offset of (-1, -1).
      */
     public static final Offset NORTH_WEST = new Offset(-1, -1);
 
     /**
-     * A constant representing an offset of (1, -1).
+     * A constant that represents an offset of (1, -1).
      */
     public static final Offset NORTH_EAST = new Offset(1, -1);
 
     /**
-     * A constant representing an offset of (-1, 1).
+     * A constant that represents an offset of (-1, 1).
      */
     public static final Offset SOUTH_WEST = new Offset(-1, 1);
 
     /**
-     * A constant representing an offset of (1, 1).
+     * A constant that represents an offset of (1, 1).
      */
     public static final Offset SOUTH_EAST = new Offset(1, 1);
 

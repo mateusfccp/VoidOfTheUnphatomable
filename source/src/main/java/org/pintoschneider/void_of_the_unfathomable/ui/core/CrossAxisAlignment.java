@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
 /**
- * An enumeration representing the alignment options for cross-axis alignment in a layout.
+ * An enumeration that represents the alignment options for cross-axis alignment in a layout.
  */
 public enum CrossAxisAlignment {
     /**

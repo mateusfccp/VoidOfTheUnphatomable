@@ -3,7 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.game.items.key_items;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 
 /**
- * A key item representing a Fragment of Nothingness in the game.
+ * A key item that represents a Fragment of Nothingness in the game.
  * <p>
  * A Fragment of Nothingness is a shard that pulsates with void energy, absorbing light and warmth around it. It is
  * dropped by all enemies, and can be used as a currency to trade with The Mender of Minds.

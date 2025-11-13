@@ -19,7 +19,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import java.util.List;
 
 /**
- * An entity representing the player in the game.
+ * An entity that represents the player in the game.
  */
 public final class PlayerEntity extends DamageableEntity<Player> {
     /**

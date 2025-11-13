@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game.enemies;
 
 /**
- * A class representing the Mimic enemy.
+ * A class that represents the Mimic enemy.
  * <p>
  * The mimic is a deceptive enemy that disguises itself as a treasure chest to lure unsuspecting players.
  * It has moderate health and defense, making it a formidable opponent when revealed.

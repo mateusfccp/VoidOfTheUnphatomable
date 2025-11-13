@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * A scene representing a shop, allowing the player to buy items.
+ * A scene that represents a shop, allowing the player to buy items.
  */
 public class ShopScene extends SelectionScene {
 

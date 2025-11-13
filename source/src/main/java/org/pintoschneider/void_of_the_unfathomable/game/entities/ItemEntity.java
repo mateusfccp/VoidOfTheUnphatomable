@@ -7,7 +7,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.map.SpatialProperty;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 
 /**
- * An entity representing an item on the map.
+ * An entity that represents an item on the map.
  * <p>
  * When a player interacts with this entity, the item is added to the player's inventory and the entity is destroyed.
  */

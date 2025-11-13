@@ -11,7 +11,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.scenes.DialogScene;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.Alignment;
 
 /**
- * An entity representing a locked door that can be unlocked with specific key items.
+ * An entity that represents a locked door that can be unlocked with specific key items.
  */
 public class LockedDoor extends Entity<Boolean> {
     static Boolean isLocked = true;

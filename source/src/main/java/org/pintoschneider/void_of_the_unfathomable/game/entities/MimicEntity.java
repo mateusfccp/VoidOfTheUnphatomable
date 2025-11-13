@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * An entity representing a mimic enemy in the game.
+ * An entity that represents a mimic enemy in the game.
  */
 public final class MimicEntity extends DamageableEntity<Mimic> {
     private final Animation representationAnimation = Animation.repeating(Duration.ofMillis(800));

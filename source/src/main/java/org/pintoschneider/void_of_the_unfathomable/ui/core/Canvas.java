@@ -192,7 +192,7 @@ public final class Canvas {
     }
 
     /**
-     * Builds and returns a list of {@link AttributedString} objects representing the canvas content.
+     * Builds and returns a list of {@link AttributedString} objects that represents the canvas content.
      * <p>
      * Each row is written in order, with null cells rendered as spaces.
      *

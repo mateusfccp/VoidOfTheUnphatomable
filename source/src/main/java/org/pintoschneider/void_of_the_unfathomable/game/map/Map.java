@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 /**
- * A class representing a 2D map composed of tiles and entities.
+ * A class that represents a 2D map composed of tiles and entities.
  * <p>
  * The tiles describe the terrain of the map, while the entities represent dynamic objects such as players, NPCs, or
  * items.
@@ -219,7 +219,7 @@ public final class Map {
     /**
      * Converts the map to a 2D array of characters, taking into the tile definitions.
      *
-     * @return A 2D array of characters representing the map.
+     * @return A 2D array of characters that represents the map.
      */
     public char[][] toCharacterMatrix() {
         char[][] charArray = new char[width][height];

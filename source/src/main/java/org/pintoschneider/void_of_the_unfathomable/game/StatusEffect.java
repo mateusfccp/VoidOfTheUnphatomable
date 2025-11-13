@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game;
 
 /**
- * Enum representing various status effects that can affect a player or monster.
+ * Enum that represents various status effects that can affect a player or monster.
  */
 public enum StatusEffect {
     /**

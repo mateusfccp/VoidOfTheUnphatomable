@@ -280,7 +280,7 @@ public final class InGame implements Scene {
     /**
      * Returns the progress of the current game.
      *
-     * @return An integer representing the progress between 0 and 100.
+     * @return An integer that represents the progress between 0 and 100.
      */
     public int progress() {
         final int total = 34; // Total number of entities in the game (manually counted hehe)

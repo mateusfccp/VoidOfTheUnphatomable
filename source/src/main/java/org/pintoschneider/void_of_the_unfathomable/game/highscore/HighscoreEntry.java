@@ -5,7 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.scenes.InGame;
 import java.time.LocalDateTime;
 
 /**
- * A class representing a high-score entry.
+ * A class that represents a high-score entry.
  */
 public class HighscoreEntry {
     private final RunStatus status;

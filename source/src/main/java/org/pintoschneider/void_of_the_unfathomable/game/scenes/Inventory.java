@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * A scene representing the player's inventory, allowing them to view and interact with their items.
+ * A scene that represents the player's inventory, allowing them to view and interact with their items.
  */
 public class Inventory extends SelectionScene {
     private final Player player;

@@ -11,7 +11,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import java.util.*;
 
 /**
- * A class representing the player character in the game including their attributes, status effects, and inventory.
+ * A class that represents the player character in the game including their attributes, status effects, and inventory.
  */
 public final class Player implements Damageable {
     private static final int maximumHealth = 100;
@@ -124,7 +124,7 @@ public final class Player implements Damageable {
     /**
      * Gets the current status effects affecting the player.
      *
-     * @return An {@link EnumSet} of {@link StatusEffect} representing the player's current status effects
+     * @return An {@link EnumSet} of {@link StatusEffect} that represents the player's current status effects
      */
     public Set<StatusEffect> statusEffects() {
         final EnumSet<StatusEffect> statusEffects = this.statusEffects.clone();

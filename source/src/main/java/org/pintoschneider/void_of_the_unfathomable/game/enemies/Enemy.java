@@ -5,7 +5,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.Damageable;
 import java.util.Objects;
 
 /**
- * A class representing an enemy in the game.
+ * A class that represents an enemy in the game.
  */
 public abstract class Enemy implements Damageable {
     private final String name;

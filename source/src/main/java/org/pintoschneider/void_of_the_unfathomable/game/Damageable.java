@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.game;
 
 /**
- * An interface representing an entity that can take damage.
+ * An interface that represents an entity that can take damage.
  */
 public interface Damageable {
     /**

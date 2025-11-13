@@ -4,7 +4,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.Player;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Consumable;
 
 /**
- * A class representing a Haloperidol Ampoule consumable item.
+ * A class that represents a Haloperidol Ampoule consumable item.
  * <p>
  * When consumed, it heals the player and increases neural toxicity.
  */

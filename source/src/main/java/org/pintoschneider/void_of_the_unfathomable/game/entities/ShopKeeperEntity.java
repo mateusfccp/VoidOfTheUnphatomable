@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An entity representing a Merchant allowing the player to interact and buy various items.
+ * An entity that represents a Merchant allowing the player to interact and buy various items.
  * <p>
  * When the player interacts with this entity, the ShopScene scene is called.
  */

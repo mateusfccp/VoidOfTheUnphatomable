@@ -3,7 +3,7 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 
 /**
- * A class representing layout constraints with minimum and maximum width and height.
+ * A class that represents layout constraints with minimum and maximum width and height.
  */
 public final class Constraints {
     final private int minWidth;
@@ -162,7 +162,7 @@ public final class Constraints {
     }
 
     /**
-     * Returns a {@link Size} object representing the biggest size that satisfies the constraints.
+     * Returns a {@link Size} object that represents the biggest size that satisfies the constraints.
      *
      * @return A {@link Size} object with the maximum width and height.
      */
@@ -171,7 +171,7 @@ public final class Constraints {
     }
 
     /**
-     * Returns a {@link Size} object representing the smallest size that satisfies the constraints.
+     * Returns a {@link Size} object that represents the smallest size that satisfies the constraints.
      *
      * @return A {@link Size} object with the minimum width and height.
      */

@@ -1,7 +1,7 @@
 package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
 /**
- * A record representing text paint styles for the terminal.
+ * A record that represents text paint styles for the terminal.
  * <p>
  * All fields have default values. Use {@link #Paint()} for defaults and {@code with*} methods to create modified copies.
  *

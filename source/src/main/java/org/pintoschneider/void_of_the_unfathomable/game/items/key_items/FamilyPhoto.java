@@ -4,7 +4,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.enemies.Abyssmonkey;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 
 /**
- * A key item representing a family photo.
+ * A key item that represents a family photo.
  * <p>
  * The family photo is what prevents the player from going insane just by being in the void.
  * <p>

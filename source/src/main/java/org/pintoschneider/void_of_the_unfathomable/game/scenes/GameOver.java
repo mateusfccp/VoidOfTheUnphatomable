@@ -13,7 +13,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.CrossAxisAlignment;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.MainAxisSize;
 
 /**
- * A scene representing the game over screen.
+ * A scene that represents the game over screen.
  */
 public class GameOver implements Scene {
     static private final String base = """

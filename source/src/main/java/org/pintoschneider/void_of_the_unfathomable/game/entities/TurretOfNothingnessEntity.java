@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * An entity representing a Turret of Nothingness.
+ * An entity that represents a Turret of Nothingness.
  */
 public class TurretOfNothingnessEntity extends DamageableEntity<TurretOfNothingness> {
     private boolean isShootingDiagonal = false;

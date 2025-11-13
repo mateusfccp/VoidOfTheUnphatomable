@@ -11,7 +11,7 @@ import org.pintoschneider.void_of_the_unfathomable.game.turn_steps.TurnStep;
 import java.util.List;
 
 /**
- * An entity representing a bullet in the game.
+ * An entity that represents a bullet in the game.
  */
 public class BulletEntity extends Entity<Void> {
     final BulletManagerEntity manager;

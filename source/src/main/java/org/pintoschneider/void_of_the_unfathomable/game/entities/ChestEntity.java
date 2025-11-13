@@ -13,7 +13,7 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Paint;
 import java.util.function.Supplier;
 
 /**
- * An entity representing a chest that can be opened to obtain items.
+ * An entity that represents a chest that can be opened to obtain items.
  * <p>
  * When the player interacts with this entity, it will open and give the associated item(s) to the player.
  */
