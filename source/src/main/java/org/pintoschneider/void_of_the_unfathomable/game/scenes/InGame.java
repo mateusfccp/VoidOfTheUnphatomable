@@ -316,6 +316,7 @@ public final class InGame implements Scene {
             total += percentageItems(item);
         }
 
+
         return total;
     }
 
@@ -333,6 +334,8 @@ public final class InGame implements Scene {
             return 2;
         } else if (entity instanceof MimicEntity) { // x4
             return 3;
+        } else if (!LockedDoor.isLocked() && entity instanceof LockedDoor) {
+            return 10;
         }
 
         return 0;
@@ -348,11 +351,11 @@ public final class InGame implements Scene {
         if (item instanceof MaidDress) {
             return 5;
         } else if (item instanceof Blue) {
-            return 15;
+            return 10;
         } else if (item instanceof Sunga) {
             return 5;
         } else if (item instanceof Pajamas) {
-            return 15;
+            return 10;
         } else if (item instanceof BlackHole) {
             return 5;
         } else if (item instanceof Stickool) {
