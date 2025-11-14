@@ -1,6 +1,7 @@
 plugins {
     java
     application
+    id("org.beryx.jlink") version "3.1.3"
 }
 
 application {
@@ -30,7 +31,11 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.named<Jar>("jar") {
+jlink {
+    options.addAll("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages")
+}
+
+tasks.register<Jar>("fatJar") {
     manifest {
         attributes["Main-Class"] = "org.pintoschneider.void_of_the_unfathomable.Main"
     }
