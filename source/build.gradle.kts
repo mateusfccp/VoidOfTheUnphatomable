@@ -4,6 +4,10 @@ plugins {
 }
 
 application {
+    // Add JVM arguments to enable native access for all unnamed modules
+    // For some reason, this causes the terminal size to be zero
+    // See: https://github.com/jline/jline3/issues/1067
+    // applicationDefaultJvmArgs = listOf("--enable-native-access=ALL-UNNAMED")
     mainClass.set("org.pintoschneider.void_of_the_unfathomable.Main")
 }
 
@@ -20,10 +24,18 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation("org.jline:jline:3.30.0")
+    implementation("org.jetbrains:annotations:26.0.2")
+    implementation("org.jline:jline:3.30.6")
+
+    // JediTerm dependencies
+    implementation("org.jetbrains.pty4j:pty4j:0.13.11")
+    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation("org.slf4j:slf4j-jdk14:2.0.17")
+    implementation(
+        fileTree("libs") {
+            include("*.jar") // Include all files ending with .jar in the 'libs' directory
+        }
+    )
 }
 
 tasks.test {

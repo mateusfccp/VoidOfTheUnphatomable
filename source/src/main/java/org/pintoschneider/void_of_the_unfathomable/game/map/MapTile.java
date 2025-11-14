@@ -12,14 +12,14 @@ public enum MapTile {
     /**
      * A wall tile that is opaque and not walkable, with auto-tiling characters.
      */
-    WALL('⬤',
+    WALL('█',
         '┼',
         '─',
-        '╴',
-        '╶',
+        '─',
+        '─',
         '│',
-        '╵',
-        '╷',
+        '│',
+        '│',
         '┌',
         '┐',
         '└',

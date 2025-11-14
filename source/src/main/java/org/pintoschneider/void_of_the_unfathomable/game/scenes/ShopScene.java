@@ -66,7 +66,7 @@ public class ShopScene extends SelectionScene {
                 Alignment.CENTER,
                 new Column(
                     new Box(
-                        Border.SINGLE_ROUNDED,
+                        Border.SINGLE,
                         new Text("Tienda") // Changed title
                     ),
                     new SizedBox(0, 1),
@@ -78,7 +78,7 @@ public class ShopScene extends SelectionScene {
                         new ConstrainedBox(
                             new Constraints(16, null, 20, null),
                             new Box(
-                                Border.SINGLE_ROUNDED,
+                                Border.SINGLE,
                                 new Padding(
                                     EdgeInsets.all(1),
                                     new Column(
@@ -95,7 +95,7 @@ public class ShopScene extends SelectionScene {
                     selectedItem == null ? null : new ConstrainedBox(
                         new Constraints(0, 57, 8, 8),
                         new Box(
-                            Border.SINGLE_ROUNDED,
+                            Border.SINGLE,
                             new Text(selectedItem.description())
                         )
                     )

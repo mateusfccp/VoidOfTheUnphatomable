@@ -28,17 +28,17 @@ import java.util.List;
  */
 public class WellOfTransformationEntity extends Entity<Void> {
     private static final List<Color> colorSequence = List.of(
-        ColorPalette.BLUSH,
+        ColorPalette.SALMON_PINK,
         ColorPalette.AZURE,
-        ColorPalette.ROYAL_BLUE,
+        ColorPalette.POWDER_BLUE,
         ColorPalette.APRICOT,
-        ColorPalette.CLAY,
-        ColorPalette.BANANA,
-        ColorPalette.VERMILION,
-        ColorPalette.MINT_GREEN,
-        ColorPalette.MERLOT,
-        ColorPalette.EMERALD,
-        ColorPalette.IVORY
+        ColorPalette.CHESTNUT_BROWN,
+        ColorPalette.AMBER,
+        ColorPalette.SCARLET,
+        ColorPalette.SPRING_GREEN,
+        ColorPalette.DEEP_PURPLE,
+        ColorPalette.FOREST_GREEN,
+        ColorPalette.TAWNY
     );
     private final Animation idleAnimation = Animation.repeating(
         Duration.ofSeconds(2)
@@ -94,7 +94,7 @@ public class WellOfTransformationEntity extends Entity<Void> {
             (idleAnimation.progress() * colorSequence.size()) % 1.0
         );
 
-        return new Paint().withForegroundColor(wasUsed ? ColorPalette.CHARCOAL : color);
+        return new Paint().withForegroundColor(wasUsed ? ColorPalette.MIDNIGHT_INDIGO : color);
     }
 
     @Override

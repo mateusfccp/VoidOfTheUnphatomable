@@ -1,6 +1,5 @@
 package org.pintoschneider.void_of_the_unfathomable.game.scenes;
 
-import org.pintoschneider.void_of_the_unfathomable.Main;
 import org.pintoschneider.void_of_the_unfathomable.core.Offset;
 import org.pintoschneider.void_of_the_unfathomable.engine.Context;
 import org.pintoschneider.void_of_the_unfathomable.engine.Engine;
@@ -17,7 +16,6 @@ import org.pintoschneider.void_of_the_unfathomable.game.items.Equippable;
 import org.pintoschneider.void_of_the_unfathomable.game.items.EquippableSlot;
 import org.pintoschneider.void_of_the_unfathomable.game.items.Item;
 import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.FluoxetineBottle;
-import org.pintoschneider.void_of_the_unfathomable.game.items.consumables.HaloperidolAmpoule;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Blue;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.MaidDress;
 import org.pintoschneider.void_of_the_unfathomable.game.items.equippables.armors.Pajamas;
@@ -34,7 +32,6 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 /**
  * The in-game scene where the player can explore the map and interact with the game world.
@@ -53,8 +50,8 @@ public final class InGame implements Scene {
     private final Player player = new Player();
     private final PlayerEntity playerEntity = new PlayerEntity(playerInitialPosition, player, map);
     private final TurnManager turnManager = new TurnManager(playerEntity, map);
-    private Offset mapOffset = Offset.ZERO;
     private final List<Entity<?>> allEntities = new ArrayList<>();
+    private Offset mapOffset = Offset.ZERO;
 
     /**
      * Creates a new in-game scene.
@@ -65,20 +62,20 @@ public final class InGame implements Scene {
         player.equipItem(initialWeapon);
         player.addItemToInventory(new FamilyPhoto());
 
-        if (Main.debugMode) {
-            player.addItemToInventory(new Blue());
-            player.addItemToInventory(new Sunga());
-            player.addItemToInventory(new Pajamas());
-            player.addItemToInventory(new LeftBanana());
-            player.addItemToInventory(new RightBanana());
-            player.addItemToInventory(new BlackHole());
-
-            for (int i = 0; i < 100; i++) {
-                player.addItemToInventory(new FragmentOfNothingness());
-                player.addItemToInventory(new FluoxetineBottle());
-                player.addItemToInventory(new HaloperidolAmpoule());
-            }
-        }
+//        if (Main.debugMode) {
+//            player.addItemToInventory(new Blue());
+//            player.addItemToInventory(new Sunga());
+//            player.addItemToInventory(new Pajamas());
+//            player.addItemToInventory(new LeftBanana());
+//            player.addItemToInventory(new RightBanana());
+//            player.addItemToInventory(new BlackHole());
+//
+//            for (int i = 0; i < 100; i++) {
+//                player.addItemToInventory(new FragmentOfNothingness());
+//                player.addItemToInventory(new FluoxetineBottle());
+//                player.addItemToInventory(new HaloperidolAmpoule());
+//            }
+//        }
 
         // Initialize explored tiles
         exploredTiles = new BitSet[map.height()];
@@ -135,7 +132,7 @@ public final class InGame implements Scene {
         new ItemEntity(
             new Offset(58, 54),
             new BlackHole(),
-            new Paint().withForegroundColor(ColorPalette.CHARCOAL),
+            new Paint().withForegroundColor(ColorPalette.AQUA),
             map
         );
         new WellOfTransformationEntity(new Offset(49, 120), map);
@@ -157,7 +154,7 @@ public final class InGame implements Scene {
         new ItemEntity(
             new Offset(153, 190),
             new RightBanana(),
-            new Paint().withForegroundColor(ColorPalette.BANANA),
+            new Paint().withForegroundColor(ColorPalette.AMBER),
             map
         );
 
@@ -205,7 +202,7 @@ public final class InGame implements Scene {
                     new Padding(
                         EdgeInsets.all(1),
                         new Box(
-                            Border.SINGLE_ROUNDED,
+                            Border.SINGLE,
                             new Padding(
                                 EdgeInsets.all(1),
                                 new Column(
@@ -287,13 +284,13 @@ public final class InGame implements Scene {
 
     private Color statusToColor(StatusEffect statusEffect) {
         return switch (statusEffect) {
-            case DEPRESSION -> ColorPalette.ROYAL_BLUE;
-            case DEPENDENCY -> ColorPalette.BANANA;
+            case DEPRESSION -> ColorPalette.POWDER_BLUE;
+            case DEPENDENCY -> ColorPalette.AMBER;
             case DISCONTINUATION_SYNDROME -> ColorPalette.APRICOT;
-            case DYSKINESIA -> ColorPalette.CLAY;
-            case TARDIVE_DYSKINESIA -> ColorPalette.VERMILION;
-            case INSANITY -> ColorPalette.BLUSH;
-            case DEATH -> ColorPalette.SLATE;
+            case DYSKINESIA -> ColorPalette.CHESTNUT_BROWN;
+            case TARDIVE_DYSKINESIA -> ColorPalette.SCARLET;
+            case INSANITY -> ColorPalette.DEEP_PURPLE;
+            case DEATH -> ColorPalette.SLATE_BLUE;
         };
     }
 

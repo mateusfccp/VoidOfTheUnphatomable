@@ -38,7 +38,6 @@ final class InputThread extends Thread {
 
             if (key != null) {
                 lastKey.set(key);
-                IO.println("Key pressed: " + key);
             }
         }
     }

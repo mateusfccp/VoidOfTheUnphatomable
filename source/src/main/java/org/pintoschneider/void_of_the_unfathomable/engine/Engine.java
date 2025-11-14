@@ -5,7 +5,6 @@ import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.AttributedString;
 import org.jline.utils.Display;
 import org.jline.utils.InfoCmp.Capability;
-import org.pintoschneider.void_of_the_unfathomable.Main;
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 import org.pintoschneider.void_of_the_unfathomable.ui.components.*;
 import org.pintoschneider.void_of_the_unfathomable.ui.core.*;
@@ -23,7 +22,7 @@ import java.util.function.Consumer;
  */
 public final class Engine implements AutoCloseable, Context {
     private static Engine context = null;
-    private final Terminal terminal = TerminalBuilder.builder().build();
+    private final Terminal terminal;
     private final Display display;
     private final AtomicReference<Key> lastKey = new AtomicReference<>(null);
     private final SceneManager sceneManager;
@@ -33,12 +32,24 @@ public final class Engine implements AutoCloseable, Context {
     private boolean running = true;
 
     /**
-     * Creates a new engine instance with the specified initial scene.
+     * Creates a new engine instance with the specified initial scene and a default terminal.
      *
      * @param initialScene The initial scene to display.
      * @throws IOException If an I/O error occurs while initializing the terminal.
      */
     public Engine(Scene initialScene) throws IOException {
+        this(initialScene, TerminalBuilder.builder().build());
+    }
+
+    /**
+     * Creates a new engine instance with the specified initial scene.
+     *
+     * @param initialScene The initial scene to display.
+     * @param terminal     The terminal to use for rendering and input.
+     * @throws IOException If an I/O error occurs while initializing the terminal.
+     */
+    public Engine(Scene initialScene, Terminal terminal) throws IOException {
+        this.terminal = terminal;
         terminal.enterRawMode();
 
         display = new Display(terminal, true);
@@ -69,7 +80,6 @@ public final class Engine implements AutoCloseable, Context {
         uiThread = new UIThread(this, 60);
         uiThread.setDaemon(true);
         uiThread.start();
-
     }
 
     /**
@@ -214,7 +224,7 @@ final class Root extends Composent {
 
         final Component debugLine;
 
-        if (Main.debugMode) {
+        if (Boolean.parseBoolean(System.getProperty("debug", "false"))) {
             final String sceneInfo = "%s (%d)".formatted(
                 engine.sceneManager().currentScene().getClass().getSimpleName(),
                 engine.sceneManager().scenes().size()

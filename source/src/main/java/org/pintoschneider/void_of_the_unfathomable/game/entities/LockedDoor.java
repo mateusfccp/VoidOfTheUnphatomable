@@ -26,6 +26,15 @@ public class LockedDoor extends Entity<Boolean> {
         super(position, isLocked, map);
     }
 
+    /**
+     * Whether the door is locked.
+     *
+     * @return True if the door is locked, false if it is not.
+     */
+    static public boolean isLocked() {
+        return isLocked;
+    }
+
     @Override
     public void interact(Entity<?> entity) {
         if (entity instanceof PlayerEntity player) {
@@ -74,14 +83,5 @@ public class LockedDoor extends Entity<Boolean> {
         } else {
             return new SpatialProperty(true, false);
         }
-    }
-
-    /**
-     * Whether the door is locked.
-     *
-     * @return True if the door is locked, false if it is not.
-     */
-    static public boolean isLocked() {
-        return isLocked;
     }
 }

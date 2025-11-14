@@ -46,7 +46,7 @@ public final class PlayerEntity extends DamageableEntity<Player> {
         final Color color;
         if (damageAnimation.playing()) {
             color = Color.lerp(
-                ColorPalette.VERMILION,
+                ColorPalette.SCARLET,
                 equippedPaint.foregroundColor(),
                 damageAnimation.progress()
             );

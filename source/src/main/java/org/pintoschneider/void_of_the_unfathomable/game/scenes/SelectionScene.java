@@ -36,7 +36,7 @@ public abstract class SelectionScene implements Scene {
     @Override
     public Component build() {
         return new Box(
-            Border.SINGLE_ROUNDED,
+            Border.SINGLE,
             new Padding(
                 EdgeInsets.all(1),
                 buildContent()

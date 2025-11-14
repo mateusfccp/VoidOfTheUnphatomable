@@ -58,7 +58,7 @@ public final class QuestionScene<T> extends SelectionScene {
             EdgeInsets.symmetric(2, 4),
             new Column(
                 new Box(
-                    Border.SINGLE_ROUNDED,
+                    Border.SINGLE,
                     new Padding(
                         EdgeInsets.all(1),
                         new Text(question)

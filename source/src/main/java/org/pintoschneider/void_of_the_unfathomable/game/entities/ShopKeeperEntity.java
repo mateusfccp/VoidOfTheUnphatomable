@@ -83,7 +83,7 @@ public class ShopKeeperEntity extends Entity<Void> {
 
     @Override
     public Paint paint() {
-        final Paint basePaint = new Paint().withForegroundColor(ColorPalette.MINT_GREEN);
+        final Paint basePaint = new Paint().withForegroundColor(ColorPalette.PINE_GREEN);
 
         if (player.statusEffects().contains(StatusEffect.INSANITY)) {
             return basePaint;

@@ -37,7 +37,7 @@ public class TurretOfNothingnessEntity extends DamageableEntity<TurretOfNothingn
     }
 
     public Paint paint() {
-        return new Paint().withForegroundColor(ColorPalette.CLAY);
+        return new Paint().withForegroundColor(ColorPalette.COPPER_BROWN);
     }
 
     @Override

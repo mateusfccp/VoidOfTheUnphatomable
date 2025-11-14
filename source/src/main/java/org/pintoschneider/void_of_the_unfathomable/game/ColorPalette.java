@@ -6,117 +6,223 @@ import org.pintoschneider.void_of_the_unfathomable.ui.core.Color;
  * The colors used throughout the game.
  */
 public abstract class ColorPalette {
-    /**
-     * The charcoal color.
-     * <p>
-     * Defined by the RGB values (34, 35, 35).
-     */
-    public static final Color CHARCOAL = new Color(34, 35, 35);
 
     /**
-     * The gunmetal color.
+     * The chestnut brown color.
      * <p>
-     * Defined by the RGB values (67, 67, 79).
+     * Defined by the RGB values (115, 62, 57).
      */
-    public static final Color GUNMETAL = new Color(67, 67, 79);
+    public static final Color CHESTNUT_BROWN = new Color(115, 62, 57);
 
     /**
-     * The slate color.
+     * The rust color.
      * <p>
-     * Defined by the RGB values (96, 96, 112).
+     * Defined by the RGB values (190, 74, 47).
      */
-    public static final Color SLATE = new Color(96, 96, 112);
+    public static final Color RUST = new Color(190, 74, 47);
 
     /**
-     * The cool gray color.
+     * The copper brown color.
      * <p>
-     * Defined by the RGB values (126, 126, 143).
+     * Defined by the RGB values (184, 111, 80).
      */
-    public static final Color COOL_GRAY = new Color(126, 126, 143);
+    public static final Color COPPER_BROWN = new Color(184, 111, 80);
 
     /**
-     * The lavender gray color.
+     * The cinnamon color.
      * <p>
-     * Defined by the RGB values (194, 194, 209).
+     * Defined by the RGB values (194, 133, 105).
      */
-    public static final Color LAVENDER_GRAY = new Color(194, 194, 209);
+    public static final Color CINNAMON = new Color(194, 133, 105);
 
     /**
-     * The merlot color.
+     * The tawny color.
      * <p>
-     * Defined by the RGB values (140, 63, 93).
+     * Defined by the RGB values (215, 118, 67).
      */
-    public static final Color MERLOT = new Color(140, 63, 93);
+    public static final Color TAWNY = new Color(215, 118, 67);
 
     /**
-     * The clay color.
+     * The vivid orange color.
      * <p>
-     * Defined by the RGB values (186, 97, 86).
+     * Defined by the RGB values (247, 118, 34).
      */
-    public static final Color CLAY = new Color(186, 97, 86);
+    public static final Color VIVID_ORANGE = new Color(247, 118, 34);
 
     /**
-     * The vermilion color.
+     * The sand color.
      * <p>
-     * Defined by the RGB values (235, 86, 75).
+     * Defined by the RGB values (232, 183, 150).
      */
-    public static final Color VERMILION = new Color(235, 86, 75);
-
-    /**
-     * The blush color.
-     * <p>
-     * Defined by the RGB values (255, 181, 181).
-     */
-    public static final Color BLUSH = new Color(255, 181, 181);
-
-    /**
-     * The emerald color.
-     * <p>
-     * Defined by the RGB values (60, 163, 112).
-     */
-    public static final Color EMERALD = new Color(60, 163, 112);
-
-    /**
-     * The mint green color.
-     * <p>
-     * Defined by the RGB values (93, 222, 135).
-     */
-    public static final Color MINT_GREEN = new Color(93, 222, 135);
-
-    /**
-     * The royal blue color.
-     * <p>
-     * Defined by the RGB values (100, 118, 232).
-     */
-    public static final Color ROYAL_BLUE = new Color(100, 118, 232);
-
-    /**
-     * The azure color.
-     * <p>
-     * Defined by the RGB values (134, 167, 237).
-     */
-    public static final Color AZURE = new Color(134, 167, 237);
+    public static final Color SAND = new Color(232, 183, 150);
 
     /**
      * The apricot color.
      * <p>
-     * Defined by the RGB values (242, 166, 94).
+     * Defined by the RGB values (228, 166, 114).
      */
-    public static final Color APRICOT = new Color(242, 166, 94);
+    public static final Color APRICOT = new Color(228, 166, 114);
 
     /**
-     * The sunglow color.
+     * The amber color.
      * <p>
-     * Defined by the RGB values (255, 228, 120).
+     * Defined by the RGB values (254, 174, 52).
      */
-    public static final Color BANANA = new Color(255, 228, 120);
+    public static final Color AMBER = new Color(254, 174, 52);
 
     /**
-     * The ivory color.
+     * The wheat color.
      * <p>
-     * Defined by the RGB values (255, 255, 235).
+     * Defined by the RGB values (234, 212, 170).
      */
-    public static final Color IVORY = new Color(255, 255, 235);
+    public static final Color WHEAT = new Color(234, 212, 170);
+
+    /**
+     * The canary yellow color.
+     * <p>
+     * Defined by the RGB values (254, 231, 97).
+     */
+    public static final Color CANARY_YELLOW = new Color(254, 231, 97);
+
+    /**
+     * The spring green color.
+     * <p>
+     * Defined by the RGB values (99, 199, 77).
+     */
+    public static final Color SPRING_GREEN = new Color(99, 199, 77);
+
+    /**
+     * The forest green color.
+     * <p>
+     * Defined by the RGB values (62, 137, 72).
+     */
+    public static final Color FOREST_GREEN = new Color(62, 137, 72);
+
+    /**
+     * The pine green color.
+     * <p>
+     * Defined by the RGB values (38, 92, 66).
+     */
+    public static final Color PINE_GREEN = new Color(38, 92, 66);
+
+    /**
+     * The teal color.
+     * <p>
+     * Defined by the RGB values (25, 60, 62).
+     */
+    public static final Color TEAL = new Color(25, 60, 62);
+
+    /**
+     * The aqua color.
+     * <p>
+     * Defined by the RGB values (44, 232, 245).
+     */
+    public static final Color AQUA = new Color(44, 232, 245);
+
+    /**
+     * The azure color.
+     * <p>
+     * Defined by the RGB values (0, 153, 219).
+     */
+    public static final Color AZURE = new Color(0, 153, 219);
+
+    /**
+     * The cobalt blue color.
+     * <p>
+     * Defined by the RGB values (18, 78, 137).
+     */
+    public static final Color COBALT_BLUE = new Color(18, 78, 137);
+
+    /**
+     * The powder blue color.
+     * <p>
+     * Defined by the RGB values (192, 203, 220).
+     */
+    public static final Color POWDER_BLUE = new Color(192, 203, 220);
+
+    /**
+     * The cadet blue color.
+     * <p>
+     * Defined by the RGB values (139, 155, 180).
+     */
+    public static final Color CADET_BLUE = new Color(139, 155, 180);
+
+    /**
+     * The steel blue color.
+     * <p>
+     * Defined by the RGB values (90, 105, 136).
+     */
+    public static final Color STEEL_BLUE = new Color(90, 105, 136);
+
+    /**
+     * The slate blue color.
+     * <p>
+     * Defined by the RGB values (58, 68, 102).
+     */
+    public static final Color SLATE_BLUE = new Color(58, 68, 102);
+
+    /**
+     * The midnight indigo color.
+     * <p>
+     * Defined by the RGB values (38, 43, 68).
+     */
+    public static final Color MIDNIGHT_INDIGO = new Color(38, 43, 68);
+
+    /**
+     * The deep purple color.
+     * <p>
+     * Defined by the RGB values (24, 20, 37).
+     */
+    public static final Color DEEP_PURPLE = new Color(24, 20, 37);
+
+    /**
+     * The grape color.
+     * <p>
+     * Defined by the RGB values (104, 56, 108).
+     */
+    public static final Color GRAPE = new Color(104, 56, 108);
+
+    /**
+     * The mulberry color.
+     * <p>
+     * Defined by the RGB values (181, 80, 136).
+     */
+    public static final Color MULBERRY = new Color(181, 80, 136);
+
+    /**
+     * The eggplant color.
+     * <p>
+     * Defined by the RGB values (62, 39, 49).
+     */
+    public static final Color EGGPLANT = new Color(62, 39, 49);
+
+    /**
+     * The neon red color.
+     * <p>
+     * Defined by the RGB values (255, 0, 68).
+     */
+    public static final Color NEON_RED = new Color(255, 0, 68);
+
+    /**
+     * The crimson color.
+     * <p>
+     * Defined by the RGB values (162, 38, 51).
+     */
+    public static final Color CRIMSON = new Color(162, 38, 51);
+
+    /**
+     * The scarlet color.
+     * <p>
+     * Defined by the RGB values (228, 59, 68).
+     */
+    public static final Color SCARLET = new Color(228, 59, 68);
+
+    /**
+     * The salmon pink color.
+     * <p>
+     * Defined by the RGB values (246, 117, 122).
+     */
+    public static final Color SALMON_PINK = new Color(246, 117, 122);
 
     /**
      * The white color.

@@ -51,19 +51,19 @@ public class HighscoreScene implements Scene {
         return switch (status) {
             case FORSAKEN -> new Text(
                 "Abandonado",
-                new Paint().withForegroundColor(ColorPalette.VERMILION)
+                new Paint().withForegroundColor(ColorPalette.SCARLET)
             );
             case COWARD -> new Text(
                 "Cobarde",
-                new Paint().withForegroundColor(ColorPalette.VERMILION)
+                new Paint().withForegroundColor(ColorPalette.SCARLET)
             );
             case DECEASED -> new Text(
                 "Muerto",
-                new Paint().withForegroundColor(ColorPalette.BANANA)
+                new Paint().withForegroundColor(ColorPalette.AMBER)
             );
             case VICTORIOUS -> new Text(
                 "Victoria",
-                new Paint().withForegroundColor(ColorPalette.EMERALD)
+                new Paint().withForegroundColor(ColorPalette.FOREST_GREEN)
             );
         };
     }
@@ -108,12 +108,12 @@ public class HighscoreScene implements Scene {
                 Alignment.CENTER,
                 new Column(
                     new Box(
-                        Border.SINGLE_ROUNDED,
+                        Border.SINGLE,
                         new Text("Puntaje Máximo", Paint.BOLD)
                     ),
                     new SizedBox(0, 1),
                     new Box(
-                        Border.SINGLE_ROUNDED,
+                        Border.SINGLE,
                         new Padding(
                             EdgeInsets.all(1),
                             new Column(

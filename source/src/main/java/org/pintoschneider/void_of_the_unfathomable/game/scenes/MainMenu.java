@@ -86,13 +86,12 @@ public final class MainMenu extends SelectionScene {
 
 final class Title extends Composent {
     static private final String base = """
-          ▖▖  ▘ ▌    ▐▘  ▄▖▌
-          ▌▌▛▌▌▛▌  ▛▌▜▘  ▐ ▛▌█▌
-          ▚▘▙▌▌▙▌  ▙▌▐   ▐ ▌▌▙▖
-        ▖▖    ▌   ▗        ▌ ▜
-        ▌▌▛▌▛▌▛▌▀▌▜▘▛▌▛▛▌▀▌▛▌▐ █▌
-        ▙▌▌▌▙▌▌▌█▌▐▖▙▌▌▌▌█▌▙▌▐▖▙▖
-            ▌""";
+           │ │┌─┐┬ ─┬┐   ┌─┐┌──   ─┬─│ │┌── \s
+           │┌┘│ ││  ││   │ │├─     │ ├─┤├─  \s
+           └┘ └─┘┴ ─┴┘   └─┘│      │ │ │└── \s
+        │ │┌┐│┌──┌─┐─┬─│ │┌─┐┌┬┐┌─┐┌┐ │  ┌──
+        │ ││└┤├─ ├─┤ │ ├─┤│ ││││├─┤├┴┐│  ├─\s
+        └─┘│ ││  │ │ │ │ │└─┘│ ││ │└─┘└──└──""";
 
     private final Animation animation;
 
@@ -105,7 +104,7 @@ final class Title extends Composent {
         final double t = CubicCurve.EASE_IN_OUT.transform(
             Math.min(animation.progress(), 1.0 - animation.progress()) * 2.0
         );
-        final Color color = Color.lerp(ColorPalette.LAVENDER_GRAY, ColorPalette.SLATE, t);
+        final Color color = Color.lerp(ColorPalette.SLATE_BLUE, ColorPalette.POWDER_BLUE, t);
         return new Text(base, new Paint().withForegroundColor(color));
     }
 }

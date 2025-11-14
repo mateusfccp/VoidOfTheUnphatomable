@@ -39,7 +39,7 @@ public abstract class DamageableEntity<T extends Damageable> extends Entity<T> {
     public Paint paint() {
         final Color baseColor = basePaint().foregroundColor();
         final Color color = damageAnimation.playing() ? Color.lerp(
-            ColorPalette.VERMILION,
+            ColorPalette.SCARLET,
             baseColor,
             damageAnimation.progress()
         ) : baseColor;

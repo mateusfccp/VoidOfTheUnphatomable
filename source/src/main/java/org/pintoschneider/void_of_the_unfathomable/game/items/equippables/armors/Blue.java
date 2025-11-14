@@ -32,7 +32,7 @@ public class Blue implements Equippable {
     @Override
     public Paint playerPaint(Paint paint) {
         return paint.withForegroundColor(
-            ColorPalette.ROYAL_BLUE
+            ColorPalette.POWDER_BLUE
         );
     }
 

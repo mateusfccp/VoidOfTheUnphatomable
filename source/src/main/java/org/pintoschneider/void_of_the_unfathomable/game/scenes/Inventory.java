@@ -65,7 +65,7 @@ public class Inventory extends SelectionScene {
                 Alignment.CENTER,
                 new Column(
                     new Box(
-                        Border.SINGLE_ROUNDED,
+                        Border.SINGLE,
                         new Text("Inventario")
                     ),
                     new SizedBox(0, 1),
@@ -77,7 +77,7 @@ public class Inventory extends SelectionScene {
                         new ConstrainedBox(
                             new Constraints(16, null, 20, null),
                             new Box(
-                                Border.SINGLE_ROUNDED,
+                                Border.SINGLE,
                                 new Padding(
                                     EdgeInsets.all(1),
                                     new Column(
@@ -107,7 +107,7 @@ public class Inventory extends SelectionScene {
                     selectedItem == null ? null : new ConstrainedBox(
                         new Constraints(0, 57, 8, 8),
                         new Box(
-                            Border.SINGLE_ROUNDED,
+                            Border.SINGLE,
                             new Text(selectedItem.description())
                         )
                     )

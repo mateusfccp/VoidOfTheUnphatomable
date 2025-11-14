@@ -21,32 +21,8 @@ public record Border(char horizontal, char vertical, char topLeft, char topRight
     public static final Border SINGLE = new Border('─', '│', '┌', '┐', '└', '┘');
 
     /**
-     * A single line rounded border.
-     */
-    public static final Border SINGLE_ROUNDED = new Border('─', '│', '╭', '╮', '╰', '╯');
-
-    /**
      * A double line border.
      */
     public static final Border DOUBLE = new Border('═', '║', '╔', '╗', '╚', '╝');
 
-    /**
-     * A dashed line border.
-     */
-    public static final Border DASHED = new Border('┄', '┆', '┌', '┐', '└', '┘');
-
-    /**
-     * A dotted line border.
-     */
-    public static final Border DOTTED = new Border('┈', '┊', '┌', '┐', '└', '┘');
-
-    /**
-     * A large dashed line border.
-     */
-    public static final Border DASHED_LARGE = new Border('╌', '╎', '┌', '┐', '└', '┘');
-
-    /**
-     * A heavy line border.
-     */
-    public static final Border HEAVY = new Border('━', '┃', '┏', '┓', '┗', '┛');
 }

@@ -37,7 +37,7 @@ public class BulletEntity extends Entity<Void> {
 
     @Override
     public Character representation() {
-        return '⏺';
+        return '●';
     }
 
     @Override

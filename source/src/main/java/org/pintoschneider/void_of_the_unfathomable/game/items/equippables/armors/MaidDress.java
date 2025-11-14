@@ -26,7 +26,7 @@ public class MaidDress implements Equippable {
 
     @Override
     public Paint playerPaint(Paint paint) {
-        return paint.withForegroundColor(ColorPalette.BLUSH).withBlink(true);
+        return paint.withForegroundColor(ColorPalette.SALMON_PINK).withBlink(true);
     }
 
     @Override

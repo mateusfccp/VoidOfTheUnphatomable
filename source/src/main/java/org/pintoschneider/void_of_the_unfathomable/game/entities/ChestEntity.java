@@ -51,9 +51,9 @@ public class ChestEntity extends Entity<Supplier<Item>> {
     @Override
     public Character representation() {
         if (isOpened) {
-            return '▭';
+            return '□';
         } else {
-            return '▆';
+            return '█';
         }
     }
 

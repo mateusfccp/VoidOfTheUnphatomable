@@ -121,7 +121,7 @@ public final class Canvas {
         try {
             component.draw(canvas);
         } catch (OverflowException e) {
-            final Paint paint = new Paint().withBackgroundColor(ColorPalette.VERMILION);
+            final Paint paint = new Paint().withBackgroundColor(ColorPalette.SCARLET);
             canvas.draw('‼', e.component().size().width() - 1, e.component().size().height() - 1, paint);
         }
 

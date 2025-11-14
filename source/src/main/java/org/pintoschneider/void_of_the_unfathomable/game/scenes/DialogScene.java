@@ -48,7 +48,7 @@ public final class DialogScene implements Scene {
                 new ConstrainedBox(
                     new Constraints(1, 60, 1, null),
                     new Box(
-                        Border.SINGLE_ROUNDED,
+                        Border.SINGLE,
                         new Text(message)
                     )
                 )

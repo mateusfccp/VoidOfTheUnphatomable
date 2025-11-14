@@ -27,7 +27,7 @@ public class TrananaEntity extends Entity<Void> {
 
     @Override
     public Paint paint() {
-        return new Paint().withForegroundColor(ColorPalette.BANANA);
+        return new Paint().withForegroundColor(ColorPalette.AMBER);
     }
 
     @Override

@@ -60,9 +60,9 @@ public class EquippableDifference extends Composent {
         final Paint newValuePaint;
 
         if (newValue > originalValue) {
-            newValuePaint = new Paint().withForegroundColor(ColorPalette.EMERALD);
+            newValuePaint = new Paint().withForegroundColor(ColorPalette.FOREST_GREEN);
         } else if (newValue < originalValue) {
-            newValuePaint = new Paint().withForegroundColor(ColorPalette.VERMILION);
+            newValuePaint = new Paint().withForegroundColor(ColorPalette.SCARLET);
         } else {
             newValuePaint = Paint.DIM;
         }

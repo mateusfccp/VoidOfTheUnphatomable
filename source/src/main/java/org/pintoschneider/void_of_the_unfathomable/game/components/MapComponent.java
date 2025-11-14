@@ -16,7 +16,7 @@ import java.util.Objects;
  * A component that renders a portion of the game map.
  */
 public final class MapComponent extends Component {
-    static private final Paint fogPaint = new Paint().withForegroundColor(ColorPalette.GUNMETAL);
+    static private final Paint fogPaint = new Paint().withForegroundColor(ColorPalette.MIDNIGHT_INDIGO);
     private final Map map;
     private final Offset offset;
     private final Offset playerOffset;
