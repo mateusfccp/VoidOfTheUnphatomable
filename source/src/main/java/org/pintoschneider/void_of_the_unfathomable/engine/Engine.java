@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 public final class Engine implements AutoCloseable, Context {
     private static Engine context = null;
     private final Terminal terminal;
+    private final boolean ownsTerminal;
     private final Display display;
     private final AtomicReference<Key> lastKey = new AtomicReference<>(null);
     private final SceneManager sceneManager;
@@ -38,7 +39,7 @@ public final class Engine implements AutoCloseable, Context {
      * @throws IOException If an I/O error occurs while initializing the terminal.
      */
     public Engine(Scene initialScene) throws IOException {
-        this(initialScene, TerminalBuilder.builder().build());
+        this(initialScene, TerminalBuilder.builder().build(), true);
     }
 
     /**
@@ -49,7 +50,12 @@ public final class Engine implements AutoCloseable, Context {
      * @throws IOException If an I/O error occurs while initializing the terminal.
      */
     public Engine(Scene initialScene, Terminal terminal) throws IOException {
+        this(initialScene, terminal, false);
+    }
+
+    private Engine(Scene initialScene, Terminal terminal, boolean ownsTerminal) throws IOException {
         this.terminal = terminal;
+        this.ownsTerminal = ownsTerminal;
         terminal.enterRawMode();
 
         display = new Display(terminal, true);
@@ -102,8 +108,13 @@ public final class Engine implements AutoCloseable, Context {
             }
         }
 
+        if (!running) return;
         sceneManager.currentScene().onUpdate(uiThread.deltaTime());
+
+        if (!running) return;
         handleInput();
+
+        if (!running) return;
         refreshUI();
 
         synchronized (this) {
@@ -190,7 +201,10 @@ public final class Engine implements AutoCloseable, Context {
         inputThread.interrupt();
         display.clear();
         terminal.flush();
-        terminal.close();
+
+        if (ownsTerminal) {
+            terminal.close();
+        }
     }
 
     final class _EngineTicker implements Ticker {

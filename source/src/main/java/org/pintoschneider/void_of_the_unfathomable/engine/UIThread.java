@@ -6,9 +6,9 @@ import java.util.Objects;
  * A thread that runs the game UI, updating the engine at a fixed frames per second (FPS).
  */
 public final class UIThread extends Thread {
+    private static final int BUFFER_TIME = 5_000_000;
     private final Engine engine;
     private final int fps;
-    private long lastNanoTime;
     private volatile long tickCount = 0;
     private volatile long deltaTime = 0;
 
@@ -43,18 +43,42 @@ public final class UIThread extends Thread {
 
     @Override
     public void run() {
+        final long optimalTime = 1_000_000_000L / fps;
+        long lastNanoTime = System.nanoTime();
+
         while (!Thread.currentThread().isInterrupted()) {
-            final long nanoSeconds = System.nanoTime();
+            long startTime = System.nanoTime();
 
-            if (nanoSeconds - lastNanoTime >= 1_000_000_000L / fps) {
-                deltaTime = nanoSeconds - lastNanoTime;
-                lastNanoTime = nanoSeconds;
+            // Calculate time passed since last frame
+            long now = System.nanoTime();
+            deltaTime = now - lastNanoTime;
+            lastNanoTime = now;
 
-                synchronized (this) {
-                    tickCount++;
+            synchronized (this) {
+                tickCount++;
+            }
+
+            engine.tick();
+
+            // Calculate how much time to wait to maintain target FPS
+            long endTime = System.nanoTime();
+            long timeTaken = endTime - startTime;
+            long timeRemaining = optimalTime - timeTaken;
+
+            if (timeRemaining > 0) {
+                try {
+                    if (timeRemaining > BUFFER_TIME) {
+                        Thread.sleep((timeRemaining - BUFFER_TIME) / 1_000_000);
+                    }
+
+                    // Spin-lock for the remaining time to ensure precision
+                    while (System.nanoTime() - startTime < optimalTime) {
+                        Thread.onSpinWait();
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
                 }
-
-                engine.tick();
             }
         }
     }
