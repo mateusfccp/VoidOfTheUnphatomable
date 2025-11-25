@@ -2,15 +2,19 @@ package org.pintoschneider.void_of_the_unfathomable.ui.core;
 
 import org.pintoschneider.void_of_the_unfathomable.core.Size;
 
+import java.util.Objects;
+
 /**
  * A class that represents layout constraints with minimum and maximum width and height.
+ * <p>
+ * Null values are treated as unbounded (0 for minimums and Integer.MAX_VALUE for maximums).
+ *
+ * @param minWidth  The minimum width constraint (nullable).
+ * @param maxWidth  The maximum width constraint (nullable).
+ * @param minHeight The minimum height constraint (nullable).
+ * @param maxHeight The maximum height constraint (nullable).
  */
-public final class Constraints {
-    final private int minWidth;
-    final private int minHeight;
-    final private int maxWidth;
-    final private int maxHeight;
-
+public record Constraints(Integer minWidth, Integer maxWidth, Integer minHeight, Integer maxHeight) {
     /**
      * Constructs a Constraints object with the specified minimum and maximum width and height.
      * <p>
@@ -22,7 +26,7 @@ public final class Constraints {
      * @param maxHeight The maximum height constraint (nullable).
      * @throws IllegalArgumentException if any of the constraints are negative or if minimums are greater than maximums.
      */
-    public Constraints(Integer minWidth, Integer maxWidth, Integer minHeight, Integer maxHeight) {
+    public Constraints {
         if (minWidth == null) minWidth = 0;
         if (maxWidth == null) maxWidth = Integer.MAX_VALUE;
         if (minHeight == null) minHeight = 0;
@@ -39,11 +43,6 @@ public final class Constraints {
         if (minHeight > maxHeight) {
             throw new IllegalArgumentException("Minimum height cannot be greater than maximum height.");
         }
-
-        this.minWidth = minWidth;
-        this.maxWidth = maxWidth;
-        this.minHeight = minHeight;
-        this.maxHeight = maxHeight;
     }
 
     /**
@@ -99,42 +98,6 @@ public final class Constraints {
     }
 
     /**
-     * The minimum width constraint.
-     *
-     * @return The minimum width constraint.
-     */
-    public int minWidth() {
-        return minWidth;
-    }
-
-    /**
-     * The maximum width constraint.
-     *
-     * @return The maximum width constraint.
-     */
-    public int maxWidth() {
-        return maxWidth;
-    }
-
-    /**
-     * The minimum height constraint.
-     *
-     * @return The minimum height constraint.
-     */
-    public int minHeight() {
-        return minHeight;
-    }
-
-    /**
-     * The maximum height constraint.
-     *
-     * @return The maximum height constraint.
-     */
-    public int maxHeight() {
-        return maxHeight;
-    }
-
-    /**
      * Checks if the constraints are tight (i.e., min and max dimensions are equal).
      *
      * @return true if the constraints are tight, false otherwise.
@@ -149,7 +112,7 @@ public final class Constraints {
      * @return true if the width constraints are tight, false otherwise.
      */
     public boolean hasTightWidth() {
-        return minWidth == maxWidth;
+        return Objects.equals(minWidth, maxWidth);
     }
 
     /**
@@ -158,7 +121,7 @@ public final class Constraints {
      * @return true if the height constraints are tight, false otherwise.
      */
     public boolean hasTightHeight() {
-        return minHeight == maxHeight;
+        return Objects.equals(minHeight, maxHeight);
     }
 
     /**
@@ -284,14 +247,4 @@ public final class Constraints {
     public Constraints loosen() {
         return new Constraints(0, maxWidth, 0, maxHeight);
     }
-
-    @Override
-    public String toString() {
-        return "Constraints[" +
-            "minWidth=" + minWidth + ", " +
-            "maxWidth=" + maxWidth + ", " +
-            "minHeight=" + minHeight + ", " +
-            "maxHeight=" + maxHeight + ']';
-    }
-
 }
